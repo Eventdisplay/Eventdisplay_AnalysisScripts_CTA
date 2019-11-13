@@ -18,7 +18,7 @@ ROOT installed (v6.14 or newer)
 
 Install all necessary software using 
 
-  prepareProductionBinaries.sh <DSET>
+    prepareProductionBinaries.sh <DSET>
 
 This script downloads
 
@@ -39,10 +39,23 @@ To start the analysis do:
 
 1. set all PATHS correctly
 
-  source ./setSoftwarePaths.sh prod3b-LaPalma-20degu05b-LL
+    source ./setSoftwarePaths.sh prod3b-LaPalma-20degu05b-LL
 
 2. start analysis
  
-  ./
+    ./CTA.runAnalysis.sh
+
+### Eventdisplay analysis steps
+
+- converts a sim_telarray file into a DST root file
+- runs the trace and image analysis; array reconstruction
+
+Requires:
+- array layout to be used (from $CTA_EVNDISP_AUX_DIR/DetectorGeometry)
+- list of sim_telarray simulation files. Expected to be e.g. in $CTA_USER_DATA_DIR/analysis/AnalysisData/FileList_prod3b/prod3b-LaPalma-20deg/)
+
+To run the La Palma analysis, e.g. do:
+
+    ./CTA.runAnalysis.sh N20deg EVNDISP 0
 
 
