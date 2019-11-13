@@ -18,7 +18,7 @@ ROOT installed (v6.14 or newer)
 
 Install all necessary software using 
 
-    prepareProductionBinaries.sh <DSET>
+    ./prepareProductionBinaries.sh <DSET>
 
 This script downloads
 
@@ -39,7 +39,7 @@ To start the analysis do:
 
 1. set all PATHS correctly
 
-    source ./setSoftwarePaths.sh prod3b-LaPalma-20degu05b-LL
+     source ./setSoftwarePaths.sh prod3b-LaPalma-20degu05b-LL
 
 2. start analysis
  
