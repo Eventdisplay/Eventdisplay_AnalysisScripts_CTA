@@ -164,7 +164,7 @@ do
 
                   echo "READING SIMTEL FILE LIST $LIST"
 
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh $ARRAY $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh $ARRAY $LIST $N $S$M 1 $i $QSUBOPT $TRG
            done
            continue
         fi
