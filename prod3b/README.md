@@ -1,4 +1,4 @@
-# Analysis steps
+# CTA prod3b analysis scripts
 
 The analysis works with 'data sets'. Examples are
 
