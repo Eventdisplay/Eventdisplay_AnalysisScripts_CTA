@@ -42,17 +42,28 @@ wget https://www.mpi-hd.mpg.de/hfm/CTA/MC/Software/$HESSPACKAGE
 tar -xvzf $HESSPACKAGE
 cd hessioxxx
 
-if [[ $DSET = *"paranal"* ]]
+if [[ $DSET = *"prod3"* ]]
 then
-    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
-elif [[ $DSET = *"LaPalma"* ]]
+    if [[ $DSET = *"paranal"* ]]
+    then
+        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
+    elif [[ $DSET = *"LaPalma"* ]]
+    then
+        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+    else
+        echo "unknown data"
+        exit
+    fi
+elif [[ $DSET = *"prod4"* ]]
 then
-    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+   export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
 else
-    echo "unknown data"
-    exit
+   echo "unknown production"
+   exit
 fi
 make EXTRA_DEFINES="${HESSIOCFLAGS}"
+
+rm -f hessioxxx_2019-09-04.tar.gz
 
 export HESSIOSYS=$EVNDISPSYS/hessioxxx
 
