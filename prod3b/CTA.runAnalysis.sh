@@ -43,7 +43,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_91"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_991"
 
 #####################################
 # output directory for script parameter files
@@ -114,7 +114,7 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
-PARTICLE=( "proton" )
+PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_onSource" "proton" )
 
 #####################################
@@ -164,7 +164,9 @@ do
 
                   echo "READING SIMTEL FILE LIST $LIST"
 
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh $ARRAY $LIST $N $S$M 1 $i $QSUBOPT $TRG
+                  CURDIRR=`pwd`
+                  cd ../analysis/
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh ../prod3b/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
            done
            continue
         fi
