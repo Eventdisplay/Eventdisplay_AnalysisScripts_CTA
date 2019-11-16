@@ -141,18 +141,27 @@ do
       echo "DST file not found: $TMPDIR/$OFIL.root" >& $TMPDIR/$OFIL.$N.evndisp.log
   fi
 
+
 ####################################################################
 # get runnumber and azimuth and rename output files; mv them to final destination
   if [ -e $TMPDIR/$OFIL.root ]
   then
       MCAZ=`$EVNDISPSYS/bin/printRunParameter $TMPDIR/$OFIL.root -mcaz`
       RUNN=`$EVNDISPSYS/bin/printRunParameter $TMPDIR/$OFIL.root -runnumber`
+
+    # mv log files into evndisp root file
+      if [ -e $TMPDIR/$OFIL.$N.evndisp.log ]
+      then
+          $EVNDISPSYS/bin/logFile evndispLog $TMPDIR/${RUNN}.root $TMPDIR/$OFIL.$N.evndisp.log
+      fi
+      if [ -e $TMPDIR/$OFIL.$N.convert.log ]
+      then
+          $EVNDISPSYS/bin/logFile convLog $TMPDIR/${RUNN}.root $TMPDIR/$OFIL.$N.convert.log
+      fi
+
       cp -v -f $TMPDIR/[0-9]*.root $ODIR/${RUNN}"HD_"$ILINE"_"$MCAZ"deg.root"
   fi
-  bzip2 -v -f $TMPDIR/$OFIL.$N.evndisp.log
-  cp -v -f $TMPDIR/$OFIL.$N.evndisp.log.bz2 $ODIR/$RUNN"HD_"$ILINE"_"$MCAZ"deg.log.bz2"
-  bzip2 -v -f $TMPDIR/$OFIL.$N.convert.log
-  cp -v -f $TMPDIR/$OFIL.$N.convert.log.bz2 $ODIR/$RUNN"HD_"$ILINE"_"$MCAZ"deg.convert.log.bz2"
+
   if [ -f $CDIR/Calibration/[0-9]*IPRcontours.root ] 
   then 
     cp -v -f $CDIR/Calibration/[0-9]*IPRcontours.root $ODIR/Calibration/$RUNN"_"$ILINE"_"$MCAZ"deg.IPRcontours.root"
