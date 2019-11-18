@@ -48,18 +48,20 @@ QSUBOPT=${QSUBOPT//_M_/-}
 #########################################
 # software paths
 echo $DSET
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
 if [ -z $EVNDISPSYS ]
 then
     echo "no EVNDISPSYS environmental variable defined"
     exit
 fi
+DATE=`date +"%y%m%d%h%m%s"`
 # checking if table already exists
+# archive this table
 if [ -e $TFIL.root ]
 then
-   echo "error: table file exists, move or delete it"
-   exit
+   mv -f $TFIL.root ${TFIL}.${DATE}.root
+   echo "archived existing table file to ${TFIL}.${DATE}.root" 
 fi
 
 # adjust table name for on-axis tables
@@ -67,7 +69,6 @@ fi
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
-DATE=`date +"%y%m%d"`
 QLOG=$CTA_USER_LOG_DIR/$DATE/MAKETABLES/
 mkdir -p $QLOG
 

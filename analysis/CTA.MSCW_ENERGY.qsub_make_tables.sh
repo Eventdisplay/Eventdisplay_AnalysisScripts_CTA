@@ -97,6 +97,17 @@ echo $MOPT
 $EVNDISPSYS/bin/mscw_energy $MOPT -arrayrecid=$RECID -tablefile "$ODIR/$TFIL-$ARRAY.root" -inputfilelist ${TMPLIST} > $LDIR/$TFIL-$ARRAY.log
 #########################################
 
+# move log files into root file
+if [ -e $LDIR/$TFIL-$ARRAY.log ]
+then
+     $EVNDISPSYS/bin/logFile makeTableLog $ODIR/$TFIL-$ARRAY.root $LDIR/$TFIL-$ARRAY.log
+     rm -f $LDIR/$TFIL-$ARRAY.log
+fi
+if [ -e ${TMPLIST} ]
+then
+     $EVNDISPSYS/bin/logFile makeTableFileList $ODIR/$TFIL-$ARRAY.root ${TMPLIST}
+     rm -f ${TMPLIST}
+fi
 
 # sleep
 sleep 2
