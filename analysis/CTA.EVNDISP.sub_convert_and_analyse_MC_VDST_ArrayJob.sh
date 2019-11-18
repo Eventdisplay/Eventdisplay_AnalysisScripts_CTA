@@ -173,14 +173,25 @@ do
     chmod u+x $FNAM.sh
     echo $FNAM.sh
 
+    NUMDFIL=`wc -l $RUNLISTNdeg | awk '{print $1}'`
+    NUMDCAC=`grep acs $RUNLISTNdeg | wc -l`
+    # k=`awk -v N1=$NUMDFIL -v N2=$NUMDCAC 'BEGIN { print ( N2 / N1 ) }'`
+    DCACHEOPT=""
+    # save dCache from heart attack
+    if [[ $NUMDCAC -ge 1000 ]]
+    then
+        DCACHEOPT=" -l cta_dcache=1 "
+    fi
+    echo $DCACHEOPT
+
     if [[ $NRUN -ne 0 ]]
     then
         if [[ $DSET == "SCT" ]]
         then
             # SCT prod3 files need more memory:
-            qsub $QSUBOPT -t $RUNFROMTO:1  -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o $QLOG -e $QLOG "$FNAM.sh" 
         else
-            qsub $QSUBOPT -t $RUNFROMTO:1  -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o $QLOG -e $QLOG "$FNAM.sh" 
         fi
     echo "submit"
     fi
