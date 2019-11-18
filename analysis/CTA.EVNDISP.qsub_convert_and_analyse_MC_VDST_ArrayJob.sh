@@ -100,11 +100,6 @@ do
 # output data files are written to this directory
    ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"${N}"/"$PART"/"
    mkdir -p $ODIR
-   mkdir -p $ODIR/Calibration/
-
-# calibration direction (mainly important for NN cleaning)
-   CDIR=$TMPDIR
-   mkdir -p $CDIR/Calibration
 
 ####################################################################
 # execute zero suppression
@@ -148,7 +143,7 @@ do
 # execute eventdisplay
   if [ -e $TMPDIR/$OFIL.root ]
   then
-      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT -outputdirectory $TMPDIR -calibrationdirectory $CDIR >& $TMPDIR/$OFIL.$N.evndisp.log
+      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT -outputdirectory $TMPDIR -calibrationdirectory $TMPDIR >& $TMPDIR/$OFIL.$N.evndisp.log
   else
       echo "DST file not found: $TMPDIR/$OFIL.root" >& $TMPDIR/$OFIL.$N.evndisp.log
   fi
@@ -172,11 +167,6 @@ do
       fi
 
       cp -v -f $TMPDIR/[0-9]*.root $ODIR/${RUNN}"HD_"$ILINE"_"$MCAZ"deg.root"
-  fi
-
-  if [ -f $CDIR/Calibration/[0-9]*IPRcontours.root ] 
-  then 
-    cp -v -f $CDIR/Calibration/[0-9]*IPRcontours.root $ODIR/Calibration/$RUNN"_"$ILINE"_"$MCAZ"deg.IPRcontours.root"
   fi
 
 ####################################################################
