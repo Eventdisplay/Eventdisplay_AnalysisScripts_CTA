@@ -2,8 +2,6 @@
 #
 # script to convert sim_tel output files and then run eventdisplay analysis
 #
-# PROD3b
-#
 #
 #######################################################################
 
@@ -11,11 +9,11 @@ if [ ! -n "$1" ] && [ ! -n "$2" ] && [ ! -n "$3" ]
 then
    echo
    echo "
-    ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh 
+    ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh 
                   <sub array list> <list of sim_telarray files> <particle> <data set>
                   [keep simtel.root files (default off=0)] [log file directory counter] [qsub options]
    
-   CTA PROD3 ANALYSIS
+   CTA ANALYSIS
    
      <sub array list>          text file with list of subarray IDs
    
@@ -36,10 +34,6 @@ then
    exit
 fi
 
-########################
-# prod3 default 
-ARRAYCUTS="EVNDISP.prod3.reconstruction.runparameter.NN.LL"
-########################
 
 ARRAY=$1
 RUNLIST=$2
@@ -53,7 +47,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 
 # software paths
 echo $DSET
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 
 # checking the path for binaries
 if [ -z $EVNDISPSYS ]
@@ -68,30 +62,48 @@ fi
 DATE=`date +"%y%m%d"`
 
 # output directory for shell scripts and run lists
-SHELLDIR=$CTA_USER_DATA_DIR"/queueShellDir/"
+SHELLDIR=$CTA_USER_LOG_DIR"/queueShellDir/"
 mkdir -p $SHELLDIR
 
 # skeleton script
-FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob.prod3b"
+FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # log files
 QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
 mkdir -p $QLOG
 # QLOG="/dev/null"
 
-############################################
-# calibration file with IPR graphs
-# default (prod3b)
-if [[ $DSET = *"paranal"* ]]
+########################
+# producution depedendent parameters
+if [[ $DSET == *"prod3b"* ]]
 then
-   PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/prod3b.Paranal-20171214.ped.root"
-elif [[ $DSET = *"LaPalma"* ]]
+    ARRAYCUTS="EVNDISP.prod3.reconstruction.runparameter.NN.LL"
+    # calibration file with IPR graphs
+    if [[ $DSET = *"paranal"* ]]
+    then
+       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/prod3b.Paranal-20171214.ped.root"
+    elif [[ $DSET = *"LaPalma"* ]]
+    then
+       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/pedestal_nsb1x_LaPalma.root"
+    else
+       echo "Unknown data set for calibration file search with IPR graph"
+       exit
+    fi
+elif [[ $DSET == *"prod4"* ]]
 then
-   PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/pedestal_nsb1x_LaPalma.root"
+    ARRAYCUTS="EVNDISP.prod4.reconstruction.runparameter.NN.noLL"
+    # calibration file with IPR graphs
+    if [[ $DSET = *"SST"* ]]
+    then
+        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-SST-IPR.root"
+    else
+        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-MST-FlashCam.root"
+    fi
 else
-   echo "Unknown data set for calibration file search with IPR graph"
-   exit
+    echo "error: unknown production in $DSET" 
+    exit
 fi
+
 echo "PEDFIL: $PEDFIL"
 if [ ! -e $PEDFIL ]
 then
@@ -115,7 +127,7 @@ for D in 0 180
 do
 
 # run lists for north or south
-    RUNLISTNdeg=$SHELLDIR/$RUNLISTN.$D
+    RUNLISTNdeg=$SHELLDIR/$RUNLISTN.$D.${DSET}
     rm -f $RUNLISTNdeg
     grep "_$D" $RUNLIST > $RUNLISTNdeg
 

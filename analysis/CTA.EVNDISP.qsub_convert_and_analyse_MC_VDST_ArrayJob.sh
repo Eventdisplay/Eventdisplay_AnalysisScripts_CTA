@@ -2,14 +2,10 @@
 #
 # script to convert sim_tel output files to EVNDISP DST file and then run eventdisplay
 #
-# PROD3b analysis
-#
 #
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
-# source ./setSoftwarePaths.sh $DSET
-# source $EVNDISPSYS/prod3.sh
 
 ILIST=SIMTELLIST
 ILINE=$SGE_TASK_ID
@@ -27,10 +23,21 @@ FIELD=$SUBA
 
 ###################################
 # converter command line parameter
-COPT="-rfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat -f 2 -c $PEDFILE"
+COPT=""
+# prod3(b): read effective focal lengths from external file
+if [[ $DSET == *"prod3"* ]] 
+then
+    COPT="-rfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
+fi
+# (prod4 effective focal lengths included in simulation file)
+COPT="$COPT -f 2 -c $PEDFILE"
 
 # eventdisplay command line parameter
-OPT="-averagetzerofiducialradius=0.5 -shorttree -l2setspecialchannels nofile -writenoMCTree -ignoredstgains -reconstructionparameter $ACUT"
+OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+if [[ $DSET == *"prod3"* ]] 
+then
+    OPT="$OPT -ignoredstgains"
+fi
 
 # set simtelarray file and cp simtelarray.gz file to TMPDIR
 if [ ! -e $ILIST ]
@@ -91,8 +98,6 @@ do
    echo "RUNNING _"$N"_"
 # output data files are written to this directory
    ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"${N}"/"$PART"/"
-# TMPTMP
-#   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"${N}"/"$PART"/"
    mkdir -p $ODIR
    mkdir -p $ODIR/Calibration/
 
@@ -115,17 +120,23 @@ do
 # execute converter
    SIMFIL=`ls $TMPDIR/*.simtel.gz`
    echo "TMPDIR FILES " $SIMFIL
-   if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+   if [[ $DSET == *"prod3"* ]] 
    then
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
-   elif [[ $DSET == *"NSB"* ]]
+       if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+       then
+           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+       elif [[ $DSET == *"NSB"* ]]
+       then
+           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+       elif [[ $DSET == *"LaPalma"* ]]
+       then
+           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+       else
+           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${N:1}.lis
+       fi
+   elif [[ $DSET == *"prod4"* ]]
    then
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
-   elif [[ $DSET == *"LaPalma"* ]]
-   then
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
-   else
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${N:1}.lis
+       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${N}.lis
    fi
    ls -lh $DETGEO
    ls -lh $SIMFIL
