@@ -141,9 +141,9 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_onSource" "proton" )
 PARTICLE=( "electron" "gamma_cone" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" )
 
 #####################################
@@ -192,12 +192,13 @@ do
 
                   cd ./analysis/
                   ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  cd ../
            done
            continue
         fi
 ##########################################
 # for the following: duplicate the array list adding the scaling to array names
-        NXARRAY=`cat $ARRAY`
+        NXARRAY=`cat ${ARRAYDIR}/$ARRAY`
         NFILARRAY=$PDIR/temp.$ARRAY.list
         rm -f $NFILARRAY
         touch $NFILARRAY
@@ -216,6 +217,7 @@ do
             do
                 cd ./analysis/
                 ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 1 $A $RUNPAR 99
+                cd ../
             done
             continue
         fi
@@ -241,13 +243,16 @@ do
                               echo "Filling table $TABLE"
                               cd ./analysis/
                               ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} $QSUBOPT
+                              cd ../
                               continue
     ##########################################
 # analyse with lookup tables
                        elif [[ $RUN == "ANATABLES" ]]
                        then
                               echo "Using table $TABLE"
+                              cd ./analysis/
                               ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID $NFILARRAY $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} $QSUBOPT
+                              cd ../
                               continue
                         fi
                    fi
