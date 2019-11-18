@@ -36,6 +36,7 @@ COPT="$COPT -f 2 -c $PEDFILE"
 OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 if [[ $DSET == *"prod3"* ]] 
 then
+    # needs to be the same as used for IPR graph preparation
     OPT="$OPT -ignoredstgains"
 fi
 
