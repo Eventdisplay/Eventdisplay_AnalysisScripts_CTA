@@ -144,7 +144,7 @@ OFFAXIS="cone"
 PARTICLE=( "gamma_onSource" "proton" )
 PARTICLE=( "electron" "gamma_cone" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
-PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_onSource" )
 
 #####################################
 # cut on number of images
