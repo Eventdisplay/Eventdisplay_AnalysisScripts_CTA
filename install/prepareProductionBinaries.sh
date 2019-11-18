@@ -63,6 +63,7 @@ else
 fi
 make EXTRA_DEFINES="${HESSIOCFLAGS}"
 
+cd $EVNDISPSYS
 rm -f hessioxxx_2019-09-04.tar.gz
 
 export HESSIOSYS=$EVNDISPSYS/hessioxxx
