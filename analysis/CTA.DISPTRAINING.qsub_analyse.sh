@@ -30,16 +30,21 @@ rm -f $ODIR/*${TTYPE}*
 
 # strip array scaling (two characters) for paranal sites
 DARR=${ARRAY}
-if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+if [[ $DSET == *"prod3"* ]]
 then
-   DARR=${ARRAY%??}
-   ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
-elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
-then
-   DARR=${ARRAY}
-   ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+    then
+       DARR=${ARRAY%??}
+       ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
+    then
+       DARR=${ARRAY}
+       ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    else
+       ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+    fi
 else
-   ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+    ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
 fi
 
 #########################################

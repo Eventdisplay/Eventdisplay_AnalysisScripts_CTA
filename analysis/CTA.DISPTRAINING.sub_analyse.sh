@@ -62,7 +62,7 @@ TMVA=`cat $TMVAP`
 
 #########################################
 # software paths
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
 if [ -z $EVNDISPSYS ]
 then
@@ -86,11 +86,25 @@ FSCRIPT="CTA.DISPTRAINING.qsub_analyse"
 
 ########################################
 # list of telescopes
-if [[ $DSET == *"LaPalma"* ]]
+if [[ $DSET == *"prod3"* ]]
 then
-    TELTYPELIST="138704810 10408418 10408618"
+    if [[ $DSET == *"LaPalma"* ]]
+    then
+        TELTYPELIST="138704810 10408418 10408618"
+    else
+        TELTYPELIST="138704810 10408418 201309316 909924 10408618 201511619 207308707"
+    fi
+elif [[ $DSET == *"prod4"* ]]
+then
+    if [[ $DSET == *"MST"* ]]
+    then
+        TELTYPELIST="10408618"
+    else
+        TELTYPELIST="910224 201309316 201310418 201511619 201409917 201411019" 
+    fi
 else
-    TELTYPELIST="138704810 10408418 201309316 909924 10408618 201511619 207308707"
+    echo "unknown data set $DSET"
+    exit
 fi
 
 #########################################
