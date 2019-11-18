@@ -24,12 +24,15 @@ mkdir -p $ODIR
 rm -f $ODIR/$TFIL.log
 rm -f $ODIR/$TFIL.table.log
 
+# table directory
+TABDIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$ARRAY"/Tables/"
+
 #########################################
 # smooth / cp table file to temp disk
 SMOOTH="TRUE"
 if [ $SMOOTH == "TRUE" ]
 then
-    $EVNDISPSYS/bin/smoothLookupTables $CTA_EVNDISP_AUX_DIR/Tables/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
+    $EVNDISPSYS/bin/smoothLookupTables $TABDIR/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
 else
     cp -v $CTA_EVNDISP_AUX_DIR/Tables/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
 fi
@@ -63,22 +66,28 @@ DARR=${ARRAY}
 if  [[ $DSET == *"prod4"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
-elif [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+elif [[ $DSET == *"prod3"* ]]
 then
-   DARR=${ARRAY%??}
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
-elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
-then
-   DARR=${ARRAY}
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
+    then
+       DARR=${ARRAY%??}
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
+    then
+       DARR=${ARRAY}
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    else
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+    fi
 else
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+     echo "error: unknown data set $DSET"
+     exit
 fi
+
 
 #########################################
 # options for simple stereo reconstruction
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
-# MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=5"
 
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2"
@@ -117,21 +126,24 @@ $EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root -inputf
 #########################################
 
 #########################################
-# clean up and zip log files
-if [ -e $ODIR/$TFIL.table.log ] && [ -e $ODIR/$TFIL.log ]
+# clean up and mv loog file into root file
+if [ -e $ODIR/$TFIL.table.log ] && [ -e $TMPDIR/$TFIL.root ]
 then
-    cat $ODIR/$TFIL.table.log >> $ODIR/$TFIL.log
-    rm -f $ODIR/$TFIL.table.log
+     $EVNDISPSYS/bin/logFile smoothTableLog $TMPDIR/$TFIL.root $ODIR/$TFIL.table.log
+     rm -f $ODIR/$TFIL.table.log
 fi
-if [ -e $ODIR/$TFIL.table.log ]
+if [ -e $ODIR/$TFIL.log ] && [ -e $TMPDIR/$TFIL.root ]
 then
-    bzip2 -v -f $ODIR/$TFIL.table.log
+     $EVNDISPSYS/bin/logFile mscwTableLog $TMPDIR/$TFIL.root $ODIR/$TFIL.log
+     rm -f $ODIR/$TFIL.log
 fi
-if [ -e $ODIR/$TFIL.log ]
+if [ -e $TMPDIR/iList.list ] && [ -e $TMPDIR/$TFIL.root ]
 then
-    bzip2 -v -f $ODIR/$TFIL.log
+     $EVNDISPSYS/bin/logFile mscwTableList $TMPDIR/$TFIL.root $TMPDIR/iList.list
+     rm -f $TMPDIR/iList.list
+     rm -f $IFIL
 fi
-
+   
 mv -f -v $TMPDIR/$TFIL.root $ODIR/
 
 # sleep

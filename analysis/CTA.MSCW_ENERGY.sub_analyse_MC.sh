@@ -48,7 +48,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 
 #########################################
 # software paths
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
 if [ -z $EVNDISPSYS ]
 then
@@ -99,16 +99,10 @@ do
 
 # take $FILEN files and combine them into one mscw file
 	 FILEN=250
-	 if [ $PART = "proton" ] || [ $PART = "electron" ]
+	 if [ $PART = "proton" ]
 	 then
 	    FILEN=750
 	 fi
-         if [[ $DSET == *"LaPalma"* ]]
-         then
-            FILEN=500
-            # less for prod3
-            FILEN=100
-         fi
 
 #########################################
 # input files lists
@@ -151,6 +145,8 @@ do
             qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G  -V -j y -o $QLOG -e $QLOG "$FNAM.sh" 
 	    echo "run script written to $FNAM.sh"
 	    echo "queue log and error files written to $QLOG"
+
+            exit
        done
    done
 done
