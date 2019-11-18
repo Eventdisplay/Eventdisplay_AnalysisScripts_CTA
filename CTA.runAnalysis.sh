@@ -10,11 +10,14 @@
 if [ $# -lt 3 ] 
 then
    echo "
-   ./CTA.runProd3bAnalysis.sh <S/S40deg> <run mode> <recid> \\\\
+   ./CTA.runbAnalysis.sh <S/S40deg> <run mode> <recid> \\\\
                 <min number of LSTs> <min number of MSTs> <min number of SSTs> <min number of SCMSTs>
    
-     S20deg/S40deg/S60deg=prod3b-Southern-Site (20/40/60 deg ze)
-     N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
+    Prod3b analysis:
+         S20deg/S40deg/S60deg=prod3b-Southern-Site (20/40/60 deg ze)
+         N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
+    Prod4 analysis:
+         prod4-S20deg-MST
    
      possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
    
@@ -80,32 +83,46 @@ MCAZ=( "_180deg" "_0deg" "" )
 EDM=( "u05b-LL" )
 
 ##########################################################
-# SOUTH
+# PROD3B Analysis
 if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
    ARRAY="subArray.prod3b.South.list"
+   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "S40deg" ]]
 then
    SITE=( "prod3b-paranal40deg" )
    ARRAY="subArray.prod3b.South.list"
+   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "S60deg" ]]
 then
    SITE=( "prod3b-paranal60deg" )
    ARRAY="subArray.prod3b.South.list"
+   ARRAYDIR=( "prod3b" )
 # NORTH
 elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
+   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "N20deg-test" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North-test.list"
+   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "N40deg" ]]
 then
    SITE=( "prod3b-LaPalma-40deg" )
    ARRAY="subArray.prod3b.North.list"
+   ARRAYDIR=( "prod3b" )
+###############################################################
+# PROD4 Analysis
+elif [[ $P2 == "prod4-S20deg-MST" ]]
+then
+   SITE=( "prod4-MST-paranal-20deg-mst-f" )
+   ARRAY=( "subArray.prod4-MST-baseline.list" )
+   ARRAYDIR=( "prod4" )
+###############################################################
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo $P2
@@ -149,7 +166,6 @@ do
 
 #####################################
 # loop over all array scalings
-# (not relevant for prod3b production)
    for Y in $SUBARRAY
    do
 
@@ -162,14 +178,12 @@ do
           do
                   N=${PARTICLE[$i]}
 
-                  LIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/FileLists/prod3b-paranal20deg/prod3b-paranal20deg-${N}.20deg_0deg.list
-                  LIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/FileLists/prod3b-paranal20deg/${N}_180deg.list
-                  LIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/FileList_prod3b/${S}/${N}.list
+                  LIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/FileList_${ARRAYDIR}/${S}/${N}.list
 
                   echo "READING SIMTEL FILE LIST $LIST"
 
-                  cd ../analysis/
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../prod3b/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  cd ./analysis/
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 1 $i $QSUBOPT $TRG
            done
            continue
         fi
@@ -192,8 +206,8 @@ do
             DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/"
             for A in $NXARRAY
             do
-                cd ../analysis/
-                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99
+                cd ./analysis/
+                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 1 $A $RUNPAR 99
             done
             continue
         fi
@@ -217,7 +231,7 @@ do
                       if [[ $RUN == "MAKETABLES" ]]
                       then
                               echo "Filling table $TABLE"
-                              cd ../analysis/
+                              cd ./analysis/
                               ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} $QSUBOPT
                               continue
     ##########################################
@@ -254,7 +268,7 @@ do
                   then
                       TMVATYPF=NIM${NIMAGESMIN}LST${LST}MST${MST}SST${SST}
                   fi
-                  PARA="$PDIR/scriptsInput.prod3b.ID${ID}${ETYPF}${AZ}.${S}${AZ}${OOTIME}.runparameter"
+                  PARA="$PDIR/scriptsInput.{ID}${ETYPF}${AZ}.${S}${AZ}${OOTIME}.runparameter"
                   rm -f $PARA
                   touch $PARA
                   echo "WRITING PARAMETERFILE $PARA"
