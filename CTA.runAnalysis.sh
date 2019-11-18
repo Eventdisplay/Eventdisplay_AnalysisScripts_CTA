@@ -43,7 +43,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_991"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_3"
 
 #####################################
 # output directory for script parameter files
@@ -74,7 +74,6 @@ fi
 # _180deg = south
 # _0deg = north
 MCAZ=( "_180deg" "_0deg" "" )
-MCAZ=( "_180deg" )
 
 #####################################
 # loss cut adaption
@@ -99,6 +98,10 @@ elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
+elif [[ $P2 == "N20deg-test" ]]
+then
+   SITE=( "prod3b-LaPalma-20deg" )
+   ARRAY="subArray.prod3b.North-test.list"
 elif [[ $P2 == "N40deg" ]]
 then
    SITE=( "prod3b-LaPalma-40deg" )
@@ -114,8 +117,9 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
-PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_onSource" "proton" )
+PARTICLE=( "electron" "gamma_cone" )
+PARTICLE=( "gamma_cone" )
 
 #####################################
 # cut on number of images
@@ -164,9 +168,8 @@ do
 
                   echo "READING SIMTEL FILE LIST $LIST"
 
-                  CURDIRR=`pwd`
                   cd ../analysis/
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod3b.sh ../prod3b/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../prod3b/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
            done
            continue
         fi
@@ -189,6 +192,7 @@ do
             DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/"
             for A in $NXARRAY
             do
+                cd ../analysis/
                 ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99
             done
             continue
@@ -213,6 +217,7 @@ do
                       if [[ $RUN == "MAKETABLES" ]]
                       then
                               echo "Filling table $TABLE"
+                              cd ../analysis/
                               ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} $QSUBOPT
                               continue
     ##########################################
