@@ -122,6 +122,14 @@ then
    SITE=( "prod4-MST-paranal-20deg-mst-f" )
    ARRAY=( "subArray.prod4-MST-baseline.list" )
    ARRAYDIR=( "prod4" )
+elif [[ $P2 == "prod4-S20deg-SST" ]]
+then
+# for other prod4(b) SST data sets:
+# - set file lists correctly
+# - prepare and install software (each SST type is a DSET)
+   SITE=( "prod4-SST-paranal-20deg-sst-astri-chec-s" )
+   ARRAY=( "subArray.prod4-SST.list" )
+   ARRAYDIR=( "prod4" )
 ###############################################################
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -183,7 +191,7 @@ do
                   echo "READING SIMTEL FILE LIST $LIST"
 
                   cd ./analysis/
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 1 $i $QSUBOPT $TRG
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
            done
            continue
         fi
