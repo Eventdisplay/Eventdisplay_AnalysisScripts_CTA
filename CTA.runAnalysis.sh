@@ -216,7 +216,7 @@ do
             for A in $NXARRAY
             do
                 cd ./analysis/
-                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 1 $A $RUNPAR 99
+                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99
                 cd ../
             done
             continue
