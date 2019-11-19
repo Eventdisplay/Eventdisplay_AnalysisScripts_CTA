@@ -2,6 +2,13 @@
 #
 # set software paths to the correct place
 
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
+then
+   echo "source ./setSoftwarePaths.sh <data set>"
+   echo "(use source)"
+   exit
+fi
+
 if [ ! -n "$1" ]
 then
     echo "source ./setSoftwarePaths.sh <data set>"
