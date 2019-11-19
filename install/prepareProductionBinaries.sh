@@ -20,7 +20,7 @@ mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-git clone https://github.com/GernotMaier/Eventdisplay_AnalysisFiles_CTA.git
+git clone https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
 
@@ -34,7 +34,7 @@ echo "Preparing binaries for $DSET"
 echo 
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
-git clone https://github.com/GernotMaier/Eventdisplay.git .
+git clone https://github.com/Eventdisplay/Eventdisplay.git .
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx_2019-09-04.tar.gz"
