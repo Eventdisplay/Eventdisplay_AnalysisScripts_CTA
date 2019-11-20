@@ -141,10 +141,10 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" "proton" )
 PARTICLE=( "electron" "gamma_cone" )
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_onSource" )
+PARTICLE=( "gamma_onSource" "proton" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
 # cut on number of images
