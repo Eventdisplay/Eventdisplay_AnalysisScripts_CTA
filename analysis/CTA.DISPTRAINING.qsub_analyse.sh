@@ -15,6 +15,8 @@ TMVAO=TTT
 DSET="DATASET"
 ARRAY=AAA
 
+source ../setSoftwarePaths.sh $DSET
+
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
 
