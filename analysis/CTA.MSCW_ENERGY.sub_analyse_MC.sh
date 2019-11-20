@@ -146,7 +146,6 @@ do
 	    echo "run script written to $FNAM.sh"
 	    echo "queue log and error files written to $QLOG"
 
-            exit
        done
    done
 done
