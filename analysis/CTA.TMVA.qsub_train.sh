@@ -26,13 +26,16 @@ rm -f $CDIR/BDT_${EBIN}*.C
 # rm -rf $CDIR/complete_BDTroot/BDT_${EBIN}*
 rm -rf $CDIR/complete_BDTroot
 
-# dump runparameter file into the log files and zip it
-if [ -e $PFILE.log ]
+# mv log file into root file
+if [ -e $PFILE.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
-   cat $PFILE.runparameter >> $PFILE.log
-   bzip2 -f -v $PFILE.log
+    $EVNDISPSYS/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root $PFILE.log
+    rm -f $PFILE.log
 fi
-rm -f $PFILE.runparameter
-
+if [ -e $PFILE.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
+then
+    $EVNDISPSYS/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root $PFILE.runparameter
+    rm -f $PFILE.runparameter
+fi
 
 exit

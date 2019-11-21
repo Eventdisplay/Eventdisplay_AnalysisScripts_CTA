@@ -56,9 +56,6 @@ then
 fi
 VARRAY=`awk '{printf "%s ",$0} END {print ""}' $1`
 
-# directory for log files
-QLOG=/dev/null
-
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
@@ -113,7 +110,7 @@ NOFF=${#OFFMIN[@]}
 
 ######################################
 # software paths
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
 if [ -z $EVNDISPSYS ]
 then
@@ -125,6 +122,7 @@ fi
 # log files
 DATE=`date +"%y%m%d"`
 LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
+QLOG=$LDIR
 mkdir -p $LDIR
 echo "log directory: " $LDIR
 
@@ -229,6 +227,7 @@ do
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
    NTELTYPE=`$EVNDISPSYS/bin/printRunParameter $1 -nteltypes`
+   NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
@@ -246,6 +245,7 @@ do
    then
        TYPECUT="${TYPECUT})"
    fi
+   TYPECUT="$NTYPECUT\&\&$TYPECUT"
    echo "Telescope type cut: $TYPECUT"
 
 ###############################################################
@@ -300,8 +300,8 @@ do
      # loop over all energy bins and prepare run scripts
      for ((i=0; i < $NENE; i++))
      do
-         FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.$2.${OFFMEA[$W]}.$MCAZ.$i
-         FNAM=$ODIR/tmva${i}.qsub
+         FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.$MCAZ.$i
+         # FNAM=$ODIR/tmva${i}.qsub
 
          RRFIL=$ODIR/$RXPAR$ARRAY
 
