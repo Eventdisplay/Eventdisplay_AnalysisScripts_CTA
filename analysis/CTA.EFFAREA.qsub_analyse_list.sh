@@ -372,7 +372,6 @@ do
                  -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
                  -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
 
-          cd $EVNDISPSYS/scripts/CTA/
           echo $iCFIL
 
     ###############################################################################
@@ -471,12 +470,14 @@ do
       #  cleanup
       # (reduce number of files)
 
-          cat $MSCF >> $OFIX.log
+          $EVNDISPSYS/bin/logFile effAreaParameters $OFIX.root $MSCF
           rm -f $MSCF
-          cat  $iCFIL >> $OFIX.log
+
+          $EVNDISPSYS/bin/logFile effAreaCuts $OFIX.root $iCFIL
           rm -f $iCFIL
 
-          bzip2 -f $OFIX.log
+          $EVNDISPSYS/bin/logFile effAreaLog $OFIX.root $OFIX.log
+          rm -f $OFIX.log
 
        done
     done
@@ -493,6 +494,7 @@ then
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.onSource.log
      rm -f $LLOG
      $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
+     $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      # cone
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
      rm -f $LLOG
@@ -504,6 +506,8 @@ then
      # off-axis std binning
          $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $ODIR $AXDIR > $LLOG
      fi
+     $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.0.root $LLOG
+     rm -f $LLOG
 fi
 
 exit

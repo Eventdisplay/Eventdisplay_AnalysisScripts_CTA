@@ -64,7 +64,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/} 
 
 # set directories
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 CDIR="$CTA_EVNDISP_AUX_DIR/GammaHadronCutFiles/"
 
 #######################################
