@@ -281,7 +281,7 @@ do
                   then
                       TMVATYPF=NIM${NIMAGESMIN}LST${LST}MST${MST}SST${SST}
                   fi
-                  PARA="$PDIR/scriptsInput.{ID}${ETYPF}${AZ}.${S}${AZ}${OOTIME}.runparameter"
+                  PARA="$PDIR/scriptsInput.${ID}${ETYPF}${AZ}.${S}${AZ}${OOTIME}.runparameter"
                   rm -f $PARA
                   touch $PARA
                   echo "WRITING PARAMETERFILE $PARA"
@@ -299,6 +299,8 @@ do
                   echo "OBSERVINGTIME_H $OOTIME" >> $PARA
                   echo "GETXOFFYOFFAFTERCUTS yes" >> $PARA
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> $PARA
+
+                  cd ./analysis/
 ##########################################
 # train BDTs   
 # (note: BDT training does not need to be done for all observing periods)
@@ -353,6 +355,7 @@ do
                       echo "Unknown run set: $RUN"
                       exit
                 fi
+                cd ../
          done
       done
      done
