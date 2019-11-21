@@ -494,6 +494,8 @@ then
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.onSource.log
      rm -f $LLOG
      $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
+     echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
+     echo $LLOG
      $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      # cone
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
