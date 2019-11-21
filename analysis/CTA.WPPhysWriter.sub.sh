@@ -42,7 +42,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 
 ############################################################################
 # software paths
-source ./setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
 if [ -z $EVNDISPSYS ]
 then
@@ -66,12 +66,8 @@ for ARRAY in $VARRAY
 do
    echo "STARTING ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys20171231/
-   ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys20180120NSB/
-   ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys20180120FOVFB/
-   ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys20180120highCL/
-   ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys20180120LaPalmas05/
-   # ODIR=$CTA_USER_DATA_DIR/analysis/WPPhys/WPPhys2018012060degq05/
+   ODIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/Phys/"
+
    OXUTNAME=$ODIR/$OUTNAME
    mkdir -p $ODIR
    echo "WP Phys file written to $OXUTNAME"
