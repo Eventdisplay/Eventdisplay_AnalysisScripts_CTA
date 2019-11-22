@@ -55,7 +55,7 @@ then
     echo "no EVNDISPSYS environmental variable defined"
     exit
 fi
-DATE=`date +"%y%m%d%h%m%s"`
+DATE=`date +"%y%m%d"`
 # checking if table already exists
 # archive this table
 if [ -e $TFIL.root ]
