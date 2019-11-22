@@ -445,6 +445,9 @@ do
 #          fi
           echo "* CUTFILE $iCFIL" >> $MSCF
           echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
+          # to write full data tress 
+          # (note: very large output files!)
+          # echo "* WRITEEVENTDATATREE 1" >> $MSCF
 
     # output file
           if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
