@@ -90,7 +90,7 @@ fi
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
 
 # IMPORTANT: this must be the same or lower value as in dispBDT training
-MOPT="$MOPT -maxloss=0.2"
+MOPT="$MOPT -maxloss=0.2 -minfui=0."
 
 #########################################
 # disp main directory name

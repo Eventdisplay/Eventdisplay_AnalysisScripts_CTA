@@ -14,8 +14,7 @@ TLIST=ILIST
 TMVAO=TTT
 DSET="DATASET"
 ARRAY=AAA
-
-source ../setSoftwarePaths.sh $DSET
+QC="QQQQ"
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -51,7 +50,7 @@ fi
 
 #########################################
 # train TMVA
-$EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST $ODIR 0.5 ${RECID} ${TTYPE} ${BDT} ${TMVAO} ${ADIR} > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
+$EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST $ODIR 0.5 ${RECID} ${TTYPE} ${BDT} ${TMVAO} ${ADIR} "" ${QC} > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
 #########################################
 
 ##############

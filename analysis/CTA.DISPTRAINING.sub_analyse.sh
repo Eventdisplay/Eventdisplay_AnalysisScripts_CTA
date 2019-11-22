@@ -49,9 +49,14 @@ if [ -n $6 ]
 then
     SCALING=$6
 fi
-if [ -n $7 ]
+TMVAQC=""
+if [ -n $8 ]
 then
-   QSUBOPT="$7"
+   TMVAQC="$7"
+fi
+if [ -n $8 ]
+then
+   QSUBOPT="$8"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 
@@ -59,6 +64,8 @@ QSUBOPT=${QSUBOPT//_M_/-}
 #########################################
 # TMVA options
 TMVA=`cat $TMVAP`
+# TMVA quality cuts
+QCA=`cat $TMVAQC`
 
 #########################################
 # software paths
@@ -114,107 +121,113 @@ for BDT in BDTDisp BDTDispEnergy BDTDispError
 do
     for MCAZ in 0deg 180deg
     do
-      NSTEP=183
+      NSTEP=1083
       for T in ${TMVA}
       do
         echo $T
-        let "NSTEP = $NSTEP + 1"
-        OFFDIR=${ODIR}.T${NSTEP}
-        ####################
-        # output directory
-        TDIR="${OFFDIR}/${BDT}/${MCAZ}/"
-        mkdir -p $TDIR
-
-        for TELTYPE in $TELTYPELIST
+        for QC in ${QCA}
         do
-            echo
-            echo "STARTING BDT TRAINING FOR AZ DIRECTION $MCAZ AND TELESCOPE TYPE $TELTYPE"
-            echo "   training options: ${T}"
-            echo "=========================================================================="
+            echo $QC
 
+            let "NSTEP = $NSTEP + 1"
+            OFFDIR=${ODIR}.T${NSTEP}
             ####################
-            # input directory
-            if [[ $TELTYPE == "138704810" ]]
-            then
-                AY=${ARRAY}-NG
-            elif [[ $TELTYPE == "10408418" ]]
-            then
-                AY=${ARRAY}-NG
-            elif [[ $TELTYPE == "201309316" ]]
-            then
-                AY=${ARRAY}-NG
-            elif [[ $TELTYPE == "909924" ]]
-            then
-                AY=${ARRAY}-FD
-            elif [[ $TELTYPE == "10408618" ]]
-            then
-                AY=${ARRAY}-FD
-            elif [[ $TELTYPE == "201511619" ]]
-            then
-                AY=${ARRAY}-FA
-            elif [[ $TELTYPE == "207308707" ]]
-            then
-                AY=${ARRAY}-SD
-            else
-                echo "Error: unknown telescope type: $TELTYPE"
-                exit
-            fi
-            if [[ ${SCALING} < 99 ]]
-            then
-                AY=${AY}-${SCALING}
-            fi
-            if [[ $DSET == *"LaPalma"* ]] || [[ $DSET == *"SCT"* ]]
-            then
+            # output directory
+            TDIR="${OFFDIR}/${BDT}/${MCAZ}/"
+            mkdir -p $TDIR
+
+            for TELTYPE in $TELTYPELIST
+            do
+                echo
+                echo "STARTING BDT TRAINING FOR AZ DIRECTION $MCAZ AND TELESCOPE TYPE $TELTYPE"
+                echo "   training options: ${T}"
+                echo "=========================================================================="
+
+                ####################
+                # input directory
+                if [[ $TELTYPE == "138704810" ]]
+                then
+                    AY=${ARRAY}-NG
+                elif [[ $TELTYPE == "10408418" ]]
+                then
+                    AY=${ARRAY}-NG
+                elif [[ $TELTYPE == "201309316" ]]
+                then
+                    AY=${ARRAY}-NG
+                elif [[ $TELTYPE == "909924" ]]
+                then
+                    AY=${ARRAY}-FD
+                elif [[ $TELTYPE == "10408618" ]]
+                then
+                    AY=${ARRAY}-FD
+                elif [[ $TELTYPE == "201511619" ]]
+                then
+                    AY=${ARRAY}-FA
+                elif [[ $TELTYPE == "207308707" ]]
+                then
+                    AY=${ARRAY}-SD
+                else
+                    echo "Error: unknown telescope type: $TELTYPE"
+                    exit
+                fi
+                if [[ ${SCALING} < 99 ]]
+                then
+                    AY=${AY}-${SCALING}
+                fi
+                if [[ $DSET == *"LaPalma"* ]] || [[ $DSET == *"SCT"* ]]
+                then
+                    AY=${ARRAY}
+                fi
                 AY=${ARRAY}
-            fi
-            AY=${ARRAY}
 
-            echo $DSET $AY
+                echo $DSET $AY
 
-            ####################
-            # input file list
-            rm -f $SHELLDIR/tempList.list
-            find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$AY/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
-            NFIL=`wc -l $SHELLDIR/tempList.list | awk '{print $1}'`
-            echo "Total number of files available: $NFIL"
-            # only use NN% of all evndisp files for training
-            # (for LSTs: use more, as there are less telescopes)
-            # South:  10%
-            # North: 20%
-            k=`expr 0.2*$NFIL | bc`
-            if [[ $DSET == *"LaPalma"* ]]
-            then
-                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
-            else
-                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
-            fi
-            TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP.list"
-            rm -f $TLIST
-            shuf -n $k $SHELLDIR/tempList.list > $TLIST
-            echo "List of $k input files for training: $TLIST"
+                ####################
+                # input file list
+                rm -f $SHELLDIR/tempList.list
+                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$AY/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
+                NFIL=`wc -l $SHELLDIR/tempList.list | awk '{print $1}'`
+                echo "Total number of files available: $NFIL"
+                # only use NN% of all evndisp files for training
+                # (for LSTs: use more, as there are less telescopes)
+                # South:  10%
+                # North: 20%
+                k=`expr 0.2*$NFIL | bc`
+                if [[ $DSET == *"LaPalma"* ]]
+                then
+                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
+                else
+                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
+                fi
+                TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP.list"
+                rm -f $TLIST
+                shuf -n $k $SHELLDIR/tempList.list > $TLIST
+                echo "List of $k input files for training: $TLIST"
 
-            ####################
-            # prepare run scripts
-              FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP"
-              cp $FSCRIPT.sh $FNAM.sh
+                ####################
+                # prepare run scripts
+                  FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP"
+                  cp $FSCRIPT.sh $FNAM.sh
 
-              sed -i -e "s|OFILE|$TDIR|" \
-                     -e "s|TELTYPE|$TELTYPE|" \
-                     -e "s|BDTTYPE|$BDT|" \
-                     -e "s|RECONSTRUCTIONID|$RECID|" \
-                     -e "s|ILIST|$TLIST|" \
-                     -e "s|TTT|$T|" \
-                     -e "s|AAA|$ARRAY|" \
-                     -e "s|DATASET|$DSET|" $FNAM.sh
+                  sed -i -e "s|OFILE|$TDIR|" \
+                         -e "s|TELTYPE|$TELTYPE|" \
+                         -e "s|BDTTYPE|$BDT|" \
+                         -e "s|RECONSTRUCTIONID|$RECID|" \
+                         -e "s|ILIST|$TLIST|" \
+                         -e "s|TTT|$T|" \
+                         -e "s|AAA|$ARRAY|" \
+                         -e "s|QQQQ|$QC|" \
+                         -e "s|DATASET|$DSET|" $FNAM.sh
 
-              chmod u+x $FNAM.sh
-              echo "shell script " $FNAM.sh
+                  chmod u+x $FNAM.sh
+                  echo "shell script " $FNAM.sh
 
-              # submit the job
-              qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=8000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
-           done
+                  # submit the job
+                  qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=8000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+               done
+             done
          done
-     done
+    done
 done
 
 echo "shell scripts are written to $SHELLDIR"

@@ -142,8 +142,8 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "electron" "gamma_cone" )
-PARTICLE=( "gamma_onSource" )
 PARTICLE=( "gamma_onSource" "proton" )
+PARTICLE=( "proton" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -212,11 +212,12 @@ do
         then
             BDTDIR="BDTdisp."
             RUNPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDTDisp.runparameter"
+            QCPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
             DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/"
             for A in $NXARRAY
             do
                 cd ./analysis/
-                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99
+                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
                 cd ../
             done
             continue
