@@ -65,7 +65,7 @@ mkdir -p $QLOG
 # QLOG=/dev/null
 
 # output directory for shell scripts
-SHELLDIR=$CTA_USER_LOG_DIR/$DATE"/MSCWANA/$ANADIR/"
+SHELLDIR="$QLOG/$ANADIR/"
 mkdir -p $SHELLDIR
 
 ###########################
