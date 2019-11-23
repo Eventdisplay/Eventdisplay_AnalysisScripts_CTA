@@ -37,7 +37,10 @@ export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
 export HESSIOSYS=$EVNDISPSYS/hessioxxx
 export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
 
-export LD_LIBRARY_PATH=/afs/ifh.de/group/cta/VERITAS/software/VBF-0.3.4/lib:${LD_LIBRARY_PATH}
+if [ $VBFSYS ]
+then
+    export LD_LIBRARY_PATH=$VBFSYS/lib:${LD_LIBRARY_PATH}
+fi
 export ROOT_INCLUDE_PATH=${EVNDISPSYS}/inc
 
 export CTA_EVNDISP_AUX_DIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/Eventdisplay_AnalysisFiles_CTA/
