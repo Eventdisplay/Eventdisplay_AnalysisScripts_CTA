@@ -95,7 +95,7 @@ echo "directory for qsub shell scripts"
 QSHELLDIR=$CTA_USER_DATA_DIR"/queueShellDir"
 echo $QSHELLDIR
 mkdir -p $QSHELLDIR
-QDIR=$CTA_USER_LOG_DIR"/$DATE/EFFAREA/"
+QDIR=$CTA_USER_LOG_DIR"/$DATE/EFFAREA/$4/"
 mkdir -p $QDIR
 # QDIR="/dev/null"
 echo "qsub error log $QDIR"
