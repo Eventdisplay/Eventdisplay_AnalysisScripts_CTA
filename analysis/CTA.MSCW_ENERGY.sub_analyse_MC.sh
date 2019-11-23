@@ -142,7 +142,7 @@ do
 	    chmod u+x $FNAM.sh
 
 # submit the job
-            qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G  -V -j y -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G -V -o $QLOG -e $QLOG "$FNAM.sh" 
 	    echo "run script written to $FNAM.sh"
 	    echo "queue log and error files written to $QLOG"
 
