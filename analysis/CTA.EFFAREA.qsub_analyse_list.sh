@@ -230,7 +230,7 @@ do
        fi   
        ISOTROPY="1"
        DIRECTIONCUT="0"
-    fi
+    fi 
     if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
     then
        if [[ ${DSET:0:2} == "GR" ]]
