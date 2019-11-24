@@ -16,6 +16,8 @@ source $EVNDISPSYS/setObservatory.sh CTA
 PFILE=${RPARA}_${EBIN}
 rm -f $PFIL.log
 
+echo $PFILE.runparameter
+
 $EVNDISPSYS/bin/trainTMVAforGammaHadronSeparation $PFILE.runparameter > $PFILE.log
 
 CDIR=`dirname $PFILE`
@@ -36,6 +38,14 @@ if [ -e $PFILE.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
     $EVNDISPSYS/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root $PFILE.runparameter
     rm -f $PFILE.runparameter
+fi
+
+# bzip log files for which there are not enough events
+if [ -e $PFILE.log ]
+then
+    if grep -q "ERROR: not enough signal or/and backgrou eve" "$PFILE.log"; then
+        bzip2 -f $PFILE.log
+    fi
 fi
 
 exit

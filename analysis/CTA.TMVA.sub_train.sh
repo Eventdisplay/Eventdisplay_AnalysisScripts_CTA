@@ -313,7 +313,7 @@ do
 
         #################################
         # submit job to queue
-        qsub $QSUBOPT -V -l h_cpu=41:59:00 -l h_rss=4000M -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+        qsub $QSUBOPT -V -l h_cpu=47:59:00 -l h_rss=6000M -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
     done
   done
 done
