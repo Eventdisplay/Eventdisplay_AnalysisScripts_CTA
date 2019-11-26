@@ -428,21 +428,6 @@ do
              echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
              echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CrabNebula.dat 5" >> $MSCF
           fi
-    # REMOVED IGNOREFRACTIONOFEVENTS:
-    #  - training is randomizing the input files, therefore this
-    #    is anyway not a clean approach anymore
-    #    solution would be to use the same input file list as
-    #    BDT training
-    # first half of data set is not used (as these events are used for the TMVA training)
-#          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
-#          then
-#             echo "* IGNOREFRACTIONOFEVENTS 0.5" >> $MSCF
-#          fi
-#          if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
-#          then
-    # first half of data set is not used (as these events are used for the TMVA training)
-#             echo "* IGNOREFRACTIONOFEVENTS 0.5" >> $MSCF
-#          fi
           echo "* CUTFILE $iCFIL" >> $MSCF
           echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
           # to write full data tress 
@@ -498,7 +483,7 @@ then
      rm -f $LLOG
      $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
      echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
-     echo $LLOG
+     rm -f $LLOG
      $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      # cone
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
