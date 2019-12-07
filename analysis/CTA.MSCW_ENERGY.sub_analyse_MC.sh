@@ -122,10 +122,12 @@ do
 # input file list
 	    IFIL=$ODIR/$TFIL.list
 	    rm -f $IFIL
-	    let "k = $l + $FILEN"
+	    let "k = $l + $FILEN - 1"
 	    sed -n "$l,$k p" $TMPLIST > $IFIL
 # skeleton script
 	    FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
+
+            continue
 
 # name of script actually submitted to the queue
 	    FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-array$SUBAR-$6-$l"
