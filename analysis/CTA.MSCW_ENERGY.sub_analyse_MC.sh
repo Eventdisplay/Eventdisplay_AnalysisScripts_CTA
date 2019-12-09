@@ -127,8 +127,6 @@ do
 # skeleton script
 	    FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
 
-            continue
-
 # name of script actually submitted to the queue
 	    FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-array$SUBAR-$6-$l"
 
