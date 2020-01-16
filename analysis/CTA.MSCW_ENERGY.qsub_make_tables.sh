@@ -40,7 +40,6 @@ MCAZ=${MCAZ/_/}
 TMPLIST=$LDIR/${DSET}${MCAZ}.${ARRAY}.list
 rm -f $TMPLIST
 touch $TMPLIST
-# for diffuse gamma rays: use also on-axis gamma rays to get sufficient statistics at high energies
 if [ $CONE == "TRUE" ]
 then
    find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
