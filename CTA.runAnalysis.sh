@@ -46,7 +46,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_3"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -104,6 +104,10 @@ elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
+   ARRAY="subArray.prod3b.North-202003.list"
+   ARRAY="subArray.prod3b.North-202003.v2.list"
+   ARRAY="subArray.prod3b.North-202004c-smallArrays.list"
+   ARRAY="subArray.prod3b.North-202004b.list"
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "N20deg-test" ]]
 then
@@ -144,6 +148,7 @@ OFFAXIS="cone"
 PARTICLE=( "electron" "gamma_cone" )
 PARTICLE=( "gamma_onSource" "proton" )
 PARTICLE=( "proton" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -241,9 +246,9 @@ do
                       TABLE="tables_CTA-$S$M-ID0${AZ}-$TDATE"
                       if [[ $RUN == "MAKETABLES" ]]
                       then
-                              echo "Filling table $TABLE"
+                              echo "Filling table $TABLE with mintel option ${LST}"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} ${LST} $QSUBOPT
                               cd ../
                               continue
     ##########################################
