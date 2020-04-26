@@ -9,7 +9,7 @@
 if [ $# -lt 6 ]
 then
    echo
-   echo "CTA.MSCW_ENERGY.sub_make_tables.sh <table file name> <recid> <subarray list> <onSource/cone> <data set> <azimuth bin> [qsub options]"
+   echo "CTA.MSCW_ENERGY.sub_make_tables.sh <table file name> <recid> <subarray list> <onSource/cone> <data set> <azimuth bin> [min tel] [qsub options]"
    echo ""
    echo "  <table file name>  name of the table file (to be written; without .root)"
    echo "  <recid>            reconstruction ID according to EVNDISP.reconstruction.parameter"
@@ -17,6 +17,7 @@ then
    echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
    echo "  <data set>         e.g. cta-ultra3, ISDC3700m, ...  "
    echo "  <azimuth bin>      e.g. _180deg, _0deg"
+   echo "  [min tel]          minimum number of telescopes (any type)"
    echo
    echo " input data and output directories for tables are fixed in CTA.MSCW_ENERGY.qsub_make_tables.sh"
    echo
@@ -38,9 +39,10 @@ then
 fi
 DSET=$5
 AZ=$6
-if [ -n $7 ]
+[[ "$7" ]] && MINTEL=$7 || MINTEL="4"
+if [ -n $8 ]
 then
-   QSUBOPT="$7"
+   QSUBOPT="$8"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 
@@ -99,6 +101,7 @@ do
          -e "s|ARRRRRRR|$ARRAY|" \
          -e "s|CCC|$CONE|" \
          -e "s|AZIMUTH|$AZ|" \
+         -e "s|MMTEL|$MINTEL|" \
          -e "s|DATASET|$DSET|" $FNAM.sh
 
   chmod u+x $FNAM.sh

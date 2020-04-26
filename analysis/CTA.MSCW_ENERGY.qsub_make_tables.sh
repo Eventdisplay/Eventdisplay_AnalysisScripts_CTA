@@ -10,6 +10,7 @@ ARRAY=ARRRRRRR
 CONE="CCC"
 DSET="DATASET"
 MCAZ="AZIMUTH"
+MINTEL="MMTEL"
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -71,9 +72,7 @@ else
    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
 fi
 
-# MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=2 -write1DHistograms"
-# MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=3 -write1DHistograms"
-MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=4  -write1DHistograms"
+MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=${MINTEL} -write1DHistograms"
 # options for reweighting of telescopes
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
 # for 40 deg prod3b
