@@ -10,7 +10,7 @@ DISPN="1084"
 # new disp training files
 DISPO="1085"
 # baseline array directory
-FULLARRAY="BDTdisp.Nb.3AL4-BN15.${DISPN}"
+FULLARRAY="BDTdisp.Nb.3AL4-BN15.T${DISPN}"
 
 DD=$(find . -maxdepth 1 -name "BDTdisp.Nb*${DISPN}")
 
