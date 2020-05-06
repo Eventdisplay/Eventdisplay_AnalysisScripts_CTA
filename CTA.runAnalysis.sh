@@ -38,9 +38,9 @@ RECID=$3
 SUBARRAY="1"
 # number of telescopes
 [[ "$4" ]] && LST=$4 || LST="2"
-[[ "$5" ]] && MST=$4 || MST="2"
-[[ "$6" ]] && SST=$4 || SST="2"
-[[ "$7" ]] && SCMST=$4 || SCMST="2"
+[[ "$5" ]] && MST=$5 || MST="2"
+[[ "$6" ]] && SST=$6 || SST="2"
+[[ "$7" ]] && SCMST=$7 || SCMST="2"
 echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 
 #####################################
@@ -59,6 +59,10 @@ TDATE="g20191112"
 ANADATE="g20191112"
 TMVADATE="g20191112"
 EFFDATE="g20191112"
+TDATE="g20191112"
+ANADATE="g20200429"
+TMVADATE="g20200429"
+EFFDATE="g20200429"
 # analysis versions
 TMVAVERSION="V3"
 EFFVERSION="V3"
@@ -108,6 +112,8 @@ then
    ARRAY="subArray.prod3b.North-202003.v2.list"
    ARRAY="subArray.prod3b.North-202004c-smallArrays.list"
    ARRAY="subArray.prod3b.North-202004b.list"
+   ARRAY="subArray.prod3b.North-202004e.list"
+   ARRAY="subArray.prod3b.North-202004f.list"
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "N20deg-test" ]]
 then
