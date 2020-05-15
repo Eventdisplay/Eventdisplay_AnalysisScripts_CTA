@@ -94,7 +94,7 @@ MOPT="$MOPT -maxloss=0.2 -minfui=0."
 
 #########################################
 # disp main directory name
-DISPSUBDIR="BDTdisp.${ARRAY}.T1084"
+DISPSUBDIR="BDTdisp.${ARRAY}.T1085"
 
 #########################################
 # options for DISP method (direction)
