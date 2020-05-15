@@ -117,7 +117,7 @@ fi
 #########################################
 # 
 #########################################
-for BDT in BDTDisp BDTDispEnergy BDTDispError
+for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore
 do
     for MCAZ in 0deg 180deg
     do
