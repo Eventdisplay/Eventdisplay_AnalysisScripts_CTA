@@ -117,6 +117,10 @@ DISPENERGYDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/
 MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################
+# allow single image events
+MOPT="$MOPT -minImages=1"
+
+################################
 # telescope type dependent weight
 # prod3b production
 if [[ $DSET == *"prod3b"* ]]

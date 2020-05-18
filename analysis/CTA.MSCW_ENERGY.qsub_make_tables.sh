@@ -80,6 +80,11 @@ MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFIL
 # for 20 deg prod3b (default)
 # (remove for small arrays)
 MOPT="$MOPT -maxnevents=3000000"
+# options for single telescope analysis
+if [ ${MINTEL} -eq 1 ]
+then
+   MOPT="$MOPT -use_mc_parameters"
+fi
 
 ################################
 # telescope type dependent weight
