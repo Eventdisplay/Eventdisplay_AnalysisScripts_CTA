@@ -107,6 +107,11 @@ DISPERRORDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/B
 MOPT="$MOPT  -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperror_weight 50"
 
 ##########################################################################################################
+# options for DISP method (core)
+DISPCOREDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/BDTDispCore/${MCAZ}/BDTDispCore_BDT_"
+MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+
+##########################################################################################################
 # options for DISP method (energy)
 DISPENERGYDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/BDTDispEnergy/${MCAZ}/BDTDispEnergy_BDT_"
 MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
