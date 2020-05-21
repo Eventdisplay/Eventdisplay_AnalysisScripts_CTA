@@ -46,7 +46,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
@@ -55,14 +55,10 @@ mkdir -p $PDIR
 
 #####################################
 # analysis dates and table dates
-TDATE="g20191112"
-ANADATE="g20191112"
-TMVADATE="g20191112"
-EFFDATE="g20191112"
-TDATE="g20191112"
-ANADATE="g20200429"
-TMVADATE="g20200429"
-EFFDATE="g20200429"
+TDATE="g20200518"
+ANADATE="g20200518"
+TMVADATE="g20200518"
+EFFDATE="g20200518"
 # analysis versions
 TMVAVERSION="V3"
 EFFVERSION="V3"
@@ -91,7 +87,10 @@ EDM=( "u05b-LL" )
 if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
+   ARRAY="subArray.prod3b.South.list-202005.list"
    ARRAY="subArray.prod3b.South.list"
+   ARRAY="subArray.prod3b.South.list-202005_singleTelescope.list"
+   ARRAY="subArray.prod3b.South.list-202005_multipleTelescope.list"
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "S40deg" ]]
 then
@@ -114,6 +113,7 @@ then
    ARRAY="subArray.prod3b.North-202004b.list"
    ARRAY="subArray.prod3b.North-202004e.list"
    ARRAY="subArray.prod3b.North-202004f.list"
+   ARRAY="subArray.prod3b.North-202005.list"
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "N20deg-test" ]]
 then
@@ -159,7 +159,13 @@ PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
 # cut on number of images
+# (replace by 1 of there is one single telescope requirement
+#  for one type)
 NIMAGESMIN="2"
+if [ ${LST} -eq 1 ] || [ ${MST} -eq 1 ] || [ ${SST} -eq 1 ] || [ ${SCMST} -eq 1 ]
+then
+   NIMAGESMIN="1"
+fi
 
 #####################################
 # observing time [h]
