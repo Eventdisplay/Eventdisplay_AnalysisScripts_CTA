@@ -300,8 +300,7 @@ do
      # loop over all energy bins and prepare run scripts
      for ((i=0; i < $NENE; i++))
      do
-         FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.$MCAZ.$i
-         # FNAM=$ODIR/tmva${i}.qsub
+         FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ$MCAZ.$NIMAGESMIN.$i
 
          RRFIL=$ODIR/$RXPAR$ARRAY
 
@@ -311,9 +310,21 @@ do
          chmod u+x $FNAM.sh
          echo "SCRIPT $FNAM.sh"
 
+         if [[ ${i} != "5" ]]; then
+             continue;
+         fi
+
+        #################
+        # memory requirement varies signficantly.
+        # values below based on experience
+        MEM=6000M
+        if [[ ${i} == "4" ]] || [[ ${i} == "5" ]]; then
+            MEM=8000M
+        fi
+
         #################################
         # submit job to queue
-        qsub $QSUBOPT -V -l h_cpu=47:59:00 -l h_rss=6000M -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+        qsub $QSUBOPT -V -l h_cpu=47:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
     done
   done
 done
