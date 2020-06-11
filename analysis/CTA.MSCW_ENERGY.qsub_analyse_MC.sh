@@ -95,6 +95,7 @@ MOPT="$MOPT -maxloss=0.2 -minfui=0."
 #########################################
 # disp main directory name
 DISPSUBDIR="BDTdisp.${ARRAY}.T1085"
+DISPSUBDIR="BDTdisp.${ARRAY}.T1086"
 
 #########################################
 # options for DISP method (direction)
@@ -108,8 +109,9 @@ MOPT="$MOPT  -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperr
 
 ##########################################################################################################
 # options for DISP method (core)
+# (switch on for single-telescope analysis)
 DISPCOREDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/BDTDispCore/${MCAZ}/BDTDispCore_BDT_"
-MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+# MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
 
 ##########################################################################################################
 # options for DISP method (energy)
