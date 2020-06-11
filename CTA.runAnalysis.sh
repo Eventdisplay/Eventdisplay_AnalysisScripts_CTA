@@ -62,6 +62,10 @@ EFFDATE="g20200518"
 # analysis versions
 TMVAVERSION="V3"
 EFFVERSION="V3"
+# EHeight
+ANADATE="g20200610"
+TMVADATE="g20200610"
+EFFDATE="g20200610"
 
 # off-axis binnning
 BFINEBINNING="TRUE"
@@ -87,10 +91,22 @@ EDM=( "u05b-LL" )
 if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
-   ARRAY="subArray.prod3b.South.list-202005.list"
    ARRAY="subArray.prod3b.South.list"
-   ARRAY="subArray.prod3b.South.list-202005_singleTelescope.list"
-   ARRAY="subArray.prod3b.South.list-202005_multipleTelescope.list"
+   ARRAYDIR=( "prod3b" )
+elif [[ $P2 == "S20degSV1" ]]
+then
+   SITE=( "prod3b-paranal20deg" )
+   ARRAY="subArray.prod3b.South.list_SV1.list"
+   ARRAYDIR=( "prod3b" )
+elif [[ $P2 == "S20degSV2" ]]
+then
+   SITE=( "prod3b-paranal20deg" )
+   ARRAY="subArray.prod3b.South.list_SV2.list"
+   ARRAYDIR=( "prod3b" )
+elif [[ $P2 == "S20degSVN" ]]
+then
+   SITE=( "prod3b-paranal20deg" )
+   ARRAY="subArray.prod3b.South.list_SVN.list"
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "S40deg" ]]
 then
@@ -151,10 +167,6 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "electron" "gamma_cone" )
-PARTICLE=( "gamma_onSource" "proton" )
-PARTICLE=( "proton" )
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -173,6 +185,8 @@ OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" )
+
+echo $RUN $SITE
 
 #####################################
 # loop over all sites
