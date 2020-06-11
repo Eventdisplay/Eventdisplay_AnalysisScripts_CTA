@@ -310,10 +310,6 @@ do
          chmod u+x $FNAM.sh
          echo "SCRIPT $FNAM.sh"
 
-         if [[ ${i} != "5" ]]; then
-             continue;
-         fi
-
         #################
         # memory requirement varies signficantly.
         # values below based on experience
