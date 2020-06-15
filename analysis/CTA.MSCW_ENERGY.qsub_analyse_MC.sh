@@ -91,6 +91,9 @@ MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFIL
 
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
+# MST small array analysis
+#MOPT="$MOPT -maxdist=3."
+MOPT="$MOPT -maxdistfraction=0.70"
 
 #########################################
 # disp main directory name
@@ -111,7 +114,9 @@ MOPT="$MOPT  -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperr
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
 DISPCOREDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/BDTDispCore/${MCAZ}/BDTDispCore_BDT_"
-# MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+if [[ $ARRAY == *"SV1"* ]]; then
+    MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+fi
 
 ##########################################################################################################
 # options for DISP method (energy)
