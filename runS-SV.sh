@@ -15,17 +15,27 @@ if [[ ${PROD} == "S20degSV1" ]]; then
     for R in  ${RECID}
     do
         ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 1 1 2 2
-        ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 1 1 3 3
-        ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 1 1 4 4
+        if [[ ${R} != 2 ]]; then
+            ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 1 1 3 3
+            ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 1 1 4 4
+        fi
     done
 elif [[ ${PROD} == "S20degSV2" ]]; then
     for R in  ${RECID}
     do
         ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 2 2 2 2
-        ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 2 2 3 3
-        ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 2 2 4 4
+        if [[ ${R} != 2 ]]; then
+            ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 2 2 3 3
+            ./CTA.runAnalysis.sh ${PROD} ${NT} ${R} 2 2 4 4
+        fi
     done
 else
+    for R in ${RECID}
+    do
+        if [[ ${R} != 2 ]] && [[ ${R} != 3 ]]; then
+            ./CTA.runAnalysis.sh ${PROD} ${NT} 0 2 2 3 3
+        fi
+    done
     for T in 4 3 2
     do
        for R in  ${RECID}
