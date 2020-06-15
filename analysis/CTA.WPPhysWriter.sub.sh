@@ -66,7 +66,7 @@ for ARRAY in $VARRAY
 do
    echo "STARTING ARRAY $ARRAY"
 
-   ODIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/Phys/"
+   ODIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/Phys-20200614/"
 
    OXUTNAME=$ODIR/$OUTNAME
    mkdir -p $ODIR

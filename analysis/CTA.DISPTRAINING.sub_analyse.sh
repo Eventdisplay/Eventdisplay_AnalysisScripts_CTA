@@ -199,6 +199,11 @@ do
                 else
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
                 fi
+                # SV1 arrays: mix directories by hand!!
+                if [[ $ARRAY == *"SV1"* ]]
+                then
+                    k=$(echo $NFIL)
+                fi
                 TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP.list"
                 rm -f $TLIST
                 shuf -n $k $SHELLDIR/tempList.list > $TLIST
