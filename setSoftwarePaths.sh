@@ -17,11 +17,16 @@ then
 fi
 
 DSET="$1"
-EVNDISPSYS="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/code/"
-if [ ! -e $EVNDISPSYS ]
+MAINDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+if [[ -e ${MAINDIR}/code ]]; then
+    EVNDISPSYS="${MAINDIR}/code"
+else
+    EVNDISPSYS="${MAINDIR}/Eventdisplay/"
+fi
+if [ ! -e ${EVNDISPSYS} ]
 then
    echo "Error: directory with software not found"
-   echo $EVNDISPSYS
+   echo ${EVNDISPSYS}
    return
 fi
 
@@ -34,7 +39,11 @@ ROOTCONF=`root-config --libdir`
 export LD_LIBRARY_PATH=${ROOTCONF}
 
 export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
-export HESSIOSYS=$EVNDISPSYS/hessioxxx
+if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then
+    export HESSIOSYS=${EVNDISPSYS}/hessioxxx
+else
+    export HESSIOSYS=${MAINDIR}/hessioxxx
+fi
 export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
 
 if [ $VBFSYS ]
@@ -43,7 +52,7 @@ then
 fi
 export ROOT_INCLUDE_PATH=${EVNDISPSYS}/inc
 
-export CTA_EVNDISP_AUX_DIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/Eventdisplay_AnalysisFiles_CTA/
-export CTA_USER_LOG_DIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/LOGS/"
+export CTA_EVNDISP_AUX_DIR=${MAINDIR}/Eventdisplay_AnalysisFiles_CTA/
+export CTA_USER_LOG_DIR="${MAINDIR}/LOGS/"
 
 export SOFASYS=${EVNDISPSYS}/sofa
