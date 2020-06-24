@@ -11,3 +11,5 @@ To produce IPR graphs for all telescopes, run the scripts in the following order
 2. produceDST.sh - This will convert the output from sim_telarray to DST files. This requires having EVENTDISPLAY installed. In addition, you will need a 1 telescope geometry file in your scratch area, which can be found in this directory as geometry-1-telescope.lis
 
 3. produceGraphFromDST.sh - Calculate the graphs from the DST file produced in the previous step. The results will be saved in the current directory as "pedestals-TEL-dst.root".
+
+3. mergeIPRGraphs.C - Merge all graphs calculated into root file
