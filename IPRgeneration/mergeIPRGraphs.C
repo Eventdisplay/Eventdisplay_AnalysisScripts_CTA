@@ -47,7 +47,7 @@ void mergeIPRGraphs( string iMergedFile = "prod5-IPR.root",
                {
                   TTree *iT = (TTree*)key->ReadObj();
                   f->cd();
-                  iT->Write();
+                  iT->CloneTree()->Write();
                }
                iF->cd();
           }
