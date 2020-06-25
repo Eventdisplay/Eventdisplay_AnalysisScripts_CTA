@@ -99,6 +99,10 @@ then
     else
         PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-MST-FlashCam.root"
     fi
+elif [[ $DSET == *"prod5"* ]]
+then
+    ARRAYCUTS="EVNDISP.prod5.reconstruction.runparameter"
+    PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
 else
     echo "error: unknown production in $DSET" 
     exit

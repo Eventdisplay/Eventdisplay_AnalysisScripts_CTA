@@ -86,9 +86,11 @@ done
 
 #####################################
 # output file
-OFIL=`basename $IFIL0 .gz`
+
+EXTE="${IFIL0##*.}"
+OFIL=`basename $IFIL0 .${EXTE}`
 echo
-echo "OUTPUT FILE $OFIL"
+echo "OUTPUT FILE $OFIL ${EXTE}"
 
 ####################################################################
 # loop over all arrays
@@ -114,7 +116,7 @@ do
 
 ####################################################################
 # execute converter
-   SIMFIL=`ls $TMPDIR/*.simtel.gz`
+   SIMFIL=`ls $TMPDIR/*.simtel.${EXTE}`
    echo "TMPDIR FILES " $SIMFIL
    if [[ $DSET == *"prod3"* ]] 
    then
@@ -130,9 +132,12 @@ do
        else
            DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${N:1}.lis
        fi
-   elif [[ $DSET == *"prod4"* ]]
+   elif [[ $DSET == *"prod4"* ]] 
    then
        DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${N}.lis
+   elif [[ $DSET == *"prod5"* ]] 
+   then
+       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${N}.lis
    fi
    ls -lh $DETGEO
    ls -lh $SIMFIL
