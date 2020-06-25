@@ -31,6 +31,7 @@ void mergeIPRGraphs( string iMergedFile = "prod5-IPR.root",
           {
               continue;
           }
+          cout << "Reading " << iName << endl;
           TIter next(iF->GetListOfKeys());
           TKey *key = 0;
           while ((key = (TKey*)next()))
@@ -41,8 +42,14 @@ void mergeIPRGraphs( string iMergedFile = "prod5-IPR.root",
                    TGraphErrors* iO = ( TGraphErrors* )key->ReadObj();
                    f->cd();
                    iO->Write();
-                   iF->cd();
                }
+               else if( iClassName == "TTree" )
+               {
+                  TTree *iT = (TTree*)key->ReadObj();
+                  f->cd();
+                  iT->Write();
+               }
+               iF->cd();
           }
       }
       f->Close();
