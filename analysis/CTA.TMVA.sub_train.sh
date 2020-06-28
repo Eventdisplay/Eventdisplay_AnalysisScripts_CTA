@@ -249,6 +249,29 @@ do
    echo "Telescope type cut: $TYPECUT"
 
 ###############################################################
+# Temporary run parameter file
+   TEMPPAR=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ$MCAZ.$NIMAGESMIN.runpar
+   touch ${TEMPPAR}
+   # write signal and background files
+   # (note: training is in splitmode=block)
+   for arg in $SFIL1
+   do
+      echo "* SIGNALFILE $arg" >> ${TEMPPAR}
+   done
+   for arg in $SFIL2
+   do
+      echo "* SIGNALFILE $arg" >> ${TEMPPAR}
+   done
+   for arg in $BFIL1
+   do
+      echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
+   done
+   for arg in $BFIL2
+   do
+      echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
+   done
+
+###############################################################
 # loop over all wobble offset
    for (( W = 0; W < $NOFF; W++ ))
    do
@@ -258,71 +281,40 @@ do
       cp -f $RPAR.runparameter $ODIR
 
 ###############################################################
-# loop over all energy bins and submit a job for each bin
+# loop over all energy bins and prepare run parameter files
       for ((i=0; i < $NENE; i++))
       do
 
 # updating the  run parameter file
 	 RFIL=$ODIR/$RXPAR$ARRAY"_$i"
 	 echo $RFIL
-	 rm -f $RFIL
-	 echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}" > $RFIL.runparameter
-         echo "* ZENITHBINS 0 90" >> $RFIL.runparameter
-	 echo "* MCXYOFF (MCxoff*MCxoff+MCyoff*MCyoff)>=${OFFMIN[$W]}*${OFFMIN[$W]}&&(MCxoff*MCxoff+MCyoff*MCyoff)<${OFFMAX[$W]}*${OFFMAX[$W]}" >> $RFIL.runparameter
-         echo "* MCXYCUTSignalOnly 1" >> $RFIL.runparameter
+	 rm -f $RFIL.runparameter
+echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
+* ZENITHBINS 0 90
+* MCXYOFF (MCxoff*MCxoff+MCyoff*MCyoff)>=${OFFMIN[$W]}*${OFFMIN[$W]}&&(MCxoff*MCxoff+MCyoff*MCyoff)<${OFFMAX[$W]}*${OFFMAX[$W]}
+* MCXYCUTSignalOnly 1
+* OUTPUTFILE $ODIR $OFIL"_$i" " > $RFIL.runparameter
 	 grep "*" $RPAR.runparameter | grep -v ENERGYBINS | grep -v OUTPUTFILE | grep -v SIGNALFILE | grep -v BACKGROUNDFILE | grep -v MCXYOFF >> $RFIL.runparameter
-	 echo "* OUTPUTFILE $ODIR $OFIL"_$i" " >> $RFIL.runparameter
-         # write signal and background files
-         # (note: training is in splitmode=block)
-	 for arg in $SFIL1
-	 do
-	    echo "* SIGNALFILE $arg" >> $RFIL.runparameter
-	 done
-	 for arg in $SFIL2
-	 do
-	    echo "* SIGNALFILE $arg" >> $RFIL.runparameter
-	 done
-	 for arg in $BFIL1
-	 do
-	    echo "* BACKGROUNDFILE $arg" >> $RFIL.runparameter
-	 done
-	 for arg in $BFIL2
-	 do
-	    echo "* BACKGROUNDFILE $arg" >> $RFIL.runparameter
-	 done
+         cat ${TEMPPAR} >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
 
-         sed -i "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" $RFIL.runparameter
-         sed -i 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
+         sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
+                -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
 
-     # loop over all energy bins and prepare run scripts
-     for ((i=0; i < $NENE; i++))
-     do
-         FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ$MCAZ.$NIMAGESMIN.$i
+     FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.NIMAGES${NIMAGESMIN}
+     RRFIL=$ODIR/$RXPAR$ARRAY
+     sed -e "s|RUNPARA|$RRFIL|" $FSCRIPT.sh > $FNAM.sh
+     chmod u+x $FNAM.sh
+     echo "SCRIPT $FNAM.sh"
 
-         RRFIL=$ODIR/$RXPAR$ARRAY
-
-         sed -e "s|RUNPARA|$RRFIL|" \
-             -e "s|EEEE|$i|" $FSCRIPT.sh  > $FNAM.sh
-
-         chmod u+x $FNAM.sh
-         echo "SCRIPT $FNAM.sh"
-
-        #################
-        # memory requirement varies signficantly.
-        # values below based on experience
-        MEM=6000M
-        if [[ ${i} == "4" ]] || [[ ${i} == "5" ]]; then
-            MEM=8000M
-        fi
-
-        #################################
-        # submit job to queue
-        qsub $QSUBOPT -V -l h_cpu=47:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
-    done
+     MEM=8000M
+     #################################
+     # submit job to queue (for all energy bins)
+     qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=47:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
+  rm -f ${TEMPPAR}
 done
 
 exit

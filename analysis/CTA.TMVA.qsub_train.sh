@@ -6,19 +6,19 @@
 #
 
 RPARA=RUNPARA
-EBIN=EEEE
+let "EBIN = $SGE_TASK_ID - 1"
 
 ulimit -n 2056
 
 # set the right observatory (environmental variables)
-source $EVNDISPSYS/setObservatory.sh CTA
+source ${EVNDISPSYS}/setObservatory.sh CTA
 
 PFILE=${RPARA}_${EBIN}
 rm -f $PFIL.log
 
 echo $PFILE.runparameter
 
-$EVNDISPSYS/bin/trainTMVAforGammaHadronSeparation $PFILE.runparameter > $PFILE.log
+${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation $PFILE.runparameter > $PFILE.log
 
 CDIR=`dirname $PFILE`
 # remove .C files (never used; we use the XML files)
@@ -31,21 +31,13 @@ rm -rf $CDIR/complete_BDTroot
 # mv log file into root file
 if [ -e $PFILE.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
-    $EVNDISPSYS/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root $PFILE.log
+    ${EVNDISPSYS}/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root $PFILE.log
     rm -f $PFILE.log
 fi
 if [ -e $PFILE.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
-    $EVNDISPSYS/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root $PFILE.runparameter
+    ${EVNDISPSYS}/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root $PFILE.runparameter
     rm -f $PFILE.runparameter
-fi
-
-# bzip log files for which there are not enough events
-if [ -e $PFILE.log ]
-then
-    if grep -q "ERROR: not enough signal or/and backgrou eve" "$PFILE.log"; then
-        bzip2 -f $PFILE.log
-    fi
 fi
 
 exit
