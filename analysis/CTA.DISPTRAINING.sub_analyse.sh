@@ -117,7 +117,7 @@ fi
 #########################################
 # 
 #########################################
-for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore
+for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore BDTDispPhi
 do
     for MCAZ in 0deg 180deg
     do
@@ -204,6 +204,10 @@ do
                 then
                     k=$(echo $NFIL)
                 fi
+                if [[ $ARRAY == *"DISP"* ]]
+                then
+                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.50}')
+                fi
                 TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP.list"
                 rm -f $TLIST
                 shuf -n $k $SHELLDIR/tempList.list > $TLIST
@@ -228,7 +232,7 @@ do
                   echo "shell script " $FNAM.sh
 
                   # submit the job
-                  qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=8000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+                  qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=12000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
                done
              done
          done
