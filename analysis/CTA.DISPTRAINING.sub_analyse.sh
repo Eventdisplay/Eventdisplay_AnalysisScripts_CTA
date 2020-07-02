@@ -121,7 +121,7 @@ for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore BDTDispPhi
 do
     for MCAZ in 0deg 180deg
     do
-      NSTEP=1085
+      NSTEP=1083
       for T in ${TMVA}
       do
         echo $T
