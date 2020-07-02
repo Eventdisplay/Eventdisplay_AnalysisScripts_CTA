@@ -113,40 +113,34 @@ do
 	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
 	 NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
 	 echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
-########################################################################
-# loop over all input files, start a job when $FILEN files are found
-	 for ((l = 1; l < $NTMPLIST; l+=$FILEN ))
-	 do
+         NJOBTOT=$(( NTMPLIST / FILEN + 1))
+         echo "total number of jobs: $NJOBTOT"
+
 # output file name for mscw_energy
-	    TFIL=$PART$NC"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET"-$l.mscw"
-# input file list
-	    IFIL=$ODIR/$TFIL.list
-	    rm -f $IFIL
-	    let "k = $l + $FILEN - 1"
-	    sed -n "$l,$k p" $TMPLIST > $IFIL
+         TFIL=$PART$NC"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET
+
 # skeleton script
-	    FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
+        FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
 
 # name of script actually submitted to the queue
-	    FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-array$SUBAR-$6-$l"
+        FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-array$SUBAR-$6"
 
-	    sed -e "s|TABLEFILE|$TABLE|" \
-		-e "s|IIIIFIL|$IFIL|" \
-		-e "s|TTTTFIL|$TFIL|" \
-		-e "s|RECONSTRUCTIONID|$RECID|" \
-		-e "s|ARRAYYY|$SUBAR|" \
-		-e "s|DATASET|$DSET|" \
-		-e "s|AZIMUTH|$MCAZ|" \
-		-e "s|AAAAADIR|$ANADIR|" $FSCRIPT.sh > $FNAM.sh 
+        sed -e "s|TABLEFILE|$TABLE|" \
+            -e "s|TTTTFIL|$TFIL|" \
+            -e "s|RECONSTRUCTIONID|$RECID|" \
+            -e "s|ARRAYYY|$SUBAR|" \
+            -e "s|DATASET|$DSET|" \
+            -e "s|AZIMUTH|$MCAZ|" \
+            -e "s|FILELIST|${TMPLIST}|" \
+            -e "s|FILELENGTH|$FILEN|" \
+            -e "s|AAAAADIR|$ANADIR|" $FSCRIPT.sh > $FNAM.sh 
 
-	    chmod u+x $FNAM.sh
+        chmod u+x $FNAM.sh
+        echo "run script written to $FNAM.sh"
+        echo "queue log and error files written to $QLOG"
 
 # submit the job
-            qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G -V -o $QLOG -e $QLOG "$FNAM.sh" 
-	    echo "run script written to $FNAM.sh"
-	    echo "queue log and error files written to $QLOG"
-
-       done
+        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G -V -o $QLOG -e $QLOG "$FNAM.sh" 
    done
 done
 
