@@ -11,7 +11,7 @@ echo "calculating effective areas for CTA: create run scripts"
 echo "------------------------------------------------"
 echo
 
-source $EVNDISPSYS/setObservatory.sh CTA
+source ${EVNDISPSYS}/setObservatory.sh CTA
 
 ######################################################################
 # input variables
@@ -77,7 +77,7 @@ then
 fi
 # see if strict separation of training/testing events if possible
 # (mscw files would be in a directory ....EFF)
-if [ -e $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
+if [ -e ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
 then
     ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
 fi
@@ -153,12 +153,9 @@ do
        else
            MSCFILE=$DDIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
        fi
-       EFFFILE=$DDIR/EffectiveAreas/
        OFIL=gamma_onSource."$ARRAY"_ID"$RECID".eff
        OFFMIN=( 0. )
        OFFMAX=( 100000. )
-       # changed 2015-11-17: always use off-axis TMVA for gamma/hadron separation
-       # OFFMEA=( "0.0" )
        OFFMEA=( "0.5" )
     # NOTE: this is theta2
        THETA2MIN=( -1. )
@@ -176,7 +173,6 @@ do
        else
            MSCFILE=$DDIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
        fi
-       EFFFILE=$DDIR/EffectiveAreas/
        OFIL=gamma_cone."$ARRAY"_ID"$RECID".eff
        # note that these bins are also hardwired in VTableLookupRunParameter::setCTA_MC_offaxisBins
        if [ $BFINEBINNING = "TRUE" ]
@@ -203,7 +199,6 @@ do
        else
            MSCFILE=$DDIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
        fi
-       EFFFILE=$DDIR/EffectiveAreas/
        OFFMIN=( 0. )
        OFFMAX=( 100000. )
     # NOTE: this is theta and not theta2
@@ -224,8 +219,6 @@ do
           OFIL=electron_onSource."$ARRAY"_ID"$RECID".eff
           THETA2MIN=( 0. )
           THETA2MAX=( 1. )
-          # changed 2015-11-17: always use off-axis TMVA for gamma/hadron separation
-          # OFFMEA=( "0.0" )
           OFFMEA=( 0.5 )
        fi   
        ISOTROPY="1"
@@ -243,7 +236,6 @@ do
        then
           MSCFILE=$DDIR/proton."$ARRAY"_ID"$RECID$MCAZ".mscw.root
        fi
-       EFFFILE=$DDIR/EffectiveAreas/
        OFIL=proton."$ARRAY"_ID"$RECID".eff
        OFFMIN=( 0. )
        OFFMAX=( 100000. )
@@ -264,9 +256,6 @@ do
        else
           OFIL=proton_onSource."$ARRAY"_ID"$RECID".eff
           THETA2MIN=( 0. )
-# (default value 2017-04-30)          THETA2MAX=( 2. )
-
-# (new from 2017-04-28)
           # full system / LST only with smaller FOV
           if [ $RECID = "0" ] || [ $RECID = "1" ]
           then
@@ -275,8 +264,6 @@ do
           else
               THETA2MAX=( 2. )
           fi
-          # changed 2015-11-17: always use off-axis TMVA for gamma/hadron separation
-          # OFFMEA=( "0.0" )
           OFFMEA=( 0.5 )
        fi
        ISOTROPY="1"
@@ -289,7 +276,7 @@ do
 
 
     ###############################################################################
-    # loop over all MC cuts
+    # loop over all off-axis bins
     for ((i=0; i < $NOFF; i++))
     do
        iMIN=${OFFMIN[$i]}
@@ -337,21 +324,20 @@ do
     # angular resolution file
           if [ $PART = "gamma_onSource" ] 
           then
-             ANGRESFILE="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root"
+             ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
           else
-             ANGRESFILE="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root"
+             ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root
           fi
     # particle number file
           if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
           then
-             PNF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".00.root"
+             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".00.root
           elif [ $PART = "gamma_cone" ]
           then
-             PNF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$i.root"
+             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$i.root
           else
-             PNF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$j.root"
+             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$j.root
           fi
-          
 
           sed -i -e "s|OFFMIN|$iMIN|" \
                  -e "s|OFFMAX|$iMAX|" \
@@ -452,19 +438,19 @@ do
 
       ##############################
       # run effective area code
-          $EVNDISPSYS/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
+          ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
 
       ##############################
       #  cleanup
       # (reduce number of files)
 
-          $EVNDISPSYS/bin/logFile effAreaParameters $OFIX.root $MSCF
+          ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
           rm -f $MSCF
 
-          $EVNDISPSYS/bin/logFile effAreaCuts $OFIX.root $iCFIL
+          ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
           rm -f $iCFIL
 
-          $EVNDISPSYS/bin/logFile effAreaLog $OFIX.root $OFIX.log
+          ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
           rm -f $OFIX.log
 
        done
@@ -476,27 +462,27 @@ done
 if [[ $ODIR == *"QualityCuts"* ]]
 then
      echo "RUNNING PARTILE RATE DETERMINATION"
-     AXDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/"
+     AXDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/"
 
      # onSource
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.onSource.log
      rm -f $LLOG
-     $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
+     ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
      echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
      rm -f $LLOG
-     $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
+     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      # cone
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
      rm -f $LLOG
      # off-axis fine binning
      if [ $BFINEBINNING = "TRUE" ]
      then
-         $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $ODIR $AXDIR > $LLOG
+         ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $ODIR $AXDIR > $LLOG
      else
      # off-axis std binning
-         $EVNDISPSYS/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $ODIR $AXDIR > $LLOG
+         ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $ODIR $AXDIR > $LLOG
      fi
-     $EVNDISPSYS/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.0.root $LLOG
+     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      rm -f $LLOG
 fi
 
