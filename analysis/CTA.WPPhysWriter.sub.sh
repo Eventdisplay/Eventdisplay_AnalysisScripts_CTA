@@ -26,7 +26,7 @@ OFFSET=$4
 RECID=$5
 DSET=$6
 BFINEBINNING=FALSE
-if [ -n $7 ]
+if [ -n "$7" ]
 then
    BFINEBINNING="$7"
 fi

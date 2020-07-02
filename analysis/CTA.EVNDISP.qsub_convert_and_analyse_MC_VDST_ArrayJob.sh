@@ -99,7 +99,7 @@ do
    N=`echo $N | tr -d ' '`
    echo "RUNNING _${N}_"
 # output data files are written to this directory
-   ODIR=${CTA_USER_DATA_DIR}"/analysis/AnalysisData/"$DSET"/"${N}"/"$PART"/"
+   ODIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${N}/${PART}/
    mkdir -p $ODIR
 
 ####################################################################
@@ -170,7 +170,7 @@ do
           $EVNDISPSYS/bin/logFile convLog $TMPDIR/${RUNN}.root $TMPDIR/$OFIL.$N.convert.log
       fi
 
-      cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}"HD_"${ILINE}"_"${MCAZ}"deg.root"
+      cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}HD_${ILINE}_${MCAZ}deg.root
   fi
 
 ####################################################################

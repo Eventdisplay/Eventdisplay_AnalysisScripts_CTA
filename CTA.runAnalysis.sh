@@ -401,9 +401,9 @@ do
                   then
                      if [[ $OFFAXIS == "cone" ]]
                      then
-                        ./CTA.WPPhysWriter.sub.sh $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $QSUBOPT
                      else
-                        ./CTA.WPPhysWriter.sub.sh $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]
