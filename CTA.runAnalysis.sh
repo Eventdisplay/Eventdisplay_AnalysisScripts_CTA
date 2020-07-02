@@ -46,7 +46,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_150"
 
 #####################################
 # output directory for script parameter files
@@ -55,17 +55,13 @@ mkdir -p $PDIR
 
 #####################################
 # analysis dates and table dates
-TDATE="g20200518"
-ANADATE="g20200518"
-TMVADATE="g20200518"
-EFFDATE="g20200518"
-# analysis versions
 TMVAVERSION="V3"
 EFFVERSION="V3"
-# EHeight
-ANADATE="g20200610"
-TMVADATE="g20200610"
-EFFDATE="g20200610"
+
+TDATE="g20191112"
+ANADATE="g20200614"
+TMVADATE="g20200614"
+EFFDATE="g20200614"
 
 # off-axis binnning
 BFINEBINNING="TRUE"
@@ -130,12 +126,24 @@ then
    ARRAY="subArray.prod3b.North-202004e.list"
    ARRAY="subArray.prod3b.North-202004f.list"
    ARRAY="subArray.prod3b.North-202005.list"
+   ARRAY="subArray.prod3b.North-2020614.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "N20deg-test" ]]
+elif [[ $P2 == *"N20deg-test"* ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
-   ARRAY="subArray.prod3b.North-test.list"
+   ARRAY="subArray.prod3b.North-2020621.list.b"
+   ARRAY="subArray.prod3b.North-2020621.list"
    ARRAYDIR=( "prod3b" )
+   EDM=( "v05b-LL" )
+   if [[ $P2 == *"disp"* ]]; then
+       ANADATE="${ANADATE}disp$(echo $P2| cut -d'p' -f 2)"
+       EFFDATE="${EFFDATE}disp$(echo $P2| cut -d'p' -f 2)"
+       TMVADATE="${TMVADATE}disp$(echo $P2| cut -d'p' -f 2)"
+   elif [[ $P2 == *"test-coord"* ]]; then
+       EDM=( "w05b-LL" )
+   elif [[ $P2 == *"bug"* ]]; then
+       EDM=( "uu05b-LL" )
+   fi
 elif [[ $P2 == "N40deg" ]]
 then
    SITE=( "prod3b-LaPalma-40deg" )
@@ -157,6 +165,19 @@ then
    ARRAY=( "subArray.prod4-SST.list" )
    ARRAYDIR=( "prod4" )
 ###############################################################
+# PROD5 Analysis
+elif [[ $P2 == "prod5-N" ]]
+then
+   EDM=( "a05b" )
+   SITE=( "prod5-LaPalma20deg" )
+   ARRAY=( "subArray.prod5.North.list" )
+   ARRAYDIR=( "prod5" )
+elif [[ $P2 == "prod5-S" ]]
+then
+   EDM=( "a05b" )
+   SITE=( "prod5-Paranal20deg" )
+   ARRAY=( "subArray.prod5.South.list" )
+   ARRAYDIR=( "prod5" )
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo $P2
@@ -167,6 +188,7 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
+PARTICLE=( "gamma_onSource" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -222,7 +244,11 @@ do
                   echo "READING SIMTEL FILE LIST $LIST"
 
                   cd ./analysis/
-                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  if [[ $P2 == *"prod5"* ]]; then
+                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 1 $i $QSUBOPT $TRG
+                  else
+                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
+                  fi
                   cd ../
            done
            continue
