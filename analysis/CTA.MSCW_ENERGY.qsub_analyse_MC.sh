@@ -93,12 +93,16 @@ MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFIL
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
 # MST small array analysis
 #MOPT="$MOPT -maxdist=3."
-MOPT="$MOPT -maxdistfraction=0.70"
+if [[ $DSET == *"paranal"* ]]; then
+    MOPT="$MOPT -maxdistfraction=0.70"
+else
+    MOPT="$MOPT -maxdistfraction=0.9"
+fi
 
 #########################################
 # disp main directory name
-DISPSUBDIR="BDTdisp.${ARRAY}.T1085"
 DISPSUBDIR="BDTdisp.${ARRAY}.T1086"
+DISPSUBDIR="BDTdisp.${ARRAY}.T1084"
 
 #########################################
 # options for DISP method (direction)
@@ -125,7 +129,8 @@ MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################
 # allow single image events
-MOPT="$MOPT -minImages=1"
+#MOPT="$MOPT -minImages=1"
+MOPT="$MOPT -minImages=2"
 
 ################################
 # telescope type dependent weight
