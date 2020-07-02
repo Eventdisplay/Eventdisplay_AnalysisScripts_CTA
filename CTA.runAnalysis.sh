@@ -33,9 +33,6 @@ P2="$1"
 RUN="$2"
 # reconstruction IDs
 RECID=$3
-# list of subarrays (scalings)
-# (not relevant for prod3 analysis)
-SUBARRAY="1"
 # number of telescopes
 [[ "$4" ]] && LST=$4 || LST="2"
 [[ "$5" ]] && MST=$5 || MST="2"
@@ -59,9 +56,15 @@ TMVAVERSION="V3"
 EFFVERSION="V3"
 
 TDATE="g20191112"
+
+ANADATE="g20200614FOV07"
+TMVADATE="g20200614FOV07"
+EFFDATE="g20200614FOV07"
+
 ANADATE="g20200614"
 TMVADATE="g20200614"
 EFFDATE="g20200614"
+
 
 # off-axis binnning
 BFINEBINNING="TRUE"
@@ -225,11 +228,6 @@ do
    echo "SITE: $S $M"
    echo "RUN: $RUN"
 
-#####################################
-# loop over all array scalings
-   for Y in $SUBARRAY
-   do
-
 ##########################################
 # run eventdisplay
         if [[ $RUN == "EVNDISP" ]]
@@ -239,7 +237,7 @@ do
           do
                   N=${PARTICLE[$i]}
 
-                  LIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/FileList_${ARRAYDIR}/${S}/${N}.list
+                  LIST=${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_${ARRAYDIR}/${S}/${N}.list
 
                   echo "READING SIMTEL FILE LIST $LIST"
 
@@ -268,9 +266,9 @@ do
         if [[ $RUN == "DISPBDT" ]]
         then
             BDTDIR="BDTdisp."
-            RUNPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDTDisp.runparameter"
-            QCPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
-            DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/"
+            RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
+            QCPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
+            DDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/"
             for A in $NXARRAY
             do
                 cd ./analysis/
@@ -343,8 +341,8 @@ do
                   rm -f $PARA
                   touch $PARA
                   echo "WRITING PARAMETERFILE $PARA"
-                  EFFDIR="EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION"
-                  EFFFULLDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/EffectiveAreas/$EFFDIR/"
+                  EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
+                  EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas/$EFFDIR/"
                   echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> $PARA
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> $PARA
                   echo "EFFAREASUBDIR $EFFDIR" >> $PARA
@@ -403,9 +401,9 @@ do
                   then
                      if [[ $OFFAXIS == "cone" ]]
                      then
-                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $QSUBOPT
                      else
-                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh $EFFFULLDIR/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]
@@ -415,7 +413,6 @@ do
                 fi
                 cd ../
          done
-      done
      done
    done
    echo 

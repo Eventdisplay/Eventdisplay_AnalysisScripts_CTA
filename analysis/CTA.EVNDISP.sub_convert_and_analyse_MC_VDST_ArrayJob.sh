@@ -177,9 +177,7 @@ do
     chmod u+x $FNAM.sh
     echo $FNAM.sh
 
-    NUMDFIL=`wc -l $RUNLISTNdeg | awk '{print $1}'`
     NUMDCAC=`grep acs $RUNLISTNdeg | wc -l`
-    # k=`awk -v N1=$NUMDFIL -v N2=$NUMDCAC 'BEGIN { print ( N2 / N1 ) }'`
     DCACHEOPT=""
     # save dCache from heart attack
     if [[ $NUMDCAC -ge 1000 ]]

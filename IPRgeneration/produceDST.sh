@@ -1,3 +1,4 @@
+#!/bin/sh
 # Produce DST files from NSB simulations
 #
 # Requires an Eventdisplay installation

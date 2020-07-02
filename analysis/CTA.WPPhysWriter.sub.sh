@@ -19,23 +19,22 @@ then
    exit
 fi
 
-SUBAR=$1
-DDIR=$2
-OBSTIME=$3
-OUTNAME=$4
-OFFSET=$5
-RECID=$6
-DSET=$7
+DDIR=$1
+OBSTIME=$2
+OUTNAME=$3
+OFFSET=$4
+RECID=$5
+DSET=$6
 BFINEBINNING=FALSE
-if [ -n $8 ]
+if [ -n $7 ]
 then
-   BFINEBINNING="$8"
+   BFINEBINNING="$7"
 fi
 
 QSUBOPT=""
-if [ -n $9 ]
+if [ -n $8 ]
 then
-   QSUBOPT="$9"
+   QSUBOPT="$8"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 

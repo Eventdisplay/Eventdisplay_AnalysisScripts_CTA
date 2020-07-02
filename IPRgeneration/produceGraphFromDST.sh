@@ -1,3 +1,4 @@
+#!/bin/sh
 # Produce IPR graphs from NSB simulations
 #
 # Requires an Eventdisplay installation

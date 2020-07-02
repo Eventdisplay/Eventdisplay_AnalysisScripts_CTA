@@ -85,8 +85,8 @@ do
    echo "STARTING ARRAY $SUBAR"
 
 # output directory
-   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$SUBAR"/$ANADIR/"
-   mkdir -p $ODIR
+   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$SUBAR"/"${ANADIR}
+   mkdir -p ${ODIR}
 
 #########################################
 # loop over all particle types
@@ -95,7 +95,7 @@ do
          PART=${VPART[$m]}
 
 # delete all old files (data and log files) for the particle type and azimuth angle
-         rm -f $ODIR/${PART}*ID${RECID}_${MCAZ}*
+         rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
 
 # take $FILEN files and combine them into one mscw file
 	 FILEN=250
@@ -107,7 +107,7 @@ do
 #########################################
 # input files lists
 
-         TMPLIST=$ODIR/$PART$NC"."$SUBAR"_ID${RECID}${MCAZ}-"$DSET".list"
+         TMPLIST=${ODIR}/$PART$NC"."$SUBAR"_ID"${RECID}${MCAZ}"-"$DSET".list"
 	 rm -f $TMPLIST
 	 echo $TMPLIST ${MCAZ}
 	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
