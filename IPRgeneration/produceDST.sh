@@ -4,40 +4,48 @@
 # Requires an Eventdisplay installation
 # including all environmental variables
 #
+# Change the two variables at the top:
+#  SCRATCH: scratch space to save the output
+#  MOONOPT: option to produce pedestals for halfmoon NSB or dark time
 
-SCRATCH='USER_SET_SCRATCH'
+SCRATCH="USER_SET_SCRATCH"
 CDIR=$(pwd)
+
+MOONOPT="-DHALFMOON" # Set to -DHALFMOON for half moon or leave empty or dark conditions (i.e., MOONOPT="")
+MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
+
+[ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
 
 #####################################################################
 # LST
 #####################################################################
 
-sourceFile="${SCRATCH}/pedestals-lst-1k.simtel.gz"
+sourceFile="${SCRATCH}/pedestals-lst${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-lst-dst.root $sourceFile >& log-lst-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-lst${MOON}-dst.root $sourceFile >& log-lst${MOON}-dst.txt &
 
 
 #####################################################################
 # MST-NectarCam
 #####################################################################
 
-sourceFile="${SCRATCH}/pedestals-mst-nc-1k.simtel.gz"
+sourceFile="${SCRATCH}/pedestals-mst-nc${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-nc-dst.root $sourceFile >& log-mst-nc-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-nc${MOON}-dst.root $sourceFile >& log-mst-nc${MOON}-dst.txt &
 
 
 #####################################################################
 # MST-FlashCam
 #####################################################################
 
-sourceFile="${SCRATCH}/pedestals-mst-fc-1k.simtel.gz"
+sourceFile="${SCRATCH}/pedestals-mst-fc${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-fc-dst.root $sourceFile >& log-nst-fc-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-fc${MOON}-dst.root $sourceFile >& log-nst-fc${MOON}-dst.txt &
 
 #####################################################################
 # SST
 #####################################################################
 
-sourceFile="${SCRATCH}/pedestals-sst-1k.simtel.gz"
+sourceFile="${SCRATCH}/pedestals-sst${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-sst-dst.root $sourceFile >& log-sst-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-sst${MOON}-dst.root $sourceFile >& log-sst${MOON}-dst.txt &

@@ -4,8 +4,16 @@
 # Requires an Eventdisplay installation
 # including all environmental variables
 #
+# Change the two variables at the top:
+#  SCRATCH: scratch space to save the output
+#  MOONOPT: option to produce pedestals for halfmoon NSB or dark time
 
-SCRATCH='USER_SET_SIM_TELARRAY'
+SCRATCH="USER_SET_SCRATCH"
+
+MOONOPT="-DHALFMOON" # Set to -DHALFMOON for half moon or leave empty or dark conditions (i.e., MOONOPT="")
+MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
+
+[ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
 
 #####################################################################
 # LST
@@ -13,11 +21,11 @@ SCRATCH='USER_SET_SIM_TELARRAY'
 
 echo "Producing IPR graphs for LST"
 
-sourceFile="${SCRATCH}/pedestals-lst-dst.root"
+sourceFile="${SCRATCH}/pedestals-lst${MOON}-dst.root"
 
-$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-lst.log;
+$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-lst${MOON}.log;
 
-mv -f dst.root pedestals-fadc-lst.root;
+mv -f dst.root pedestals-lst${MOON}.root;
 
 
 #####################################################################
@@ -26,11 +34,11 @@ mv -f dst.root pedestals-fadc-lst.root;
 
 echo "Producing IPR graphs for MST-NectarCam"
 
-sourceFile="${SCRATCH}/pedestals-mst-nc-dst.root"
+sourceFile="${SCRATCH}/pedestals-mst-nc${MOON}-dst.root"
 
-$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-mst-nc.log;
+$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-mst-nc${MOON}.log;
 
-mv -f dst.root pedestals-fadc-mst-nc.root;
+mv -f dst.root pedestals-mst-nc${MOON}.root;
 
 #####################################################################
 # MST-FlashCam
@@ -38,11 +46,11 @@ mv -f dst.root pedestals-fadc-mst-nc.root;
 
 echo "Producing IPR graphs for MST-FlashCam"
 
-sourceFile="${SCRATCH}/pedestals-mst-fc-dst.root"
+sourceFile="${SCRATCH}/pedestals-mst-fc${MOON}-dst.root"
 
-$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-mst-fc.log;
+$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-mst-fc${MOON}.log;
 
-mv -f dst.root pedestals-fadc-mst-fc.root;
+mv -f dst.root pedestals-mst-fc${MOON}.root;
 
 #####################################################################
 # SST
@@ -50,8 +58,8 @@ mv -f dst.root pedestals-fadc-mst-fc.root;
 
 echo "Producing IPR graphs for SST"
 
-sourceFile="${SCRATCH}/pedestals-sst-dst.root"
+sourceFile="${SCRATCH}/pedestals-sst${MOON}-dst.root"
 
-$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-sst.log;
+$EVNDISPSYS/bin/evndisp -nevents=1000 -sourcefile $sourceFile -runmode=1  -singlepedestalrootfile=1   -donotusepeds -usePedestalsInTimeSlices=0  -calibrationsumwindow=10 -calibrationsumfirst=0 -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter -nopedestalsintimeslices  -combine_pedestal_channels -ignoredstgains >& pedestals-sst${MOON}.log;
 
-mv -f dst.root pedestals-fadc-sst.root;
+mv -f dst.root pedestals-sst${MOON}.root;
