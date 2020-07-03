@@ -168,16 +168,26 @@ then
    ARRAYDIR=( "prod4" )
 ###############################################################
 # PROD5 Analysis
-elif [[ $P2 == "prod5-N" ]]
+# prod5-N
+# prod5-N-moon
+elif [[ $P2 == "prod5-N"* ]]
 then
    EDM=( "a05b" )
-   SITE=( "prod5-LaPalma20deg" )
+   if [[ $P2 == *"moon"* ]]; then
+       SITE=( "prod5-LaPalma20deg-Moon" )
+   else
+       SITE=( "prod5-LaPalma20deg" )
+   fi
    ARRAY=( "subArray.prod5.North.list" )
    ARRAYDIR=( "prod5" )
-elif [[ $P2 == "prod5-S" ]]
+elif [[ $P2 == "prod5-S"* ]]
 then
    EDM=( "a05b" )
-   SITE=( "prod5-Paranal20deg" )
+   if [[ $P2 == *"moon"* ]]; then
+       SITE=( "prod5-Paranal20deg-Moon" )
+   else
+       SITE=( "prod5-Paranal20deg" )
+   fi
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
 else
