@@ -61,12 +61,6 @@ ANADATE="g20200614"
 TMVADATE="g20200614"
 EFFDATE="g20200614"
 
-ANADATE="g20200614FOV07"
-TMVADATE="g20200614FOV07"
-EFFDATE="g20200614FOV07"
-
-
-
 # off-axis binnning
 BFINEBINNING="TRUE"
 BFINEBINNING="FALSE"
@@ -143,6 +137,10 @@ then
        ANADATE="${ANADATE}disp$(echo $P2| cut -d'p' -f 2)"
        EFFDATE="${EFFDATE}disp$(echo $P2| cut -d'p' -f 2)"
        TMVADATE="${TMVADATE}disp$(echo $P2| cut -d'p' -f 2)"
+   elif [[ $P2 == *"FOV"* ]]; then
+       ANADATE="${ANADATE}FOV$(echo $P2| cut -d'V' -f 2)"
+       EFFDATE="${EFFDATE}FOV$(echo $P2| cut -d'V' -f 2)"
+       TMVADATE="${TMVADATE}FOV$(echo $P2| cut -d'V' -f 2)"
    elif [[ $P2 == *"test-coord"* ]]; then
        EDM=( "w05b-LL" )
    elif [[ $P2 == *"bug"* ]]; then
