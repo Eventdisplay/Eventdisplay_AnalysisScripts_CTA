@@ -4,7 +4,9 @@
  *  eventdisplay analysis
  *
  *  root -l -q -b 'mergeIPRGraphs.C( "output.root", "inputdirectory/" )'
- *
+ *. 
+ *. If the output file name contains the word "halfmoon", e.g., prod5-halfmoon-IPR.root,
+ *. then the halfmoon pedestal files are merged.
  */
 
 void mergeIPRGraphs( string iMergedFile = "prod5-IPR.root",
@@ -23,9 +25,14 @@ void mergeIPRGraphs( string iMergedFile = "prod5-IPR.root",
      fTelTypes.push_back( "mst-nc" );
      fTelTypes.push_back( "sst" );
 
+     string moon = "";
+     if (iMergedFile.find("halfmoon") != std::string::npos) {
+         moon = "-halfmoon";
+     }
+
      for( unsigned int i = 0; i < fTelTypes.size(); i++ )
      {
-          string iName = iUnMergedFileDirectory + "./pedestals-" + fTelTypes[i] + ".root";
+          string iName = iUnMergedFileDirectory + "./pedestals-" + fTelTypes[i] + moon + ".root";
           TFile *iF = new TFile( iName.c_str() );
           if( iF->IsZombie() )
           {
