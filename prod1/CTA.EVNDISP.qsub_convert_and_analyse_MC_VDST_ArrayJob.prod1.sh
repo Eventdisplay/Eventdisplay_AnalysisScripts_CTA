@@ -42,7 +42,7 @@ for N in $FIELD
 do
    echo "RUNNING  $N"
 # output data files are written to this directory
-   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$N"/"$PART"/"
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/"$DSET"/"$N"/"$PART"/
    mkdir -p $ODIR
 
 ####################################################################

@@ -1,3 +1,4 @@
+#!/bin/sh
 
 if [ $# -lt 3 ]; then
   echo "./runS-SV.sh <production> <run mode> <recID>"

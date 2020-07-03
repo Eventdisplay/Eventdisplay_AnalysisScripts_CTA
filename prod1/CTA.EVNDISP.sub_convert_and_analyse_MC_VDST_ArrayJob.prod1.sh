@@ -74,7 +74,6 @@ RUNFROMTO="1-$NRUN"
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
-DATE=`date +"%y%m%d"`
 
 # output directory for shell scripts
 SHELLDIR=$CTA_USER_DATA_DIR"/queueShellDir/"
@@ -83,8 +82,6 @@ mkdir -p $SHELLDIR
 # skeleton script
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob.prod1"
 
-#   QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP/
-#   mkdir -p $QLOG
 QLOG="/dev/null"
 
 echo "submitting $RUNFROMTO"

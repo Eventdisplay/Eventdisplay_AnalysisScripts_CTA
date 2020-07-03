@@ -1,3 +1,4 @@
+#!/bin/sh
 # Produce pedestal files from NSB simulations using sim_telarray
 #
 # script prepared for prod5 simulations

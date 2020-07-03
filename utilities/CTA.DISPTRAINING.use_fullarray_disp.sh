@@ -1,3 +1,4 @@
+#!/bin/sh
 # use for disp direction always the baseline array
 # (only telescope-wise parameters are used for disp
 #  direction)

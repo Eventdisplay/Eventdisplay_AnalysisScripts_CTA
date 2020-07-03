@@ -14,7 +14,6 @@ SUBA="ARRAY"
 KEEP=KEEEEEEP
 ACUT=ARC
 DSET=DATASET
-LOGF=FLL
 PEDFILE=PPPP
 STEPSIZE=STST
 
@@ -27,7 +26,7 @@ COPT=""
 # prod3(b): read effective focal lengths from external file
 if [[ $DSET == *"prod3"* ]] 
 then
-    COPT="-rfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
+    COPT="-rfile ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
 fi
 # (prod4 effective focal lengths included in simulation file)
 COPT="$COPT -c $PEDFILE"
@@ -98,9 +97,9 @@ for N in $FIELD
 do
 # remove spaces
    N=`echo $N | tr -d ' '`
-   echo "RUNNING _"$N"_"
+   echo "RUNNING _${N}_"
 # output data files are written to this directory
-   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"${N}"/"$PART"/"
+   ODIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${N}/${PART}/
    mkdir -p $ODIR
 
 ####################################################################
@@ -122,22 +121,22 @@ do
    then
        if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
        then
-           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+           DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3${N}.lis
        elif [[ $DSET == *"NSB"* ]]
        then
-           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+           DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3${N}.lis
        elif [[ $DSET == *"LaPalma"* ]]
        then
-           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${N}.lis
+           DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3${N}.lis
        else
-           DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${N:1}.lis
+           DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3Sb${N:1}.lis
        fi
    elif [[ $DSET == *"prod4"* ]] 
    then
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${N}.lis
+       DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4${N}.lis
    elif [[ $DSET == *"prod5"* ]] 
    then
-       DETGEO=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${N}.lis
+       DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5${N}.lis
    fi
    ls -lh $DETGEO
    ls -lh $SIMFIL
@@ -171,7 +170,7 @@ do
           $EVNDISPSYS/bin/logFile convLog $TMPDIR/${RUNN}.root $TMPDIR/$OFIL.$N.convert.log
       fi
 
-      cp -v -f $TMPDIR/[0-9]*.root $ODIR/${RUNN}"HD_"$ILINE"_"$MCAZ"deg.root"
+      cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}HD_${ILINE}_${MCAZ}deg.root
   fi
 
 ####################################################################

@@ -13,14 +13,14 @@ MCAZ="AZIMUTH"
 MINTEL="MMTEL"
 
 # set the right observatory (environmental variables)
-source $EVNDISPSYS/setObservatory.sh CTA
+source ${EVNDISPSYS}/setObservatory.sh CTA
 
 # output data files are written to this directory
-ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/$DSET/"$ARRAY"/Tables/"
+ODIR=${CTA_USER_DATA_DIR}"/analysis/AnalysisData/$DSET/"$ARRAY"/Tables/"
 mkdir -p $ODIR
 
 # output log files are written to this directory
-LDIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/$DSET/"$ARRAY"/Tables/"
+LDIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/"$ARRAY"/Tables/
 mkdir -p $LDIR
 
 # rename on-axis tables
@@ -43,12 +43,12 @@ rm -f $TMPLIST
 touch $TMPLIST
 if [ $CONE == "TRUE" ]
 then
-   find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
-   echo "$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
+   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
+   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
 # on-axis gamma rays
 else
-   find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
-   echo "$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
+   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
+   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
 fi
 
 ################################
@@ -97,18 +97,18 @@ echo $MOPT
 
 #########################################
 # fill tables
-$EVNDISPSYS/bin/mscw_energy $MOPT -arrayrecid=$RECID -tablefile "$ODIR/$TFIL-$ARRAY.root" -inputfilelist ${TMPLIST} > $LDIR/$TFIL-$ARRAY.log
+${EVNDISPSYS}/bin/mscw_energy $MOPT -arrayrecid=$RECID -tablefile "$ODIR/$TFIL-$ARRAY.root" -inputfilelist ${TMPLIST} > $LDIR/$TFIL-$ARRAY.log
 #########################################
 
 # move log files into root file
 if [ -e $LDIR/$TFIL-$ARRAY.log ]
 then
-     $EVNDISPSYS/bin/logFile makeTableLog $ODIR/$TFIL-$ARRAY.root $LDIR/$TFIL-$ARRAY.log
+     ${EVNDISPSYS}/bin/logFile makeTableLog $ODIR/$TFIL-$ARRAY.root $LDIR/$TFIL-$ARRAY.log
      rm -f $LDIR/$TFIL-$ARRAY.log
 fi
 if [ -e ${TMPLIST} ]
 then
-     $EVNDISPSYS/bin/logFile makeTableFileList $ODIR/$TFIL-$ARRAY.root ${TMPLIST}
+     ${EVNDISPSYS}/bin/logFile makeTableFileList $ODIR/$TFIL-$ARRAY.root ${TMPLIST}
      rm -f ${TMPLIST}
 fi
 

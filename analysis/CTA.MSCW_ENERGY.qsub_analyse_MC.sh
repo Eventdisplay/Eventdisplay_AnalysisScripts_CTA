@@ -6,19 +6,37 @@
 
 TABFIL=TABLEFILE
 RECID=RECONSTRUCTIONID
-IFIL="IIIIFIL"
 TFIL=TTTTFIL
 ARRAY=ARRAYYY
 DSET=DATASET
 ADIR=AAAAADIR
 MCAZ=AZIMUTH
+FILEN=FILELENGTH
+TFILE=FILELIST
+
+# counter
+l=$((SGE_TASK_ID * FILEN))
+l=$((l - FILEN))
+l=$((l + 1))
+let "k = $l + $FILEN - 1"
+echo "COUNTER $SGE_TASK_ID $l $k"
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
 
+# output MSCWFILE
+TFIL=${TFIL}-$l.mscw
+
 # output data and log files are written to this directory
 ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$ARRAY"/$ADIR/"
 mkdir -p $ODIR
+
+# FILE LIST
+IFIL=${TMPDIR}/${TFIL}.list
+echo $TFILE
+echo $IFIL
+sed -n "$l,$k p" $TFILE > $IFIL
+wc -l $IFIL
 
 # delete old log files
 rm -f $ODIR/$TFIL.log
@@ -51,7 +69,6 @@ do
    cp $F $DDIR/
 done
 find $DDIR/ -name "*.root" > $TMPDIR/iList.list
-# ls -1 $DDIR/*.root > $TMPDIR/iList.list
 
 # check disk space on TMPDIR
 du -h -c $TMPDIR
@@ -96,7 +113,7 @@ MOPT="$MOPT -maxloss=0.2 -minfui=0."
 if [[ $DSET == *"paranal"* ]]; then
     MOPT="$MOPT -maxdistfraction=0.70"
 else
-    MOPT="$MOPT -maxdistfraction=0.9"
+    MOPT="$MOPT -maxdistfraction=0.70"
 fi
 
 #########################################
