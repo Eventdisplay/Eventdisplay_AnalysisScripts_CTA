@@ -57,13 +57,14 @@ EFFVERSION="V3"
 
 TDATE="g20191112"
 
+ANADATE="g20200614"
+TMVADATE="g20200614"
+EFFDATE="g20200614"
+
 ANADATE="g20200614FOV07"
 TMVADATE="g20200614FOV07"
 EFFDATE="g20200614FOV07"
 
-ANADATE="g20200614"
-TMVADATE="g20200614"
-EFFDATE="g20200614"
 
 
 # off-axis binnning
@@ -401,9 +402,11 @@ do
                   then
                      if [[ $OFFAXIS == "cone" ]]
                      then
-                        ./CTA.WPPhysWriter.sub.sh ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                        $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                      else
-                        ./CTA.WPPhysWriter.sub.sh ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                        $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]

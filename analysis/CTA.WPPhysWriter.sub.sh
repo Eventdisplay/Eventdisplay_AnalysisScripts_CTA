@@ -8,7 +8,7 @@
 if [ $# -lt 7 ]
 then
    echo 
-   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [qsub options]"
+   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [qsub options] [name]"
    echo
    echo "  <sub array list>          text file with list of subarray IDs"
    echo ""
@@ -19,22 +19,25 @@ then
    exit
 fi
 
-DDIR=$1
-OBSTIME=$2
-OUTNAME=$3
-OFFSET=$4
-RECID=$5
-DSET=$6
+DDIR=$2
+OBSTIME=$3
+OUTNAME=$4
+OFFSET=$5
+RECID=$6
+DSET=$7
 BFINEBINNING=FALSE
-if [ -n "$7" ]
-then
-   BFINEBINNING="$7"
+if [ -n "$8" ]; then
+   BFINEBINNING="$8"
+fi
+
+PNAME=""
+if [ -n $9 ]; then
+   PNAME="$9"
 fi
 
 QSUBOPT=""
-if [ -n $8 ]
-then
-   QSUBOPT="$8"
+if [ -n ${10} ]; then
+   QSUBOPT="${10}"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 
@@ -43,7 +46,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 # software paths
 source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
-if [ -z $EVNDISPSYS ]
+if [ -z ${EVNDISPSYS} ]
 then
     echo "no EVNDISPSYS env variable defined"
     exit
@@ -51,28 +54,35 @@ fi
 
 # log files
 DATE=`date +"%y%m%d"`
-FDIR=$CTA_USER_LOG_DIR/$DATE/WPPHYSWRITER/
-mkdir -p $FDIR
-echo "log directory: " $FDIR
+FDIR=${CTA_USER_LOG_DIR}/$DATE/WPPHYSWRITER/
+mkdir -p ${FDIR}
+echo "log directory: " ${FDIR}
 
 # script name template
 FSCRIPT="CTA.WPPhysWriter.qsub"
 
 ###############################################################
 # loop over all arrays
+echo $VARRAY
 VARRAY=`awk '{printf "%s ",$0} END {print ""}' $1`
 for ARRAY in $VARRAY
 do
    echo "STARTING ARRAY $ARRAY"
 
-   ODIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/Phys/"
-
-   OXUTNAME=$ODIR/$OUTNAME
+   if [[ -z ${PNAME} ]]; then
+       ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/Phys/"
+   else
+       ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/Phys-${PNAME}/"
+   fi
    mkdir -p $ODIR
+
+   OXUTNAME=${ODIR}/${OUTNAME}
    echo "WP Phys file written to $OXUTNAME"
 
-   FNAM=$FDIR/$FSCRIPT-$ARRAY-$DSET-$OBSTIME.sh
+   FNAM=${FDIR}/$FSCRIPT-$ARRAY-$DSET-$OBSTIME.sh
    cp -f $FSCRIPT.sh $FNAM
+
+   echo "run script $FNAM"
 
    sed -i -e "s|ARRAY|$ARRAY|" \
        -e "s|DDIR|$DDIR|" \
