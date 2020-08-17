@@ -23,7 +23,7 @@ fi
 # installation of all required packages
 function install_packages {
 
-   cd ${MAINDIR}
+   cd "${MAINDIR}"
    # hessioxxx
    #wget https://www.mpi-hd.mpg.de/hfm/CTA/MC/Software/Testing/hessioxxx.tar.gz
    if [[ -e hessioxxx.tar.gz ]]; then
@@ -49,7 +49,7 @@ function install_packages {
   ./install_sofa.sh
   export SOFASYS=${EVNDISPSYS}/sofa
   make CTA CTAPROD=PROD5
-  cd ${TDIR}
+  cd "${TDIR}"
 }
 
 INSTALL="noinstall"
