@@ -1,23 +1,89 @@
 #!/bin/bash
 #
-# set software paths to the correct place
+# set software paths to analysis paths
+#
+# allow also to install all software packages
+#
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
-   echo "source ./setSoftwarePaths.sh <data set>"
+   echo "source ./setSoftwarePaths.sh <data set> [install]"
    echo "(use source)"
    exit
 fi
 
 if [ ! -n "$1" ]
 then
-    echo "source ./setSoftwarePaths.sh <data set>"
+    echo "source ./setSoftwarePaths.sh <data set> [install]"
     echo
     return
 fi
 
-DSET="$1"
+#########################################
+# installation of all required packages
+function install_packages {
+
+   cd ${MAINDIR}
+   # hessioxxx
+   #wget https://www.mpi-hd.mpg.de/hfm/CTA/MC/Software/Testing/hessioxxx.tar.gz
+   if [[ -e hessioxxx.tar.gz ]]; then
+      tar -xvzf hessioxxx.tar.gz
+      cd hessioxxx
+      make EXTRA_DEFINES="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
+      #rm -f hessioxxx.tar.gz
+      cd ${MAINDIR}
+  else
+      echo "Error finding hessioxx"
+      return
+  fi
+  export HESSIOSYS=${MAINDIR}/hessioxxx
+  export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
+
+  # Eventdisplay Analysis files
+  git clone https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+
+  # Eventdisplay code
+  git clone https://github.com/Eventdisplay/Eventdisplay.git
+  cd Eventdisplay
+  EVNDISPSYS=$(pwd)
+  ./install_sofa.sh
+  export SOFASYS=${EVNDISPSYS}/sofa
+  make CTA CTAPROD=PROD5
+  cd ${TDIR}
+}
+
+INSTALL="noinstall"
+if [ -n "$2" ]
+then
+    INSTALL=$2
+fi
+echo "SETTING $1 $INSTALL"
+
+TDIR=$(pwd)
+
+# main working directory
+DSET="${1}"
 MAINDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+
+# ROOT installation expected
+if [[ -z ${ROOTSYS} ]]; then
+   echo "Error: ROOTSYS not set"
+   return
+fi
+cd $ROOTSYS
+source ./bin/thisroot.sh
+cd $TDIR
+ROOTCONF=`root-config --libdir`
+export LD_LIBRARY_PATH=${ROOTCONF}
+
+
+# Software installation (optional)
+if [[ $INSTALL == "install" ]]; then
+   install_packages
+   return
+fi
+
+# EVNDISPSYS settings
 if [[ -e ${MAINDIR}/code ]]; then
     EVNDISPSYS="${MAINDIR}/code"
 else
@@ -29,14 +95,6 @@ then
    echo ${EVNDISPSYS}
    return
 fi
-
-TDIR=`pwd`
-cd $ROOTSYS
-source ./bin/thisroot.sh
-cd $TDIR
-
-ROOTCONF=`root-config --libdir`
-export LD_LIBRARY_PATH=${ROOTCONF}
 
 export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
 if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then
