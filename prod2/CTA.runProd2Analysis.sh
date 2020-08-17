@@ -100,7 +100,6 @@ then
   SITE=( "prod1-cta-ultra3" )
   ARRAY=( "subArray.I-noLST.list" )
   RECID="2"
-  DATE="d20130415"
   MCAZ=( "" )
 ############################
 # prod2-MS (trigsim)
@@ -251,7 +250,7 @@ do
 	  touch $PARA
 	  echo "WRITING PARAMETERFILE $PARA"
 	  NTYPF=NIM$NIMAGESMIN
-	  EFFDIR="EffectiveArea-"$OOTIME"-Erec$EREC-ID$ID$AZ-$NTYPF-$EFFDATE"
+	  EFFDIR=EffectiveArea-"$OOTIME"-Erec$EREC-ID$ID$AZ-$NTYPF-$EFFDATE
 	  echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> $PARA
 	  echo "TMVASUBDIR BDT-Erec$EREC-ID$ID$AZ-$NTYPF-$TMVADATE" >> $PARA
 	  echo "EFFAREASUBDIR $EFFDIR" >> $PARA
