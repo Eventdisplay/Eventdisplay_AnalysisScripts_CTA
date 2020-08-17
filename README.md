@@ -18,6 +18,12 @@ Requires *$ROOTSYS* to be set
 source ./setSoftwarePaths.sh prod5-LaPalma-20deg-v01-LL install
 ```
 
+Installs:
+- hessioxx
+- sofa
+- Eventdisplay analysis files
+- Eventdisplay code
+
 ## Path setting
 
 To set all paths, do:
