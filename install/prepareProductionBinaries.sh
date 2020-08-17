@@ -13,6 +13,7 @@ then
 fi
 
 DSET="$1"
+TDIR=$(pwd)
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/"
@@ -61,11 +62,11 @@ then
 elif [[ $DSET = *"prod4"* ]]
 then
    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
-   EFLAGS="CTAPROD=PROD5"
+   EFLAGS="PROD5"
 elif [[ $DSET = *"prod5"* ]]
 then
    export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
-   EFLAGS="CTAPROD=PROD5"
+   EFLAGS="PROD5"
 else
    echo "unknown production"
    exit
@@ -73,25 +74,14 @@ fi
 make EXTRA_DEFINES="${HESSIOCFLAGS}"
 
 cd $EVNDISPSYS
-
-export HESSIOSYS=$EVNDISPSYS/hessioxxx
-export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
-# ROOT installation expected
-if [[ -z ${ROOTSYS} ]]; then
-   echo "Error: ROOTSYS not set"
-   exit
-fi
-cd $ROOTSYS
-source ./bin/thisroot.sh
-cd $EVNDISPSYS
-ROOTCONF=`root-config --libdir`
-export LD_LIBRARY_PATH=${ROOTCONF}
-
-source ./setObservatory.sh CTA
-
-# get and compile sofa
 ./install_sofa.sh
-export SOFASYS=$EVNDISPSYS/sofa
+
+# set all flags
+cd ${TDIR}
+source  ../setSoftwarePaths.sh ${DSET}
 
 # compile eventdisplay
-make CTA CTAPROD=${EFLAGS} GRIDPROD=CTAGRID
+cd $EVNDISPSYS
+make CTA CTAPROD=$EFLAGS GRIDPROD=CTAGRID
+
+cd ${TDIR}
