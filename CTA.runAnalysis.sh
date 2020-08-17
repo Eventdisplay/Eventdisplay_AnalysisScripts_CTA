@@ -43,7 +43,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_150"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
@@ -55,14 +55,13 @@ mkdir -p $PDIR
 TMVAVERSION="V3"
 EFFVERSION="V3"
 
-TDATE="g20191112"
+# dates
+TDATE="g20200817"
+ANADATE="${TDATE}"
+TMVADATE="${TDATE}"
+EFFDATE="${TDATE}"
 
-ANADATE="g20200614"
-TMVADATE="g20200614"
-EFFDATE="g20200614"
-
-# off-axis binnning
-BFINEBINNING="TRUE"
+# off-axis binnning (default=FALSE)
 BFINEBINNING="FALSE"
 if [ $BFINEBINNING = "TRUE" ]
 then
@@ -76,12 +75,10 @@ fi
 # _0deg = north
 MCAZ=( "_180deg" "_0deg" "" )
 
-#####################################
-# loss cut adaption
-EDM=( "u05b-LL" )
 
 ##########################################################
 # PROD3B Analysis
+EDM=( "u05b-LL" )
 if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
@@ -117,15 +114,6 @@ elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
-   ARRAY="subArray.prod3b.North-202003.list"
-   ARRAY="subArray.prod3b.North-202003.v2.list"
-   ARRAY="subArray.prod3b.North-202004c-smallArrays.list"
-   ARRAY="subArray.prod3b.North-202004b.list"
-   ARRAY="subArray.prod3b.North-202004e.list"
-   ARRAY="subArray.prod3b.North-202004f.list"
-   ARRAY="subArray.prod3b.North-202005.list"
-   ARRAY="subArray.prod3b.North-2020614.list"
-   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == *"N20deg-test"* ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
@@ -172,11 +160,11 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
-   EDM=( "a05b" )
+   EDM=( "-v01-LL" )
    if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-LaPalma20deg-Moon" )
+       SITE=( "prod5-LaPalma-20deg-Moon" )
    else
-       SITE=( "prod5-LaPalma20deg" )
+       SITE=( "prod5-LaPalma-20deg" )
    fi
    ARRAY=( "subArray.prod5.North.list" )
    ARRAYDIR=( "prod5" )
@@ -184,9 +172,9 @@ elif [[ $P2 == "prod5-S"* ]]
 then
    EDM=( "a05b" )
    if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-Paranal20deg-Moon" )
+       SITE=( "prod5-Paranal-20deg-Moon" )
    else
-       SITE=( "prod5-Paranal20deg" )
+       SITE=( "prod5-Paranal-20deg" )
    fi
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
@@ -200,8 +188,8 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" )
 
 #####################################
 # cut on number of images
@@ -216,7 +204,6 @@ fi
 #####################################
 # observing time [h]
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
-OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" )
 
@@ -252,7 +239,7 @@ do
 
                   cd ./analysis/
                   if [[ $P2 == *"prod5"* ]]; then
-                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 1 $i $QSUBOPT $TRG
+                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
                   else
                       ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
                   fi
@@ -369,7 +356,7 @@ do
 ##########################################
 # train BDTs   
 # (note: BDT training does not need to be done for all observing periods)
-                  if [[ $RUN == "TRAIN" ]]
+                  if [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
                   then
                      if [ ${o} -eq 0 ]
                      then
