@@ -18,10 +18,14 @@ then
          N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
     Prod4 analysis:
          prod4-S20deg-MST
+    Prod5 analysis:
+         prod5-N
+         prod5-S
+         (to be added: moon light runs)
    
-     possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
+    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
    
-     <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
+    <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
    "
    
    exit
