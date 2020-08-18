@@ -121,7 +121,7 @@ fi
 
 #########################################
 # disp main directory name
-DISPSUBDIR="BDTdisp.${ARRAY}.T001"
+DISPSUBDIR="BDTdisp.${ARRAY}.T1"
 
 #########################################
 # options for DISP method (direction)
