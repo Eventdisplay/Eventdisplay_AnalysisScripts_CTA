@@ -116,7 +116,7 @@ MOPT="$MOPT -maxloss=0.2 -minfui=0."
 if [[ $DSET == *"paranal"* ]]; then
     MOPT="$MOPT -maxdistfraction=0.70"
 else
-    MOPT="$MOPT -maxdistfraction=0.90"
+    MOPT="$MOPT -maxdistfraction=0.80"
 fi
 
 #########################################
