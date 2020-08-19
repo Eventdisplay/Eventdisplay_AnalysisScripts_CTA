@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
 
 #####################################
 # output directory for script parameter files
@@ -164,13 +164,19 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
-   EDM=( "-v01-LL" )
+   if [[ $P2 == *"hyper"* ]]; then
+       EDM=( "-h01-LL" )
+   else
+       EDM=( "-v01-LL" )
+   fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-Moon" )
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
    ARRAY=( "subArray.prod5.North.list" )
+   ARRAY=( "subArray.prod5.North-Hyper.list" )
+   ARRAY=( "subArray.prod5.North-noHyper.list" )
    ARRAYDIR=( "prod5" )
 elif [[ $P2 == "prod5-S"* ]]
 then
@@ -192,8 +198,9 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
 # cut on number of images
