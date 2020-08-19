@@ -35,6 +35,7 @@ echo
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
 git clone https://github.com/Eventdisplay/Eventdisplay.git .
+git checkout prod5-v01
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx.tar.gz"
