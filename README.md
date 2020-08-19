@@ -34,6 +34,16 @@ To set all paths, do:
 source ./setSoftwarePaths.sh prod5-LaPalma-20deg-v01-LL
 ```
 
+## Utilities
+
+Set links for hyper array analysis:
+
+```
+cd utiltities
+./prepareHyperProduction.sh prod5-LaPalma-20deg-v01-LL prod5-LaPalma-20deg-h01-LL ../prod5/subArray.prod5.North-noHyper.list
+```
+
+
 
 ## Licence
 
