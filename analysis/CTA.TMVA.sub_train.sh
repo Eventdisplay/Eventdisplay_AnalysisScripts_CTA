@@ -232,6 +232,11 @@ do
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
        TELTYP=`$EVNDISPSYS/bin/printRunParameter $1 -ntype$N`
+       if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
+          echo "Error: telescope type not found: $N"
+          echo "(check printRunParameters)"
+          exit
+       fi
 
        NCUT="NCUT${TELTYP}"
        if [ $N -eq 0 ]
