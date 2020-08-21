@@ -58,6 +58,16 @@ NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
 NCUTSST=`grep NSST $ANAPAR | awk {'print $2'}`
 NCUTSCMST=`grep NSCMST $ANAPAR | awk {'print $2'}`
+if [[ $DSET == *"prod5"* ]]; then
+   if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat ]]; then
+       TELTYPESLST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep LST | awk '{ $1=""; $2=""; print}')
+       TELTYPESMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep MST | awk '{ $1=""; $2=""; print}')
+       TELTYPESSST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SST | awk '{ $1=""; $2=""; print}')
+       TELTYPESCMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SCMST | awk '{ $1=""; $2=""; print}')
+   else
+      echo "Problem / error? Prod5 teltype file not found"
+   fi
+fi
 for T in LST MST SST SCMST 
 do
     NCUT="NCUT${T}"
@@ -65,7 +75,15 @@ do
     then
        declare "NCUT${T}=0"
     fi
+    TELTYPES="TELTYPES${T}"
+    if [ -z "${!TELTYPES}" ]
+    then
+       declare "TELTYPES${T}=0"
+    fi
 done
+
+
+
 # get all directories
 ANADIR=`grep MSCWSUBDIRECTORY  $ANAPAR | awk {'print $2'}`
 TMVACUT=`grep TMVASUBDIR $ANAPAR | awk {'print $2'}`
@@ -349,7 +367,10 @@ do
                  -e "s|NTELTYPELST|$NCUTLST|" \
                  -e "s|NTELTYPEMST|$NCUTMST|" \
                  -e "s|NTELTYPESST|$NCUTSST|" \
-                 -e "s|NTELTYPESCMST|$NCUTSCMST|" \
+                 -e "s|TELTYPESLST|$TELTYPESLST|" \
+                 -e "s|TELTYPESMST|$TELTYPESMST|" \
+                 -e "s|TELTYPESSST|$TELTYPESSST|" \
+                 -e "s|TELTYPESSCMST|$TELTYPESCMST|" \
                  -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
                  -e "s|TMVACUTDIR|$TMVACUT|" \
                  -e "s|DATASET|$DSET|" \
