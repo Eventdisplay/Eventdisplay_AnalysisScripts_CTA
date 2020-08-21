@@ -95,23 +95,37 @@ FSCRIPT="CTA.DISPTRAINING.qsub_analyse"
 # list of telescopes
 if [[ $DSET == *"prod3"* ]]
 then
-    if [[ $DSET == *"LaPalma"* ]]
-    then
-        TELTYPELIST="138704810 10408418 10408618"
+    if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3.teltypes.dat ]]; then
+        if [[ $DSET == *"LaPalma"* ]]
+        then
+            TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3.teltypes.dat | grep XSTN | awk '{ $1=""; $2=""; print}')
+        else
+            TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3.teltypes.dat | grep XST | awk '{ $1=""; $2=""; print}')
+        fi
     else
-        TELTYPELIST="138704810 10408418 201309316 909924 10408618 201511619 207308707"
+        echo "Error: Prod3 teltype file not found"
+        exit
     fi
 elif [[ $DSET == *"prod4"* ]]
 then
-    if [[ $DSET == *"MST"* ]]
-    then
-        TELTYPELIST="10408618"
+    if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat ]]; then
+        if [[ $DSET == *"MST"* ]]; then
+            TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat | grep MST | awk '{ $1=""; $2=""; print}')
+        else
+            TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat | grep XST | awk '{ $1=""; $2=""; print}')
+        fi
     else
-        TELTYPELIST="910224 201309316 201310418 201511619 201409917 201411019" 
+        echo "Error: Prod4 teltype file not found"
+        exit
     fi
 elif [[ $DSET == *"prod5"* ]]
 then
-    TELTYPELIST="138704810 10408618 10608418 201409917"
+    if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat ]]; then
+        TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep XST | awk '{ $1=""; $2=""; print}')
+    else
+        echo "Error: Prod5 teltype file not found"
+        exit
+    fi
 else
     echo "unknown data set $DSET"
     exit
