@@ -63,7 +63,7 @@ if [[ $DSET == *"prod5"* ]]; then
        TELTYPESLST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep LST | awk '{ $1=""; $2=""; print}')
        TELTYPESMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep MST | awk '{ $1=""; $2=""; print}')
        TELTYPESSST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SST | awk '{ $1=""; $2=""; print}')
-       TELTYPESCMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SCMST | awk '{ $1=""; $2=""; print}')
+       TELTYPESSCMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SCMST | awk '{ $1=""; $2=""; print}')
    else
       echo "Problem / error? Prod5 teltype file not found"
    fi
@@ -80,6 +80,7 @@ do
     then
        declare "TELTYPES${T}=0"
     fi
+    echo "NCUT${T}" "TELTYPES${T}"
 done
 
 
@@ -370,7 +371,7 @@ do
                  -e "s|TELTYPESLST|$TELTYPESLST|" \
                  -e "s|TELTYPESMST|$TELTYPESMST|" \
                  -e "s|TELTYPESSST|$TELTYPESSST|" \
-                 -e "s|TELTYPESSCMST|$TELTYPESCMST|" \
+                 -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
                  -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
                  -e "s|TMVACUTDIR|$TMVACUT|" \
                  -e "s|DATASET|$DSET|" \
