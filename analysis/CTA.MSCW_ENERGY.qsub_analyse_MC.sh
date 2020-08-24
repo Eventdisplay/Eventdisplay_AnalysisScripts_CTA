@@ -83,6 +83,9 @@ DARR=${ARRAY}
 if  [[ $DSET == *"prod4"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
+elif [[ $DSET == *"prod5"* ]]
+then
+    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${DARR}.lis
 elif [[ $DSET == *"prod3"* ]]
 then
     if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
@@ -118,7 +121,7 @@ fi
 
 #########################################
 # disp main directory name
-DISPSUBDIR="BDTdisp.${ARRAY}.T001"
+DISPSUBDIR="BDTdisp.${ARRAY}.T1"
 
 #########################################
 # options for DISP method (direction)

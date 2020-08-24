@@ -18,10 +18,14 @@ then
          N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
     Prod4 analysis:
          prod4-S20deg-MST
+    Prod5 analysis:
+         prod5-N
+         prod5-S
+         (to be added: moon light runs)
    
-     possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
+    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
    
-     <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
+    <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
    "
    
    exit
@@ -43,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
 
 #####################################
 # output directory for script parameter files
@@ -58,6 +62,7 @@ EFFVERSION="V3"
 # dates
 TDATE="g20200817"
 ANADATE="${TDATE}"
+ANADATE="g20200822"
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
 
@@ -160,22 +165,32 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
+   ARRAY=( "subArray.prod5.North.list" )
+   ARRAY=( "subArray.prod5.North-Hyper.list" )
+   ARRAY=( "subArray.prod5.North-noHyper.list" )
    EDM=( "-v01-LL" )
+   if [[ $P2 == *"hyper"* ]]; then
+       EDM=( "-h01-LL" )
+   elif [[ $P2 == *"v02"* ]]; then
+       EDM=( "-v02-LL" )
+       ARRAY=( "subArray.prod5.North-noHyper.list" )
+       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
+       ARRAY=( "subArray.prod5.North-noHyper-F.list" )
+   fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-Moon" )
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
-   ARRAY=( "subArray.prod5.North.list" )
    ARRAYDIR=( "prod5" )
 elif [[ $P2 == "prod5-S"* ]]
 then
-   EDM=( "a05b" )
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-Paranal-20deg-Moon" )
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
+   EDM=( "-v02-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
 else
@@ -188,8 +203,9 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
 # cut on number of images

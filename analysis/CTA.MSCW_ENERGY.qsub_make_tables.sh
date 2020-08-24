@@ -60,16 +60,25 @@ fi
 
 # strip array scaling (two characters) for paranal sites
 DARR=${ARRAY}
-if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]] 
+if  [[ $DSET == *"prod4"* ]]
 then
-   DARR=${ARRAY%??}
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
-elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
+    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
+elif [[ $DSET == *"prod5"* ]]
 then
-   DARR=${ARRAY}
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
-else
-   LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${DARR}.lis
+elif [[ $DSET == *"prod3"* ]]
+then
+    if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]] 
+    then
+       DARR=${ARRAY%??}
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    elif [[ $DSET == *"LaPalma"* ]] || [[ $DARR == "Sb"* ]]
+    then
+       DARR=${ARRAY}
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
+    else
+       LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
+    fi
 fi
 
 MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=${MINTEL} -write1DHistograms"
