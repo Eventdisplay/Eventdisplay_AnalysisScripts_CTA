@@ -100,10 +100,10 @@ do
          rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
 
 # take $FILEN files and combine them into one mscw file
-	 FILEN=1000
+	 FILEN=250
 	 if [ $PART = "proton" ]
 	 then
-	    FILEN=2000
+	    FILEN=1000
 	 fi
 
 #########################################
