@@ -62,6 +62,7 @@ EFFVERSION="V3"
 # dates
 TDATE="g20200817"
 ANADATE="${TDATE}"
+ANADATE="g20200822"
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
 
@@ -164,28 +165,32 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
+   ARRAY=( "subArray.prod5.North.list" )
+   ARRAY=( "subArray.prod5.North-Hyper.list" )
+   ARRAY=( "subArray.prod5.North-noHyper.list" )
+   EDM=( "-v01-LL" )
    if [[ $P2 == *"hyper"* ]]; then
        EDM=( "-h01-LL" )
-   else
-       EDM=( "-v01-LL" )
+   elif [[ $P2 == *"v02"* ]]; then
+       EDM=( "-v02-LL" )
+       ARRAY=( "subArray.prod5.North-noHyper.list" )
+       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
+       ARRAY=( "subArray.prod5.North-noHyper-F.list" )
    fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-Moon" )
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
-   ARRAY=( "subArray.prod5.North.list" )
-   ARRAY=( "subArray.prod5.North-Hyper.list" )
-   ARRAY=( "subArray.prod5.North-noHyper.list" )
    ARRAYDIR=( "prod5" )
 elif [[ $P2 == "prod5-S"* ]]
 then
-   EDM=( "a05b" )
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-Paranal-20deg-Moon" )
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
+   EDM=( "-v02-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
 else
