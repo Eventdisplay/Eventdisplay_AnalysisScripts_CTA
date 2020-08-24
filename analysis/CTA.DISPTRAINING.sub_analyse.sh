@@ -164,7 +164,7 @@ do
                 ####################
                 # input file list
                 rm -f $SHELLDIR/tempList.list
-                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
+                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
                 NFIL=`wc -l $SHELLDIR/tempList.list | awk '{print $1}'`
                 echo "Total number of files available: $NFIL"
                 # only use NN% of all evndisp files for training

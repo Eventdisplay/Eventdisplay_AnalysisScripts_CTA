@@ -43,12 +43,12 @@ rm -f $TMPLIST
 touch $TMPLIST
 if [ $CONE == "TRUE" ]
 then
-   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
-   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_cone/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
+   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_cone/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
+   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_cone/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
 # on-axis gamma rays
 else
-   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
-   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/gamma_onSource/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
+   find ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_onSource/ -name "*[0-9]*[\.,_]${MCAZ}*.root" >> $TMPLIST
+   echo "${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_onSource/ -name \"*[0-9]*[\.,_]${MCAZ}*.root\""
 fi
 
 ################################
