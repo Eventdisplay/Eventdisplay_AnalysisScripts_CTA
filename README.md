@@ -36,6 +36,13 @@ source ./setSoftwarePaths.sh prod5-LaPalma-20deg-v01-LL
 
 ## Utilities
 
+Set links to EVNDISP production directory:
+
+```
+cd utitilities
+./linkEvndispProduction.sh prod5-LaPalma-20deg-EVNDISP prod5-LaPalma-20deg-v02-LL ../prod5/subArray.prod5.North-noHyper-N.list
+```
+
 Set links for hyper array analysis:
 
 ```
@@ -50,7 +57,6 @@ cd utilities
 ./countFilesinProduction.sh prod5-LaPalma-20deg-EVNDISP ../prod5/subArray.prod5.North-noHyper.list EVNDISP
 ```
 e.g., cross checks that number of EVNDISP files is correct
-
 
 
 ## Licence
