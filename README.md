@@ -43,6 +43,14 @@ cd utiltities
 ./prepareHyperProduction.sh prod5-LaPalma-20deg-v01-LL prod5-LaPalma-20deg-h01-LL ../prod5/subArray.prod5.North-noHyper.list
 ```
 
+Count number of files in production directories:
+
+```
+cd utilities
+./countFilesinProduction.sh prod5-LaPalma-20deg-EVNDISP ../prod5/subArray.prod5.North-noHyper.list EVNDISP
+```
+e.g., cross checks that number of EVNDISP files is correct
+
 
 
 ## Licence
