@@ -63,7 +63,7 @@ FILES=`cat $BLIST`
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
-DATE=`date +"%y%m%d"`
+#DATE=`date +"%y%m%d"`
 
 # output directory for shell scripts
 SHELLDIR=$CTA_USER_LOG_DIR"/queueShellDir/"
