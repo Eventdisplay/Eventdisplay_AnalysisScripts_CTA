@@ -227,6 +227,7 @@ do
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
    NTELTYPE=`$EVNDISPSYS/bin/printRunParameter $1 -nteltypes`
+   echo "$EVNDISPSYS/bin/printRunParameter $1 -nteltypes"
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
@@ -263,18 +264,18 @@ do
    do
       echo "* SIGNALFILE $arg" >> ${TEMPPAR}
    done
-   for arg in $SFIL2
-   do
-      echo "* SIGNALFILE $arg" >> ${TEMPPAR}
-   done
+  # for arg in $SFIL2
+  # do
+  #    echo "* SIGNALFILE $arg" >> ${TEMPPAR}
+  # done
    for arg in $BFIL1
    do
       echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
    done
-   for arg in $BFIL2
-   do
-      echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
-   done
+  # for arg in $BFIL2
+  # do
+  #    echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
+  # done
 
 ###############################################################
 # loop over all wobble offset
@@ -308,17 +309,18 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
 
-     FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.NIMAGES${NIMAGESMIN}
+     FNAM=$LDIR/X$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
      RRFIL=$ODIR/$RXPAR$ARRAY
      sed -e "s|RUNPARA|$RRFIL|" $FSCRIPT.sh > $FNAM.sh
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
      MEM=8000M
-     MEM=12000M
+     #MEM=16000M
      #################################
      # submit job to queue (for all energy bins)
-     qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=47:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+     qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+     #qsub $QSUBOPT -V -R y -t 1-$NENE:1 -l h_cpu=05:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
   rm -f ${TEMPPAR}
 done

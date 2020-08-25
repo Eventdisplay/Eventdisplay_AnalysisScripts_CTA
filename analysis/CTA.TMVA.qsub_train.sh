@@ -29,7 +29,7 @@ rm -f $CDIR/BDT_${EBIN}*.C
 rm -rf $CDIR/complete_BDTroot
 
 # mv log file into root file
-if [ -e $PFILE.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
+if [ -e $PFILE.log ]
 then
     ${EVNDISPSYS}/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root $PFILE.log
     rm -f $PFILE.log
