@@ -12,7 +12,7 @@ source $EVNDISPSYS/setObservatory.sh CTA
 # list of sim_telarray files to analysis
 ILIST=SIMTELLIST
 # all simtel files (only if SCSST files are not found in current directory)
-FLIST=FULLLIST
+#FLIST=FULLLIST
 ILINE=$SGE_TASK_ID
 PART=PAAART
 SUBA="ARRAY"
