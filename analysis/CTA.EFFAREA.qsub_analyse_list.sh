@@ -26,6 +26,16 @@ GFILLING=PPPGMOD
 DSET=PPPDSET
 MCAZ="PPPMCAZ"
 
+# Choose PARTICLE type from job id
+let "PARTID = $SGE_TASK_ID - 1"
+declare -a PTYPELIST=("gamma_onSource" "electron_onSource" "proton_onSource" "gamma_cone" "electron" "proton")
+if [ $PTYPE = "GAMMA" ]
+then
+    declare -a PTYPELIST=("gamma_onSource" "gamma_cone")
+fi
+PART="${PTYPELIST[$PARTID]}"
+echo "PROCESSING PARTICLE $PART"
+
 #######################################
 # read analysis values from parameter file
 if [ ! -e $ANAPAR ]
@@ -125,11 +135,6 @@ echo "output data directory"
 echo $ODIR
 mkdir -p $ODIR
 
-declare -a PTYPELIST=("gamma_onSource" "electron_onSource" "proton_onSource" "gamma_cone" "electron" "proton")
-if [ $PTYPE = "GAMMA" ]
-then
-    declare -a PTYPELIST=("gamma_onSource" "gamma_cone")
-fi
 
 ######################################################################
 # maximum core distance to a telescope
@@ -148,335 +153,329 @@ fi
 # OFFMIN/OFFMAX: range used for signal cuts
 # THETAMIN/THETAMX: range used for background cuts
 
+echo "$PART"
+echo
 ######################################################################
-# loop over all particle types
+# input files and input parameters
 ######################################################################
-for PART in "${PTYPELIST[@]}"
-do
-    echo "$PART"
-    echo
-    ######################################################################
-    # input files and input parameters
-    ######################################################################
-    # parameters which are the same for all particle types
-    # no AZ bins (CTA sims are sorted already on the input side in AZ)
-    AZBINS="0"
-    TELTYPECUTS="1"
-    # data directory
-    # on source gamma rays
-    if [ $PART = "gamma_onSource" ]
-    then
-       if [[ ${DSET:0:2} == "GR" ]]
-       then
-           MSCFILE=$DDIR/gamma*"deg$MCAZ"*"baseline_evndisp"*.mscw.root
-       else
-           MSCFILE=$DDIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
-       fi
-       OFIL=gamma_onSource."$ARRAY"_ID"$RECID".eff
-       OFFMIN=( 0. )
-       OFFMAX=( 100000. )
-       OFFMEA=( "0.5" )
-    # NOTE: this is theta2
-       THETA2MIN=( -1. )
-    # using TMVA or angular resolution
-       THETA2MAX=( -1. )
-       ISOTROPY="0"
-       DIRECTIONCUT="2"
-    fi
-    # isotropic gamma-rays: analyse in rings in camera distance
-    if [ $PART = "gamma_cone" ]
-    then
-       if [[ ${DSET:0:2} == "GR" ]]
-       then
-           MSCFILE=$DDIR/gamma*"deg$MCAZ"*"baseline_cone10_evndisp"*.mscw.root
-       else
-           MSCFILE=$DDIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
-       fi
-       OFIL=gamma_cone."$ARRAY"_ID"$RECID".eff
-       # note that these bins are also hardwired in VTableLookupRunParameter::setCTA_MC_offaxisBins
+# parameters which are the same for all particle types
+# no AZ bins (CTA sims are sorted already on the input side in AZ)
+AZBINS="0"
+TELTYPECUTS="1"
+# data directory
+# on source gamma rays
+if [ $PART = "gamma_onSource" ]
+then
+   if [[ ${DSET:0:2} == "GR" ]]
+   then
+       MSCFILE=$DDIR/gamma*"deg$MCAZ"*"baseline_evndisp"*.mscw.root
+   else
+       MSCFILE=$DDIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
+   fi
+   OFIL=gamma_onSource."$ARRAY"_ID"$RECID".eff
+   OFFMIN=( 0. )
+   OFFMAX=( 100000. )
+   OFFMEA=( "0.5" )
+# NOTE: this is theta2
+   THETA2MIN=( -1. )
+# using TMVA or angular resolution
+   THETA2MAX=( -1. )
+   ISOTROPY="0"
+   DIRECTIONCUT="2"
+fi
+# isotropic gamma-rays: analyse in rings in camera distance
+if [ $PART = "gamma_cone" ]
+then
+   if [[ ${DSET:0:2} == "GR" ]]
+   then
+       MSCFILE=$DDIR/gamma*"deg$MCAZ"*"baseline_cone10_evndisp"*.mscw.root
+   else
+       MSCFILE=$DDIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
+   fi
+   OFIL=gamma_cone."$ARRAY"_ID"$RECID".eff
+   # note that these bins are also hardwired in VTableLookupRunParameter::setCTA_MC_offaxisBins
+   if [ $BFINEBINNING = "TRUE" ]
+   then
+       OFFMIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
+       OFFMAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
+       OFFMEA=( 0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
+   else
+       OFFMIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
+       OFFMAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
+       OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
+   fi
+# NOTE: this is theta2
+   THETA2MIN=( -1. )
+   THETA2MAX=( -1. )
+   ISOTROPY="0"
+   DIRECTIONCUT="2"
+fi
+if [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
+then
+   if [[ ${DSET:0:2} == "GR" ]]
+   then
+       MSCFILE=$DDIR/electron*"deg$MCAZ"*mscw.root
+   else
+       MSCFILE=$DDIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
+   fi
+   OFFMIN=( 0. )
+   OFFMAX=( 100000. )
+# NOTE: this is theta and not theta2
+   if [ $PART = "electron" ]
+   then
+      OFIL=electron."$ARRAY"_ID"$RECID".eff
        if [ $BFINEBINNING = "TRUE" ]
        then
-           OFFMIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
-           OFFMAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
-           OFFMEA=( 0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
-       else
-           OFFMIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
-           OFFMAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
-           OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
-       fi
-    # NOTE: this is theta2
-       THETA2MIN=( -1. )
-       THETA2MAX=( -1. )
-       ISOTROPY="0"
-       DIRECTIONCUT="2"
-    fi
-    if [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
-    then
-       if [[ ${DSET:0:2} == "GR" ]]
+           THETA2MIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
+           THETA2MAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
+           OFFMEA=(    0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
+      else
+          THETA2MIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
+          THETA2MAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
+          OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
+      fi
+   else
+      OFIL=electron_onSource."$ARRAY"_ID"$RECID".eff
+      THETA2MIN=( 0. )
+      THETA2MAX=( 1. )
+      OFFMEA=( 0.5 )
+   fi   
+   ISOTROPY="1"
+   DIRECTIONCUT="0"
+fi 
+if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
+then
+   if [[ ${DSET:0:2} == "GR" ]]
+   then
+       MSCFILE=$DDIR/proton*"deg$MCAZ"*mscw.root
+   else
+       MSCFILE=$DDIR/proton*."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
+   fi    
+   if [ $ARRAY = "V5" ]
+   then
+      MSCFILE=$DDIR/proton."$ARRAY"_ID"$RECID$MCAZ".mscw.root
+   fi
+   OFIL=proton."$ARRAY"_ID"$RECID".eff
+   OFFMIN=( 0. )
+   OFFMAX=( 100000. )
+# NOTE: this is theta and not theta2
+   if [ $PART = "proton" ] 
+   then
+      OFIL=proton."$ARRAY"_ID"$RECID".eff
+       if [ $BFINEBINNING = "TRUE" ]
        then
-           MSCFILE=$DDIR/electron*"deg$MCAZ"*mscw.root
-       else
-           MSCFILE=$DDIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
-       fi
-       OFFMIN=( 0. )
-       OFFMAX=( 100000. )
-    # NOTE: this is theta and not theta2
-       if [ $PART = "electron" ]
-       then
-          OFIL=electron."$ARRAY"_ID"$RECID".eff
-           if [ $BFINEBINNING = "TRUE" ]
-           then
-               THETA2MIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
-               THETA2MAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
-               OFFMEA=(    0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
-          else
-              THETA2MIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
-              THETA2MAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
-              OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
-          fi
-       else
-          OFIL=electron_onSource."$ARRAY"_ID"$RECID".eff
-          THETA2MIN=( 0. )
+           THETA2MIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
+           THETA2MAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
+           OFFMEA=(    0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
+      else
+          THETA2MIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
+          THETA2MAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
+          OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
+      fi
+   else
+      OFIL=proton_onSource."$ARRAY"_ID"$RECID".eff
+      THETA2MIN=( 0. )
+      # full system / LST only with smaller FOV
+      if [ $RECID = "0" ] || [ $RECID = "1" ]
+      then
           THETA2MAX=( 1. )
-          OFFMEA=( 0.5 )
-       fi   
-       ISOTROPY="1"
-       DIRECTIONCUT="0"
-    fi 
-    if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
-    then
-       if [[ ${DSET:0:2} == "GR" ]]
-       then
-           MSCFILE=$DDIR/proton*"deg$MCAZ"*mscw.root
-       else
-           MSCFILE=$DDIR/proton*."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
-       fi    
-       if [ $ARRAY = "V5" ]
-       then
-          MSCFILE=$DDIR/proton."$ARRAY"_ID"$RECID$MCAZ".mscw.root
-       fi
-       OFIL=proton."$ARRAY"_ID"$RECID".eff
-       OFFMIN=( 0. )
-       OFFMAX=( 100000. )
-    # NOTE: this is theta and not theta2
-       if [ $PART = "proton" ] 
-       then
-          OFIL=proton."$ARRAY"_ID"$RECID".eff
-           if [ $BFINEBINNING = "TRUE" ]
-           then
-               THETA2MIN=( 0.0 1.0 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 )
-               THETA2MAX=( 1.0 2.0 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 )
-               OFFMEA=(    0.5 1.5 1.5 2.5  2.5 2.5  2.5 3.5  3.5 3.5  3.5 4.5  4.5 4.5  4.5 5.5  5.5 )
-          else
-              THETA2MIN=( 0.0 1.0 2.0 3.0 4.0 5.0 )
-              THETA2MAX=( 1.0 2.0 3.0 4.0 5.0 6.0 )
-              OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
-          fi
-       else
-          OFIL=proton_onSource."$ARRAY"_ID"$RECID".eff
-          THETA2MIN=( 0. )
-          # full system / LST only with smaller FOV
-          if [ $RECID = "0" ] || [ $RECID = "1" ]
-          then
-              THETA2MAX=( 1. )
-          # MST/SST system allow for larger FOV
-          else
-              THETA2MAX=( 2. )
-          fi
-          OFFMEA=( 0.5 )
-       fi
-       ISOTROPY="1"
-       DIRECTIONCUT="0"
-    fi
-    NOFF=${#OFFMIN[@]}
-    NTH2=${#THETA2MIN[@]}
-    echo "Number of offaxis bins $NOFF $NTH2 $BFINEBINNING"
-    ######################################################################
+      # MST/SST system allow for larger FOV
+      else
+          THETA2MAX=( 2. )
+      fi
+      OFFMEA=( 0.5 )
+   fi
+   ISOTROPY="1"
+   DIRECTIONCUT="0"
+fi
+NOFF=${#OFFMIN[@]}
+NTH2=${#THETA2MIN[@]}
+echo "Number of offaxis bins $NOFF $NTH2 $BFINEBINNING"
+######################################################################
 
 
-    ###############################################################################
-    # loop over all off-axis bins
-    for ((i=0; i < $NOFF; i++))
-    do
-       iMIN=${OFFMIN[$i]}
-       iMAX=${OFFMAX[$i]}
-    # loop over all theta2 cuts
-       for ((j=0; j < $NTH2; j++))
-       do
-         jMIN=${THETA2MIN[$j]}
-         jMAX=${THETA2MAX[$j]}
+###############################################################################
+# loop over all off-axis bins
+for ((i=0; i < $NOFF; i++))
+do
+   iMIN=${OFFMIN[$i]}
+   iMAX=${OFFMAX[$i]}
+# loop over all theta2 cuts
+   for ((j=0; j < $NTH2; j++))
+   do
+     jMIN=${THETA2MIN[$j]}
+     jMAX=${THETA2MAX[$j]}
 
-    ###############################################################################
-    # theta2 cut of protons and electron should match the rings from the isotropic gammas
-          if [ $PART = "proton" ] || [ $PART = "proton_onSource" ] || [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
-          then
-             jMIN=$(echo "$jMIN*$jMIN" | bc -l )
-             jMAX=$(echo "$jMAX*$jMAX" | bc -l )
-          fi
+###############################################################################
+# theta2 cut of protons and electron should match the rings from the isotropic gammas
+      if [ $PART = "proton" ] || [ $PART = "proton_onSource" ] || [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
+      then
+         jMIN=$(echo "$jMIN*$jMIN" | bc -l )
+         jMAX=$(echo "$jMAX*$jMAX" | bc -l )
+      fi
 
-    ###############################################################################
-    # create cut file
-          iCBFILE=`basename $CFIL`      
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
-          then
-              CFILP="${CFIL}.gamma.dat"
-          else
-              CFILP="${CFIL}.CRbck.dat"
-          fi
-          iCFIL=$ODIR/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
+###############################################################################
+# create cut file
+      iCBFILE=`basename $CFIL`      
+      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+      then
+          CFILP="${CFIL}.gamma.dat"
+      else
+          CFILP="${CFIL}.CRbck.dat"
+      fi
+      iCFIL=$ODIR/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
 
-          if [ ! -e $CFILP ]
-          then
-            echo "ERROR: cut file does not exist:"
-            echo $CFILP
-            exit
-          fi
-          cp -f $CFILP $iCFIL
+      if [ ! -e $CFILP ]
+      then
+        echo "ERROR: cut file does not exist:"
+        echo $CFILP
+        exit
+      fi
+      cp -f $CFILP $iCFIL
 
-    # wobble offset
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
-          then
-             WOBBLEOFFSET=${OFFMEA[$i]}
-          else
-             WOBBLEOFFSET=${OFFMEA[$j]}
-          fi
-    # angular resolution file
-          if [ $PART = "gamma_onSource" ] 
-          then
-             ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
-          else
-             ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root
-          fi
-    # particle number file
-          if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
-          then
-             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".00.root
-          elif [ $PART = "gamma_cone" ]
-          then
-             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$i.root
-          else
-             PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$j.root
-          fi
+# wobble offset
+      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+      then
+         WOBBLEOFFSET=${OFFMEA[$i]}
+      else
+         WOBBLEOFFSET=${OFFMEA[$j]}
+      fi
+# angular resolution file
+      if [ $PART = "gamma_onSource" ] 
+      then
+         ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
+      else
+         ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root
+      fi
+# particle number file
+      if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
+      then
+         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".00.root
+      elif [ $PART = "gamma_cone" ]
+      then
+         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$i.root
+      else
+         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$j.root
+      fi
 
-          sed -i -e "s|OFFMIN|$iMIN|" \
-                 -e "s|OFFMAX|$iMAX|" \
-                 -e "s|THETA2MIN|$jMIN|" \
-                 -e "s|THETA2MAX|$jMAX|" \
-                 -e "s|DIRECTIONCUT|$DIRECTIONCUT|" \
-                 -e "s|SUBARRAY|$ARRAY|" \
-                 -e "s|MINIMAGES|$NIMAGESMIN|" \
-                 -e "s|NTELTYPELST|$NCUTLST|" \
-                 -e "s|NTELTYPEMST|$NCUTMST|" \
-                 -e "s|NTELTYPESST|$NCUTSST|" \
-                 -e "s|TELTYPESLST|$TELTYPESLST|" \
-                 -e "s|TELTYPESMST|$TELTYPESMST|" \
-                 -e "s|TELTYPESSST|$TELTYPESSST|" \
-                 -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
-                 -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
-                 -e "s|TMVACUTDIR|$TMVACUT|" \
-                 -e "s|DATASET|$DSET|" \
-                 -e "s|ANGRESFILE|$ANGRESFILE|" \
-                 -e "s|PARTICLENUMBERFILE|$PNF|" \
-                 -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
-                 -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
+      sed -i -e "s|OFFMIN|$iMIN|" \
+             -e "s|OFFMAX|$iMAX|" \
+             -e "s|THETA2MIN|$jMIN|" \
+             -e "s|THETA2MAX|$jMAX|" \
+             -e "s|DIRECTIONCUT|$DIRECTIONCUT|" \
+             -e "s|SUBARRAY|$ARRAY|" \
+             -e "s|MINIMAGES|$NIMAGESMIN|" \
+             -e "s|NTELTYPELST|$NCUTLST|" \
+             -e "s|NTELTYPEMST|$NCUTMST|" \
+             -e "s|NTELTYPESST|$NCUTSST|" \
+             -e "s|TELTYPESLST|$TELTYPESLST|" \
+             -e "s|TELTYPESMST|$TELTYPESMST|" \
+             -e "s|TELTYPESSST|$TELTYPESSST|" \
+             -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
+             -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
+             -e "s|TMVACUTDIR|$TMVACUT|" \
+             -e "s|DATASET|$DSET|" \
+             -e "s|ANGRESFILE|$ANGRESFILE|" \
+             -e "s|PARTICLENUMBERFILE|$PNF|" \
+             -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
+             -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
 
-          echo $iCFIL
+      echo $iCFIL
 
-    ###############################################################################
-    # create run list
-          MSCF=$ODIR/effectiveArea-CTA-$DSET-$PART-$i-$j.$ARRAY-MCAZ${MCAZ}-${ANADIR}.dat
-          rm -f $MSCF
-          echo "effective area data file for $PART $i $j" > $MSCF
-    ###############################################################################
-    # general run parameters
-    ###############################################################################
-    # filling mode
-    ###############################################################################
-    # fill IRFs and effective areas
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
-          then
-    # filling mode 0: fill and use angular resolution for energy dependent theta2 cuts
-             echo "* FILLINGMODE $GFILLING" >> $MSCF
-          else
-    # background: use fixed theta2 cut
-             echo "* FILLINGMODE 3" >> $MSCF
-          fi
-    # fill IRFs only
-          echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
-          echo "* ENERGYAXISBINS 60" >> $MSCF
-          echo "* ENERGYRECONSTRUCTIONQUALITY 0" >> $MSCF
-    # one azimuth bin only
-          echo "* AZIMUTHBINS $AZBINS" >> $MSCF
-          echo "* ISOTROPICARRIVALDIRECTIONS $ISOTROPY" >> $MSCF
-          echo "* TELESCOPETYPECUTS $TELTYPECUTS" >> $MSCF
-    # do fill analysis (a 1 would mean that MC histograms would be filled only)
-          echo "* FILLMONTECARLOHISTOS 0" >> $MSCF
-    # spectral index & CR spectra
-          if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
-          then
-             echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
-             echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CR.dat 0" >> $MSCF
-             if  [ $GETXOFFYOFFAFTERCUTS = "yes" ]
-             then	
-                 echo "* GETXOFFYOFFAFTERCUTS 1" >> $MSCF
-             fi    
-
-          fi
-          if [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
-          then
-             echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
-             echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CR.dat 8" >> $MSCF
-             if  [ $GETXOFFYOFFAFTERCUTS = "yes" ]
-             then
+###############################################################################
+# create run list
+      MSCF=$ODIR/effectiveArea-CTA-$DSET-$PART-$i-$j.$ARRAY-MCAZ${MCAZ}-${ANADIR}.dat
+      rm -f $MSCF
+      echo "effective area data file for $PART $i $j" > $MSCF
+###############################################################################
+# general run parameters
+###############################################################################
+# filling mode
+###############################################################################
+# fill IRFs and effective areas
+      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
+      then
+# filling mode 0: fill and use angular resolution for energy dependent theta2 cuts
+         echo "* FILLINGMODE $GFILLING" >> $MSCF
+      else
+# background: use fixed theta2 cut
+         echo "* FILLINGMODE 3" >> $MSCF
+      fi
+# fill IRFs only
+      echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
+      echo "* ENERGYAXISBINS 60" >> $MSCF
+      echo "* ENERGYRECONSTRUCTIONQUALITY 0" >> $MSCF
+# one azimuth bin only
+      echo "* AZIMUTHBINS $AZBINS" >> $MSCF
+      echo "* ISOTROPICARRIVALDIRECTIONS $ISOTROPY" >> $MSCF
+      echo "* TELESCOPETYPECUTS $TELTYPECUTS" >> $MSCF
+# do fill analysis (a 1 would mean that MC histograms would be filled only)
+      echo "* FILLMONTECARLOHISTOS 0" >> $MSCF
+# spectral index & CR spectra
+      if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
+      then
+         echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
+         echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CR.dat 0" >> $MSCF
+         if  [ $GETXOFFYOFFAFTERCUTS = "yes" ]
+         then	
              echo "* GETXOFFYOFFAFTERCUTS 1" >> $MSCF
-             fi
-          fi
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
-          then
-             echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
-             echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CrabNebula.dat 5" >> $MSCF
-          fi
-          echo "* CUTFILE $iCFIL" >> $MSCF
-          echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
-          # to write full data tress 
-          # (note: very large output files!)
-          # echo "* WRITEEVENTDATATREE 1" >> $MSCF
+         fi    
 
-    # output file
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
-          then
-             OFIX=$ODIR/$OFIL-$i
-          else
-             OFIX=$ODIR/$OFIL-$j
-          fi
+      fi
+      if [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
+      then
+         echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
+         echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CR.dat 8" >> $MSCF
+         if  [ $GETXOFFYOFFAFTERCUTS = "yes" ]
+         then
+         echo "* GETXOFFYOFFAFTERCUTS 1" >> $MSCF
+         fi
+      fi
+      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
+      then
+         echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
+         echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CrabNebula.dat 5" >> $MSCF
+      fi
+      echo "* CUTFILE $iCFIL" >> $MSCF
+      echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
+      # to write full data tress 
+      # (note: very large output files!)
+      # echo "* WRITEEVENTDATATREE 1" >> $MSCF
 
-          echo
-          echo "preparing new analysis run"
-          echo "--------------------------"
-          echo
-          echo "gamma/hadron separation file"
-          echo $iCFIL
-          echo $PNF
+# output file
+      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
+      then
+         OFIX=$ODIR/$OFIL-$i
+      else
+         OFIX=$ODIR/$OFIL-$j
+      fi
 
-      ##############################
-      # run effective area code
-          ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
+      echo
+      echo "preparing new analysis run"
+      echo "--------------------------"
+      echo
+      echo "gamma/hadron separation file"
+      echo $iCFIL
+      echo $PNF
 
-      ##############################
-      #  cleanup
-      # (reduce number of files)
+  ##############################
+  # run effective area code
+      ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
 
-          ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
-          rm -f $MSCF
+  ##############################
+  #  cleanup
+  # (reduce number of files)
 
-          ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
-          rm -f $iCFIL
+      ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
+      rm -f $MSCF
 
-          ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
-          rm -f $OFIX.log
+      ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
+      rm -f $iCFIL
 
-       done
-    done
+      ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
+      rm -f $OFIX.log
+
+   done
 done
 
 #############
