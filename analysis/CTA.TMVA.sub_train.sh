@@ -309,14 +309,14 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
 
-     FNAM=$LDIR/X$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
+     FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
      RRFIL=$ODIR/$RXPAR$ARRAY
      sed -e "s|RUNPARA|$RRFIL|" $FSCRIPT.sh > $FNAM.sh
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
+     MEM=16000M
      MEM=8000M
-     #MEM=16000M
      #################################
      # submit job to queue (for all energy bins)
      qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
