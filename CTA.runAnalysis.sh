@@ -62,7 +62,6 @@ EFFVERSION="V3"
 # dates
 TDATE="g20200817"
 ANADATE="${TDATE}"
-ANADATE="g20200822"
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
 
@@ -173,10 +172,14 @@ then
        EDM=( "-h01-LL" )
    elif [[ $P2 == *"v02"* ]]; then
        EDM=( "-v02-LL" )
-       ARRAY=( "subArray.prod5.North-noHyper.list" )
        ARRAY=( "subArray.prod5.North-noHyper-N.list" )
        ARRAY=( "subArray.prod5.North-noHyper-F.list" )
+       ARRAY=( "subArray.prod5.North-BLTI.lis" )
+       ARRAY=( "subArray.prod5.North-noHyper.list" )
    fi
+   ANADATE="g20200826"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-Moon" )
    else
@@ -193,6 +196,9 @@ then
    EDM=( "-v02-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
+   ANADATE="g20200817"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo $P2
@@ -265,6 +271,10 @@ do
         fi
 ##########################################
 # for the following: duplicate the array list adding the scaling to array names
+        if [[ ! -e ${ARRAYDIR}/$ARRAY ]]; then
+           echo "Error: array file not found: ${ARRAYDIR}/$ARRAY"
+           exit
+        fi
         NXARRAY=`cat ${ARRAYDIR}/$ARRAY`
         NFILARRAY=$PDIR/temp.$ARRAY.list
         rm -f $NFILARRAY

@@ -99,7 +99,7 @@ do
    N=`echo $N | tr -d ' '`
    echo "RUNNING _${N}_"
 # output data files are written to this directory
-   ODIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${N}/${PART}/
+   ODIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${N}/EVNDISP/${PART}/
    mkdir -p $ODIR
 
 ####################################################################

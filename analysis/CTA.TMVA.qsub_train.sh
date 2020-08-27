@@ -13,14 +13,18 @@ ulimit -n 2056
 # set the right observatory (environmental variables)
 source ${EVNDISPSYS}/setObservatory.sh CTA
 
-PFILE=${RPARA}_${EBIN}
+PFIL=${RPARA}_${EBIN}
 rm -f $PFIL.log
 
-echo $PFILE.runparameter
+# this file is deleted after successful 
+# completion of training
+touch ${PFIL}.RUNNING
 
-${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation $PFILE.runparameter > $PFILE.log
+echo ${PFIL}.runparameter
 
-CDIR=`dirname $PFILE`
+${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation ${PFIL}.runparameter > ${PFIL}.log
+
+CDIR=`dirname $PFIL.log`
 # remove .C files (never used; we use the XML files)
 rm -f $CDIR/BDT_${EBIN}*.C
 # remove complete_BDTroot at the end of the run
@@ -28,16 +32,30 @@ rm -f $CDIR/BDT_${EBIN}*.C
 # rm -rf $CDIR/complete_BDTroot/BDT_${EBIN}*
 rm -rf $CDIR/complete_BDTroot
 
-# mv log file into root file
-if [ -e $PFILE.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
-then
-    ${EVNDISPSYS}/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root $PFILE.log
-    rm -f $PFILE.log
+# check successful completion of training
+# remove temporary file
+if [ -e ${PFIL}.log ]; then
+   TSTRING=$(tail -n 1 ${PFIL}.log | grep Complete)
+   echo $TSTRING
+   if [ ! -z "$TSTRING" ]; then
+      rm -f ${PFIL}.RUNNING
+   fi
+   TSTRING=$(tail -n 3 ${PFIL}.log | grep "not enough")
+   if [ ! -z "$TSTRING" ]; then
+      rm -f ${PFIL}.RUNNING
+   fi
 fi
-if [ -e $PFILE.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
+
+# mv log file into root file
+if [ -e ${PFIL}.log ]
 then
-    ${EVNDISPSYS}/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root $PFILE.runparameter
-    rm -f $PFILE.runparameter
+    ${EVNDISPSYS}/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root ${PFIL}.log
+    rm -f ${PFIL}.log
+fi
+if [ -e ${PFIL}.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
+then
+    ${EVNDISPSYS}/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root ${PFIL}.runparameter
+    rm -f ${PFIL}.runparameter
 fi
 
 exit

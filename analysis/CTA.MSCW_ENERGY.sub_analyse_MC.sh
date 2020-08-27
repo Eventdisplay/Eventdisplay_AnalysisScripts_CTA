@@ -103,7 +103,7 @@ do
 	 FILEN=250
 	 if [ $PART = "proton" ]
 	 then
-	    FILEN=750
+	    FILEN=1000
 	 fi
 
 #########################################
@@ -112,7 +112,7 @@ do
          TMPLIST=${ODIR}/$PART$NC"."$SUBAR"_ID"${RECID}${MCAZ}"-"$DSET".list"
 	 rm -f $TMPLIST
 	 echo $TMPLIST ${MCAZ}
-	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
+	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
 	 NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
 	 echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
          NJOBTOT=$(( NTMPLIST / FILEN + 1))
