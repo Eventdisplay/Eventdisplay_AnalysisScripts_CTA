@@ -316,7 +316,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      echo "SCRIPT $FNAM.sh"
 
      MEM=16000M
-     MEM=8000M
+     MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
      qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
