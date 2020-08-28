@@ -164,20 +164,14 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
-   ARRAY=( "subArray.prod5.North.list" )
-   ARRAY=( "subArray.prod5.North-Hyper.list" )
-   ARRAY=( "subArray.prod5.North-noHyper.list" )
-   EDM=( "-v01-LL" )
-   if [[ $P2 == *"hyper"* ]]; then
-       EDM=( "-h01-LL" )
-   elif [[ $P2 == *"v02"* ]]; then
+   if [[ $P2 == *"v02"* ]]; then
        EDM=( "-v02-LL" )
-       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
-       ARRAY=( "subArray.prod5.North-noHyper-F.list" )
-       ARRAY=( "subArray.prod5.North-BLTI.lis" )
        ARRAY=( "subArray.prod5.North-noHyper.list" )
+   elif [[ $P2 == *"h03"* ]]; then
+       EDM=( "-h03-LL" )
+       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
    fi
-   ANADATE="g20200826"
+   ANADATE="g20200828"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    if [[ $P2 == *"moon"* ]]; then
