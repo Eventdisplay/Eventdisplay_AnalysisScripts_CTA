@@ -37,6 +37,6 @@ do
 
    for P in gamma_cone gamma_onSource proton electron
    do
-      ln -s ${HDIR}/${A}/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
+      ln -s ${HDIR}/N.MSTN.hyperarray/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
    done
 done
