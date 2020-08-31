@@ -142,7 +142,7 @@ do
         echo "queue log and error files written to $QLOG"
 
 # submit the job
-        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=250G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=10G -V -o $QLOG -e $QLOG "$FNAM.sh" 
    done
 done
 
