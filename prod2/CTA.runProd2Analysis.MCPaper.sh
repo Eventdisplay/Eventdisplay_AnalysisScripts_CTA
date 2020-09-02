@@ -43,7 +43,6 @@ mkdir -p $PDIR
 # analysis dates and table dates
 
 TDATE="d20150824"
-DATE="d20150824"
 TMVADATE="d20150824"
 EFFDATE="d20150824"
 EFFVERSION="L1"

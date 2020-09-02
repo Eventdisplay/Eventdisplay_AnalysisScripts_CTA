@@ -18,10 +18,14 @@ then
          N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
     Prod4 analysis:
          prod4-S20deg-MST
+    Prod5 analysis:
+         prod5-N
+         prod5-S
+         (to be added: moon light runs)
    
-     possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
+    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
    
-     <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
+    <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
    "
    
    exit
@@ -43,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_150"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
 
 #####################################
 # output directory for script parameter files
@@ -55,20 +59,13 @@ mkdir -p $PDIR
 TMVAVERSION="V3"
 EFFVERSION="V3"
 
-TDATE="g20191112"
+# dates
+TDATE="g20200817"
+ANADATE="${TDATE}"
+TMVADATE="${TDATE}"
+EFFDATE="${TDATE}"
 
-ANADATE="g20200614"
-TMVADATE="g20200614"
-EFFDATE="g20200614"
-
-ANADATE="g20200614FOV07"
-TMVADATE="g20200614FOV07"
-EFFDATE="g20200614FOV07"
-
-
-
-# off-axis binnning
-BFINEBINNING="TRUE"
+# off-axis binnning (default=FALSE)
 BFINEBINNING="FALSE"
 if [ $BFINEBINNING = "TRUE" ]
 then
@@ -82,12 +79,10 @@ fi
 # _0deg = north
 MCAZ=( "_180deg" "_0deg" "" )
 
-#####################################
-# loss cut adaption
-EDM=( "u05b-LL" )
 
 ##########################################################
 # PROD3B Analysis
+EDM=( "u05b-LL" )
 if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
@@ -123,15 +118,6 @@ elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
-   ARRAY="subArray.prod3b.North-202003.list"
-   ARRAY="subArray.prod3b.North-202003.v2.list"
-   ARRAY="subArray.prod3b.North-202004c-smallArrays.list"
-   ARRAY="subArray.prod3b.North-202004b.list"
-   ARRAY="subArray.prod3b.North-202004e.list"
-   ARRAY="subArray.prod3b.North-202004f.list"
-   ARRAY="subArray.prod3b.North-202005.list"
-   ARRAY="subArray.prod3b.North-2020614.list"
-   ARRAYDIR=( "prod3b" )
 elif [[ $P2 == *"N20deg-test"* ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
@@ -143,6 +129,10 @@ then
        ANADATE="${ANADATE}disp$(echo $P2| cut -d'p' -f 2)"
        EFFDATE="${EFFDATE}disp$(echo $P2| cut -d'p' -f 2)"
        TMVADATE="${TMVADATE}disp$(echo $P2| cut -d'p' -f 2)"
+   elif [[ $P2 == *"FOV"* ]]; then
+       ANADATE="${ANADATE}FOV$(echo $P2| cut -d'V' -f 2)"
+       EFFDATE="${EFFDATE}FOV$(echo $P2| cut -d'V' -f 2)"
+       TMVADATE="${TMVADATE}FOV$(echo $P2| cut -d'V' -f 2)"
    elif [[ $P2 == *"test-coord"* ]]; then
        EDM=( "w05b-LL" )
    elif [[ $P2 == *"bug"* ]]; then
@@ -170,18 +160,45 @@ then
    ARRAYDIR=( "prod4" )
 ###############################################################
 # PROD5 Analysis
-elif [[ $P2 == "prod5-N" ]]
+# prod5-N
+# prod5-N-moon
+elif [[ $P2 == "prod5-N"* ]]
 then
-   EDM=( "a05b" )
-   SITE=( "prod5-LaPalma20deg" )
    ARRAY=( "subArray.prod5.North.list" )
+   ARRAY=( "subArray.prod5.North-Hyper.list" )
+   ARRAY=( "subArray.prod5.North-noHyper.list" )
+   EDM=( "-v01-LL" )
+   if [[ $P2 == *"hyper"* ]]; then
+       EDM=( "-h01-LL" )
+   elif [[ $P2 == *"v02"* ]]; then
+       EDM=( "-v02-LL" )
+       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
+       ARRAY=( "subArray.prod5.North-noHyper-F.list" )
+       ARRAY=( "subArray.prod5.North-BLTI.lis" )
+       ARRAY=( "subArray.prod5.North-noHyper.list" )
+   fi
+   ANADATE="g20200826"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
+   if [[ $P2 == *"moon"* ]]; then
+       SITE=( "prod5-LaPalma-20deg-Moon" )
+   else
+       SITE=( "prod5-LaPalma-20deg" )
+   fi
    ARRAYDIR=( "prod5" )
-elif [[ $P2 == "prod5-S" ]]
+elif [[ $P2 == "prod5-S"* ]]
 then
-   EDM=( "a05b" )
-   SITE=( "prod5-Paranal20deg" )
+   if [[ $P2 == *"moon"* ]]; then
+       SITE=( "prod5-Paranal-20deg-Moon" )
+   else
+       SITE=( "prod5-Paranal-20deg" )
+   fi
+   EDM=( "-v02-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAYDIR=( "prod5" )
+   ANADATE="g20200817"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo $P2
@@ -192,7 +209,8 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" )
+PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -208,7 +226,6 @@ fi
 #####################################
 # observing time [h]
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
-OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" )
 
@@ -244,7 +261,7 @@ do
 
                   cd ./analysis/
                   if [[ $P2 == *"prod5"* ]]; then
-                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 1 $i $QSUBOPT $TRG
+                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
                   else
                       ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
                   fi
@@ -254,6 +271,10 @@ do
         fi
 ##########################################
 # for the following: duplicate the array list adding the scaling to array names
+        if [[ ! -e ${ARRAYDIR}/$ARRAY ]]; then
+           echo "Error: array file not found: ${ARRAYDIR}/$ARRAY"
+           exit
+        fi
         NXARRAY=`cat ${ARRAYDIR}/$ARRAY`
         NFILARRAY=$PDIR/temp.$ARRAY.list
         rm -f $NFILARRAY
@@ -361,7 +382,7 @@ do
 ##########################################
 # train BDTs   
 # (note: BDT training does not need to be done for all observing periods)
-                  if [[ $RUN == "TRAIN" ]]
+                  if [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
                   then
                      if [ ${o} -eq 0 ]
                      then

@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# set software paths to the correct place
+# set software paths to analysis paths
+#
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
@@ -16,8 +17,24 @@ then
     return
 fi
 
-DSET="$1"
+TDIR=$(pwd)
+
+# main working directory
+DSET="${1}"
 MAINDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+
+# ROOT installation expected
+if [[ -z ${ROOTSYS} ]]; then
+   echo "Error: ROOTSYS not set"
+   return
+fi
+cd $ROOTSYS
+source ./bin/thisroot.sh
+cd $TDIR
+ROOTCONF=`root-config --libdir`
+export LD_LIBRARY_PATH=${ROOTCONF}
+
+# EVNDISPSYS settings
 if [[ -e ${MAINDIR}/code ]]; then
     EVNDISPSYS="${MAINDIR}/code"
 else
@@ -29,14 +46,6 @@ then
    echo ${EVNDISPSYS}
    return
 fi
-
-TDIR=`pwd`
-cd $ROOTSYS
-source ./bin/thisroot.sh
-cd $TDIR
-
-ROOTCONF=`root-config --libdir`
-export LD_LIBRARY_PATH=${ROOTCONF}
 
 export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
 if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then

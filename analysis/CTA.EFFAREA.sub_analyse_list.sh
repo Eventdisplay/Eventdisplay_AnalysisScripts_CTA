@@ -150,13 +150,13 @@ do
 # submit the job script
      if [ $4 = "AngularResolution" ]
      then
-         qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=3000M -l tmpdir_size=15G  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+         qsub $QSUBOPT -l h_cpu=11:29:00 -t 1-2:1 -l h_rss=3000M -l tmpdir_size=15G  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
      else
-         if [ $DSET = "*LaPalma*" ]
+         if [ $DSET = *"LaPalma"* ]
          then
-             qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=3000M -l tmpdir_size=15G  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+             qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=3000M -l tmpdir_size=15G  -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
          else
-             qsub $QSUBOPT -l h_cpu=45:29:00 -l h_rss=3000M -l tmpdir_size=15G  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+             qsub $QSUBOPT -l h_cpu=45:29:00 -l h_rss=3000M -l tmpdir_size=15G  -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
          fi
      fi
 done

@@ -143,7 +143,6 @@ do
        NRUNSST=`wc -l $RUNLISTNdegSST | awk '{print $1}'`
     fi
     RUNFROMTO="1-$NRUN"
-    NSTEP=1
 
     echo "submitting $NRUN jobs ( $NRUNSST SC-SST jobs)"
 

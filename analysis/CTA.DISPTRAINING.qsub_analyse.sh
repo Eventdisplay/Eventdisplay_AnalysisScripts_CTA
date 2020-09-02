@@ -44,8 +44,14 @@ then
     else
        ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3Sb${DARR:1}.lis
     fi
-else
+elif [[ $DSET == *"prod4"* ]]; then
     ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
+elif [[ $DSET == *"prod5"* ]]; then
+    ADIR=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${DARR}.lis
+else
+    echo "Unknown data set: $DSET"
+    echo "exiting..."
+    exit
 fi
 
 #########################################
