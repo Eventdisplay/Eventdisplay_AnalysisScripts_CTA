@@ -11,7 +11,7 @@
 SCRATCH="USER_SET_SCRATCH"
 CDIR=$(pwd)
 
-MOONOPT="-DHALFMOON" # Set to -DHALFMOON for half moon or leave empty or dark conditions (i.e., MOONOPT="")
+MOONOPT="" # Set to -DHALFMOON for half moon or leave empty or dark conditions (i.e., MOONOPT="")
 MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
 
 [ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
@@ -22,7 +22,7 @@ MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
 
 sourceFile="${SCRATCH}/pedestals-lst${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-lst${MOON}-dst.root $sourceFile >& log-lst${MOON}-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-lst${MOON}-dst.root $sourceFile >& lst${MOON}-dst.log &
 
 
 #####################################################################
@@ -31,7 +31,7 @@ $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -
 
 sourceFile="${SCRATCH}/pedestals-mst-nc${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-nc${MOON}-dst.root $sourceFile >& log-mst-nc${MOON}-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-nc${MOON}-dst.root $sourceFile >& mst-nc${MOON}-dst.log &
 
 
 #####################################################################
@@ -40,7 +40,7 @@ $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -
 
 sourceFile="${SCRATCH}/pedestals-mst-fc${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-fc${MOON}-dst.root $sourceFile >& log-nst-fc${MOON}-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-mst-fc${MOON}-dst.root $sourceFile >& mst-fc${MOON}-dst.log &
 
 #####################################################################
 # SST
@@ -48,4 +48,4 @@ $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -
 
 sourceFile="${SCRATCH}/pedestals-sst${MOON}-1k.simtel.gz"
 
-$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-sst${MOON}-dst.root $sourceFile >& log-sst${MOON}-dst.txt &
+$EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis -f 2 -o ${SCRATCH}/pedestals-sst${MOON}-dst.root $sourceFile >& sst${MOON}-dst.log &
