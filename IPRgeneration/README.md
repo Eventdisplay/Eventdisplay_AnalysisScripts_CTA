@@ -12,4 +12,6 @@ To produce IPR graphs for all telescopes, run the scripts in the following order
 
 3. produceGraphFromDST.sh - Calculate the graphs from the DST file produced in the previous step. The results will be saved in the current directory as "pedestals-TEL-dst.root".
 
-3. mergeIPRGraphs.C - Merge all graphs calculated into root file
+4. mergeIPRGraphs.C - Merge all graphs calculated into root file
+
+5. saveLogFiles.sh - Save all log files into the prod5-IPR.root file.
