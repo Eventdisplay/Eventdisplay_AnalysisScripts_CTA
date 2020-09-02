@@ -10,6 +10,8 @@
 MOONOPT="" # Set to -DHALFMOON for half moon or leave empty or dark conditions (i.e., MOONOPT="")
 MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
 
+[ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
+
 for logFileNow in $(ls *.log)
 do
     logFile=$(basename -- "$logFileNow")
