@@ -56,6 +56,12 @@ then
     exit
 fi
 
+# array list
+if [ ! -e $ARRAY ]; then
+    echo "error: array list not found: $ARRAY"
+    exit
+fi
+
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
