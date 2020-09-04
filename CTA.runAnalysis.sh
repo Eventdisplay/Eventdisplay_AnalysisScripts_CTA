@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
@@ -60,6 +60,7 @@ TMVAVERSION="V3"
 EFFVERSION="V3"
 
 # dates
+# (might be overwritten later)
 TDATE="g20200817"
 ANADATE="${TDATE}"
 TMVADATE="${TDATE}"
@@ -77,7 +78,7 @@ fi
 #
 # _180deg = south
 # _0deg = north
-MCAZ=( "_180deg" "_0deg" "" )
+MCAZ=( "" "_180deg" "_0deg" )
 
 
 ##########################################################
@@ -164,14 +165,15 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
-   if [[ $P2 == *"v02"* ]]; then
-       EDM=( "-v02-LL" )
-       ARRAY=( "subArray.prod5.North-noHyper.list" )
-   elif [[ $P2 == *"h03"* ]]; then
-       EDM=( "-h03-LL" )
-       ARRAY=( "subArray.prod5.North-noHyper-N.list" )
+   if [[ $P2 == *"s01-F"* ]]; then
+       EDM=( "-s01-LL" )
+       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
+   elif [[ $P2 == *"s01-F"* ]]; then
+       EDM=( "-s01-LL" )
+       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
    fi
-   ANADATE="g20200828"
+   TDATE="g20200909"
+   ANADATE="g20200909"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    if [[ $P2 == *"moon"* ]]; then
@@ -189,8 +191,9 @@ then
    fi
    EDM=( "-v02-LL" )
    ARRAY=( "subArray.prod5.South.list" )
+   ARRAY=( "subArray.prod5.South-Hyper.list" )
    ARRAYDIR=( "prod5" )
-   ANADATE="g20200817"
+   ANADATE="g20200828"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
 else
@@ -209,13 +212,11 @@ PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
 # cut on number of images
-# (replace by 1 of there is one single telescope requirement
-#  for one type)
-NIMAGESMIN="2"
-if [ ${LST} -eq 1 ] || [ ${MST} -eq 1 ] || [ ${SST} -eq 1 ] || [ ${SCMST} -eq 1 ]
-then
-   NIMAGESMIN="1"
-fi
+# smallest number of all telescope type dependent
+# multiplicity requirements
+NIMAGESMIN=$(($LST<$MST ? $LST : $MST))
+NIMAGESMIN=$(($SST<$NIMAGESMIN ? $SST : $NIMAGESMIN))
+NIMAGESMIN=$(($SCMST<$NIMAGESMIN ? $SCMST : $NIMAGESMIN))
 
 #####################################
 # observing time [h]
@@ -254,11 +255,7 @@ do
                   echo "READING SIMTEL FILE LIST $LIST"
 
                   cd ./analysis/
-                  if [[ $P2 == *"prod5"* ]]; then
-                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
-                  else
-                      ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
-                  fi
+                  ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
                   cd ../
            done
            continue
