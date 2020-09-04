@@ -168,7 +168,7 @@ then
    if [[ $P2 == *"s01-F"* ]]; then
        EDM=( "-s01-LL" )
        ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-   elif [[ $P2 == *"s01-F"* ]]; then
+   elif [[ $P2 == *"s01-N"* ]]; then
        EDM=( "-s01-LL" )
        ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
    fi
@@ -285,7 +285,7 @@ do
             for A in $NXARRAY
             do
                 cd ./analysis/
-                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+                ./CTA.DISPTRAINING.sub_analyse.sh ${S}${M} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
                 cd ../
             done
             continue
