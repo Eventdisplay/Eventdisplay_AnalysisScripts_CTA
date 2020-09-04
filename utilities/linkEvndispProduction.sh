@@ -39,6 +39,6 @@ do
 
    for P in gamma_cone gamma_onSource proton electron
    do
-      ln -s ${HDIR}/N.${4}/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
+      ln -s "${HDIR}/N.${4}/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
    done
 done

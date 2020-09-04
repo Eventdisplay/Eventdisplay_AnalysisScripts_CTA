@@ -57,8 +57,8 @@ then
 fi
 
 # array list
-if [ ! -e $ARRAY ]; then
-    echo "error: array list not found: $ARRAY"
+if [ ! -e ${ARRAY} ]; then
+    echo "error: array list not found: ${ARRAY}"
     exit
 fi
 

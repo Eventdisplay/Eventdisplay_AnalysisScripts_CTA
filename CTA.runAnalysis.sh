@@ -19,7 +19,7 @@ then
     Prod4 analysis:
          prod4-S20deg-MST
     Prod5 analysis:
-         prod5-N
+         prod5-N , prod5-N-s01-F, prod5-N-s01-N
          prod5-S
          (to be added: moon light runs)
    
@@ -214,9 +214,9 @@ PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 # cut on number of images
 # smallest number of all telescope type dependent
 # multiplicity requirements
-NIMAGESMIN=$(($LST<$MST ? $LST : $MST))
-NIMAGESMIN=$(($SST<$NIMAGESMIN ? $SST : $NIMAGESMIN))
-NIMAGESMIN=$(($SCMST<$NIMAGESMIN ? $SCMST : $NIMAGESMIN))
+NIMAGESMIN=$((LST<MST ? LST : MST))
+NIMAGESMIN=$((SST<NIMAGESMIN ? SST : NIMAGESMIN))
+NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 
 #####################################
 # observing time [h]
