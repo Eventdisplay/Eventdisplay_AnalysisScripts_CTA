@@ -56,6 +56,12 @@ then
     exit
 fi
 
+# array list
+if [ ! -e "${ARRAY}" ]; then
+    echo "error: array list not found: ${ARRAY}"
+    exit
+fi
+
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
@@ -69,9 +75,9 @@ mkdir -p $SHELLDIR
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # log files
-QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
-mkdir -p $QLOG
-# QLOG="/dev/null"
+#QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
+#mkdir -p $QLOG
+QLOG="/dev/null"
 
 ########################
 # producution depedendent parameters

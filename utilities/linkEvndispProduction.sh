@@ -4,9 +4,11 @@
 # general EVNDISP production 
 # (assume that EVNDISP is stable in the development)
 #
-if [ ! -n "$3" ]
+if [ ! -n "$4" ]
 then
-    echo "./linkEvndispProduction.sh <EVNDISP data set> <target data set> <list of layouts>"
+    echo "./linkEvndispProduction.sh <EVNDISP data set> <target data set> <list of layouts> <MST type>"
+    echo
+    echo "   <MST type>:   MSTF or MSTN"
     echo 
     exit
 fi
@@ -37,6 +39,6 @@ do
 
    for P in gamma_cone gamma_onSource proton electron
    do
-      ln -s ${HDIR}/${A}/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
+      ln -s "${HDIR}/N.${4}/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
    done
 done

@@ -31,11 +31,11 @@ for A in $ALIST
 do
    echo "Linking $A"
 
-   mkdir -p ${TDIR}/${A}
-   rm -rfv ${TDIR}/${A}/*
+   mkdir -p ${TDIR}/${A}/EVNDISP
+   rm -rfv ${TDIR}/${A}/EVNDISP/*
 
    for P in gamma_cone gamma_onSource proton electron
    do
-      ln -s ${HDIR}/${HARRAY}/${P} ${TDIR}/${A}/${P}
+      ln -s ${HDIR}/${HARRAY}/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
    done
 done

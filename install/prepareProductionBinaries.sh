@@ -9,6 +9,8 @@ if [ ! -n "$1" ]
 then
     echo "./setSoftwarePaths.sh <data set>"
     echo
+    echo "   will install hessioxx, Eventdisplay analysis files and code"
+    echo
     exit
 fi
 
@@ -21,7 +23,7 @@ mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-git clone https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+git clone -b prod5-v05 https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
 EVNDISPSYS="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/code/"
@@ -34,8 +36,7 @@ echo "Preparing binaries for $DSET"
 echo 
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
-git clone https://github.com/Eventdisplay/Eventdisplay.git .
-git checkout prod5-v03
+git clone -b prod5-v05 https://github.com/Eventdisplay/Eventdisplay.git .
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx.tar.gz"
@@ -73,8 +74,10 @@ else
    exit
 fi
 make EXTRA_DEFINES="${HESSIOCFLAGS}"
-
 cd $EVNDISPSYS
+rm -f hessioxxx.tar.gz
+
+# install sofa
 ./install_sofa.sh
 
 # set all flags

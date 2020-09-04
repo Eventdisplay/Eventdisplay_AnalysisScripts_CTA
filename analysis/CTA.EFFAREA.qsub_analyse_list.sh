@@ -144,6 +144,11 @@ if [ $RECID = "1" ]
 then
     MAXCDISTANCE="200."
 fi
+MAXCDISTANCE="600."
+if [ $RECID = "1" ]
+then
+    MAXCDISTANCE="300."
+fi
 
 ######################################################################
 # off-axis variables:
