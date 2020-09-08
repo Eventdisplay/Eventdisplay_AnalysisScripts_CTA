@@ -39,6 +39,7 @@ do
 
    for P in gamma_cone gamma_onSource proton electron
    do
-      ln -s "${HDIR}/N.${4}/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
+#      ln -s "${HDIR}/N.${4}.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
+      ln -s "${HDIR}/S.BL-4LSTs25MSTs70SSTs-${4}/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
    done
 done
