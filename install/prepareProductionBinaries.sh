@@ -17,13 +17,15 @@ fi
 DSET="$1"
 TDIR=$(pwd)
 
+VERSION="prod5-v06"
+
 # parameter and configuration files
 AUXDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/"
 mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-git clone -b prod5-v05 https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
 EVNDISPSYS="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/code/"
@@ -36,7 +38,7 @@ echo "Preparing binaries for $DSET"
 echo 
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
-git clone -b prod5-v05 https://github.com/Eventdisplay/Eventdisplay.git .
+git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay.git .
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx.tar.gz"
