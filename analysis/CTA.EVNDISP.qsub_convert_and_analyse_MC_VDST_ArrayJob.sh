@@ -33,6 +33,7 @@ COPT="$COPT -c $PEDFILE"
 
 # eventdisplay command line parameter
 OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+#OPT="-imagesquared -averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 if [[ $DSET == *"prod3"* ]] 
 then
     # needs to be the same as used for IPR graph preparation
