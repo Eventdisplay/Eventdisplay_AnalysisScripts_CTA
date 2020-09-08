@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_999"
 
 #####################################
 # output directory for script parameter files
@@ -171,6 +171,17 @@ then
    elif [[ $P2 == *"s01-N"* ]]; then
        EDM=( "-s01-LL" )
        ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+   elif [[ $P2 == *"s01-LST"* ]]; then
+       EDM=( "-s01-LL" )
+       ARRAY=( "subArray.prod5.North-LST.lis" )
+   elif [[ $P2 == *"sq1"* ]]; then
+       EDM=( "-sq1-LL" )
+       ARRAY=( "subArray.prod5.North-Hyper-F.list" )
+       ARRAY=( "subArray.prod5.North-BL-F.lis" )
+       ARRAY=( "subArray.prod5.North-LST.lis" )
+   else
+       echo "DSet not found: $P2"
+       exit
    fi
    TDATE="g20200909"
    ANADATE="g20200909"
@@ -189,11 +200,20 @@ then
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
-   EDM=( "-v02-LL" )
+   EDM=( "-h05-LL" )
    ARRAY=( "subArray.prod5.South.list" )
-   ARRAY=( "subArray.prod5.South-Hyper.list" )
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.South-LST.list" )
+   elif [[ $P2 == *"Hyper"* ]]; then
+       ARRAY=( "subArray.prod5.South-Hyper.list" )
+       EDM=( "-s01-LL" )
+   else
+       ARRAY=( "subArray.prod5.South-BGR.list" )
+       ARRAY=( "subArray.prod5.South-BGR-2.list" )
+   fi
    ARRAYDIR=( "prod5" )
-   ANADATE="g20200828"
+   TDATE="g20200909"
+   ANADATE="g20200909"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
 else
@@ -206,8 +226,8 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
