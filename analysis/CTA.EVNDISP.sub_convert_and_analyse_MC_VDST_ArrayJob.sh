@@ -87,10 +87,10 @@ then
     # calibration file with IPR graphs
     if [[ $DSET = *"paranal"* ]]
     then
-       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/prod3b.Paranal-20171214.ped.root"
+       PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod3b/prod3b.Paranal-20171214.ped.root"
     elif [[ $DSET = *"LaPalma"* ]]
     then
-       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/pedestal_nsb1x_LaPalma.root"
+       PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod3b/pedestal_nsb1x_LaPalma.root"
     else
        echo "Unknown data set for calibration file search with IPR graph"
        exit
@@ -101,9 +101,9 @@ then
     # calibration file with IPR graphs
     if [[ $DSET = *"SST"* ]]
     then
-        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-SST-IPR.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod4/prod4b-SST-IPR.root"
     else
-        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-MST-FlashCam.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod4/prod4b-MST-FlashCam.root"
     fi
 elif [[ $DSET == *"prod5"* ]]
 then
@@ -113,7 +113,6 @@ then
     else
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
     fi
-else
     echo "error: unknown production in $DSET" 
     exit
 fi
