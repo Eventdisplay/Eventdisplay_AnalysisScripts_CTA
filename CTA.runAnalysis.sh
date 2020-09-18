@@ -14,8 +14,8 @@ then
                 <min number of LSTs> <min number of MSTs> <min number of SSTs> <min number of SCMSTs>
    
     Prod3b analysis:
-         S20deg/S40deg/S60deg=prod3b-Southern-Site (20/40/60 deg ze)
-         N20deg/S40deg/S60deg=prod3b-Northern -Site (20/40/60 deg ze)
+         prod3b-S20deg / prod3b-S40deg / prod3b-S60deg
+         prod3b-N20deg / prod3b-N40deg / prod3b-N60deg
     Prod4 analysis:
          prod4-S20deg-MST
     Prod5 analysis:
@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_999"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
 
 #####################################
 # output directory for script parameter files
@@ -84,62 +84,44 @@ MCAZ=( "" "_180deg" "_0deg" )
 ##########################################################
 # PROD3B Analysis
 EDM=( "u05b-LL" )
-if [[ $P2 == "S" ]] || [[ $P2 == "S20deg" ]]
+if [[ $P2 == "prod3b-S20deg" ]]
 then
    SITE=( "prod3b-paranal20deg" )
    ARRAY="subArray.prod3b.South.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "S20degSV1" ]]
+elif [[ $P2 == "prod3b-S20degSV1" ]]
 then
    SITE=( "prod3b-paranal20deg" )
    ARRAY="subArray.prod3b.South.list_SV1.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "S20degSV2" ]]
+elif [[ $P2 == "prod3b-S20degSV2" ]]
 then
    SITE=( "prod3b-paranal20deg" )
    ARRAY="subArray.prod3b.South.list_SV2.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "S20degSVN" ]]
+elif [[ $P2 == "prod3b-S20degSVN" ]]
 then
    SITE=( "prod3b-paranal20deg" )
    ARRAY="subArray.prod3b.South.list_SVN.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "S40deg" ]]
+elif [[ $P2 == "prod3b-S40deg" ]]
 then
    SITE=( "prod3b-paranal40deg" )
    ARRAY="subArray.prod3b.South.list"
    ARRAYDIR=( "prod3b" )
-elif [[ $P2 == "S60deg" ]]
+elif [[ $P2 == "prod3b-S60deg" ]]
 then
    SITE=( "prod3b-paranal60deg" )
    ARRAY="subArray.prod3b.South.list"
    ARRAYDIR=( "prod3b" )
 # NORTH
-elif [[ $P2 == "N" ]] || [[ $P2 == "N20deg" ]]
+elif [[ $P2 == "prod3b-N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
    ARRAY="subArray.prod3b.North.list"
-elif [[ $P2 == *"N20deg-test"* ]]
-then
-   SITE=( "prod3b-LaPalma-20deg" )
-   ARRAY="subArray.prod3b.North-2020621.list.b"
-   ARRAY="subArray.prod3b.North-2020621.list"
+   EDM=( "-sq2-LL" )
    ARRAYDIR=( "prod3b" )
-   EDM=( "v05b-LL" )
-   if [[ $P2 == *"disp"* ]]; then
-       ANADATE="${ANADATE}disp$(echo $P2| cut -d'p' -f 2)"
-       EFFDATE="${EFFDATE}disp$(echo $P2| cut -d'p' -f 2)"
-       TMVADATE="${TMVADATE}disp$(echo $P2| cut -d'p' -f 2)"
-   elif [[ $P2 == *"FOV"* ]]; then
-       ANADATE="${ANADATE}FOV$(echo $P2| cut -d'V' -f 2)"
-       EFFDATE="${EFFDATE}FOV$(echo $P2| cut -d'V' -f 2)"
-       TMVADATE="${TMVADATE}FOV$(echo $P2| cut -d'V' -f 2)"
-   elif [[ $P2 == *"test-coord"* ]]; then
-       EDM=( "w05b-LL" )
-   elif [[ $P2 == *"bug"* ]]; then
-       EDM=( "uu05b-LL" )
-   fi
-elif [[ $P2 == "N40deg" ]]
+elif [[ $P2 == "prod3b-N40deg" ]]
 then
    SITE=( "prod3b-LaPalma-40deg" )
    ARRAY="subArray.prod3b.North.list"
@@ -165,28 +147,33 @@ then
 # prod5-N-moon
 elif [[ $P2 == "prod5-N"* ]]
 then
-   if [[ $P2 == *"s01-F"* ]]; then
-       EDM=( "-s01-LL" )
-       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-   elif [[ $P2 == *"s01-N"* ]]; then
-       EDM=( "-s01-LL" )
-       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
-   elif [[ $P2 == *"s01-LST"* ]]; then
-       EDM=( "-s01-LL" )
-       ARRAY=( "subArray.prod5.North-LST.lis" )
-   elif [[ $P2 == *"sq1"* ]]; then
-       EDM=( "-sq1-LL" )
-       ARRAY=( "subArray.prod5.North-Hyper-F.list" )
-       ARRAY=( "subArray.prod5.North-BL-F.lis" )
-       ARRAY=( "subArray.prod5.North-LST.lis" )
-   else
-       echo "DSet not found: $P2"
-       exit
-   fi
    TDATE="g20200909"
    ANADATE="g20200909"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   if [[ $P2 == *"sq1"* ]]; then
+       EDM=( "-sq1-LL" )
+       ARRAY=( "subArray.prod5.North-BL-F.lis" )
+       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-LST.lis" )
+       fi
+       TDATE="g20200909"
+       ANADATE="${ANADATE}"
+       TMVADATE="${ANADATE}"
+       EFFDATE="${ANADATE}"
+   elif [[ $P2 == *"sq2"* ]]; then
+       EDM=( "-sq2-LL" )
+       ARRAY=( "subArray.prod5.North-Hyper.list" )
+       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
+       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-LST.lis" )
+       fi
+   else
+       echo "DSet not found: $P2"
+       exit
+   fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-Moon" )
    else
@@ -202,14 +189,18 @@ then
    fi
    EDM=( "-h05-LL" )
    ARRAY=( "subArray.prod5.South.list" )
-   if [[ $P2 == *"LST"* ]]; then
-       ARRAY=( "subArray.prod5.South-LST.list" )
-   elif [[ $P2 == *"Hyper"* ]]; then
+   if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
-       EDM=( "-s01-LL" )
+       EDM=( "-sq2-LL" )
+   elif [[ $P2 ==  *"sq2"* ]]; then
+       EDM=( "-sq2-LL" )
+       ARRAY=( "subArray.prod5.South.list" )
+       ARRAY=( "subArray.prod5.South-BGR.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.South-LST.list" )
+       fi
    else
        ARRAY=( "subArray.prod5.South-BGR.list" )
-       ARRAY=( "subArray.prod5.South-BGR-2.list" )
    fi
    ARRAYDIR=( "prod5" )
    TDATE="g20200909"
@@ -226,8 +217,8 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_onSource" "electron" "proton" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -273,6 +264,10 @@ do
                   LIST=${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_${ARRAYDIR}/${S}/${N}.list
 
                   echo "READING SIMTEL FILE LIST $LIST"
+                  if [[ ! -e ${LIST} ]]; then
+                     echo "error, file list not found: ${LIST}"
+                     exit
+                  fi
 
                   cd ./analysis/
                   ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} $LIST $N $S$M 0 $i $QSUBOPT $TRG
