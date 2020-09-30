@@ -156,6 +156,9 @@ MOPT="$MOPT -minImages=2"
 if [[ $DSET == *"prod3b"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.TelescopeWeights.dat"
+elif [[ $DSET == *"prod5"* ]]
+then
+       MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5.TelescopeWeights.dat"
 fi
 echo $MOPT
 
