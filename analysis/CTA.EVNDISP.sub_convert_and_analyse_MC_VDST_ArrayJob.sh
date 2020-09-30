@@ -113,6 +113,7 @@ then
     else
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
     fi
+else
     echo "error: unknown production in $DSET" 
     exit
 fi
