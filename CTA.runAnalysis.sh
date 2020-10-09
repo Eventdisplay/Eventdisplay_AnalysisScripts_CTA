@@ -204,6 +204,9 @@ then
        if [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.South-LST.list" )
        fi
+   elif [[ $P2 ==  *"sqS7"* ]]; then
+       EDM=( "-sqS7-LL" )
+       ARRAY=( "subArray.prod5.South-Hyper.list" )
    else
        ARRAY=( "subArray.prod5.South-BGR.list" )
    fi
