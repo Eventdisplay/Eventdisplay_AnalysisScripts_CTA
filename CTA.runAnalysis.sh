@@ -47,12 +47,12 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
 PDIR="$CTA_USER_LOG_DIR/tempRunParameterDir/"
-mkdir -p $PDIR
+mkdir -p "$PDIR"
 
 #####################################
 # analysis dates and table dates
@@ -148,27 +148,21 @@ then
 elif [[ $P2 == "prod5-N"* ]]
 then
    TDATE="g20200909"
-   ANADATE="g20200909"
-   TMVADATE="${ANADATE}"
-   EFFDATE="${ANADATE}"
-   if [[ $P2 == *"sq1"* ]]; then
-       EDM=( "-sq1-LL" )
-       ARRAY=( "subArray.prod5.North-BL-F.lis" )
-       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.lis" )
-       fi
-       TDATE="g20200909"
-       ANADATE="${ANADATE}"
-       TMVADATE="${ANADATE}"
-       EFFDATE="${ANADATE}"
-   elif [[ $P2 == *"sq2"* ]]; then
+   ANADATE="g20200930-TWdispE"
+   TMVADATE="${ANADATE}-TMVAbins"
+   EFFDATE="${TMVADATE}"
+   #EFFDATE="${ANADATE}"
+   if [[ $P2 == *"sq2"* ]]; then
        EDM=( "-sq2-LL" )
        ARRAY=( "subArray.prod5.North-Hyper.list" )
        ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
        ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+       ARRAY=( "subArray.prod5.North-tmvaTest.list" )
        if [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.North-LST.lis" )
+       fi
+       if [[ $P2 == *"VTS"* ]]; then
+           ARRAY=( "subArray.prod5.North-VTS.list" )
        fi
    else
        echo "DSet not found: $P2"
@@ -194,8 +188,8 @@ then
        EDM=( "-sq2-LL" )
    elif [[ $P2 ==  *"sq2"* ]]; then
        EDM=( "-sq2-LL" )
-       ARRAY=( "subArray.prod5.South.list" )
        ARRAY=( "subArray.prod5.South-BGR.list" )
+       ARRAY=( "subArray.prod5.South.list" )
        if [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.South-LST.list" )
        fi
@@ -209,7 +203,7 @@ then
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
-   echo $P2
+   echo "$P2"
    exit
 fi
 # should be either onSource or cone (default is cone)
@@ -233,14 +227,15 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # observing time [h]
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" )
 
-echo $RUN $SITE
+echo "$RUN" "$SITE"
 
 #####################################
 # loop over all sites
 NSITE=${#SITE[@]}
-for (( m = 0; m < $NSITE ; m++ ))
+for (( m = 0; m < NSITE ; m++ ))
 do
    # site name
    S=${SITE[$m]}
@@ -281,13 +276,13 @@ do
            echo "Error: array file not found: ${ARRAYDIR}/$ARRAY"
            exit
         fi
-        NXARRAY=`cat ${ARRAYDIR}/$ARRAY`
+        NXARRAY=$(cat ${ARRAYDIR}/$ARRAY)
         NFILARRAY=$PDIR/temp.$ARRAY.list
-        rm -f $NFILARRAY
-        touch $NFILARRAY
+        rm -f "$NFILARRAY"
+        touch "$NFILARRAY"
         for A in $NXARRAY
         do
-             echo ${A} >> $NFILARRAY
+             echo ${A} >> "$NFILARRAY"
         done
 ##########################################
 # dispBDT training
@@ -326,7 +321,7 @@ do
                       then
                               echo "Filling table $TABLE with mintel option ${LST}"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID $NFILARRAY $OFFAXIS $S$M ${AZ} ${LST} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS $S$M ${AZ} ${LST} $QSUBOPT
                               cd ../
                               continue
     ##########################################
@@ -335,7 +330,7 @@ do
                        then
                               echo "Using table $TABLE"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID $NFILARRAY $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} $QSUBOPT
                               cd ../
                               continue
                         fi
@@ -366,23 +361,23 @@ do
                       TMVATYPF=NIM${NIMAGESMIN}LST${LST}MST${MST}SST${SST}
                   fi
                   PARA="$PDIR/scriptsInput.${ID}${ETYPF}${AZ}.${S}${AZ}${OOTIME}.runparameter"
-                  rm -f $PARA
-                  touch $PARA
+                  rm -f "$PARA"
+                  touch "$PARA"
                   echo "WRITING PARAMETERFILE $PARA"
                   EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
                   EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas/$EFFDIR/"
-                  echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> $PARA
-                  echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> $PARA
-                  echo "EFFAREASUBDIR $EFFDIR" >> $PARA
-                  echo "RECID $ID" >> $PARA
-                  echo "NIMAGESMIN $NIMAGESMIN" >> $PARA
-                  echo "NLST $LST" >> $PARA
-                  echo "NMST $MST" >> $PARA
-                  echo "NSST $SST" >> $PARA
-                  echo "NSCMST $SCMST" >> $PARA
-                  echo "OBSERVINGTIME_H $OOTIME" >> $PARA
-                  echo "GETXOFFYOFFAFTERCUTS yes" >> $PARA
-                  echo "OFFAXISFINEBINNING $BFINEBINNING" >> $PARA
+                  echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> "$PARA"
+                  echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
+                  echo "EFFAREASUBDIR $EFFDIR" >> "$PARA"
+                  echo "RECID $ID" >> "$PARA"
+                  echo "NIMAGESMIN $NIMAGESMIN" >> "$PARA"
+                  echo "NLST $LST" >> "$PARA"
+                  echo "NMST $MST" >> "$PARA"
+                  echo "NSST $SST" >> "$PARA"
+                  echo "NSCMST $SCMST" >> "$PARA"
+                  echo "OBSERVINGTIME_H $OOTIME" >> "$PARA"
+                  echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
+                  echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
 
                   cd ./analysis/
 ##########################################
@@ -392,24 +387,24 @@ do
                   then
                      if [ ${o} -eq 0 ]
                      then
-                         ./CTA.TMVA.sub_train.sh $NFILARRAY $OFFAXIS $S$M $PARA $QSUBOPT $AZ
+                         ./CTA.TMVA.sub_train.sh "$NFILARRAY" $OFFAXIS $S$M "$PARA" $QSUBOPT $AZ
                      fi
 ##########################################
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]
                   then
-                    ./CTA.EFFAREA.sub_analyse_list.sh $NFILARRAY ANASUM.GammaHadron.TMVAFixedSignal $PARA AngularResolution $S$M 2 $QSUBOPT $AZ
+                    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVAFixedSignal "$PARA" AngularResolution $S$M 2 $QSUBOPT $AZ
 ##########################################
 # IRFs: effective areas after quality cuts
                   elif [[ $RUN == "QC" ]]
                   then
                     if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
                     then
-                        ./CTA.EFFAREA.sub_analyse_list.sh $NFILARRAY ANASUM.GammaHadron.QC $PARA QualityCuts001CU $S$M 3 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
                     # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
                     # (never done for 50h observation, as those are expected to require higher resolution)
                     else
-                        ./CTA.EFFAREA.sub_analyse_list.sh $NFILARRAY ANASUM.GammaHadron008deg.QC $PARA QualityCuts001CU $S$M 3 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron008deg.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
                     fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
@@ -418,10 +413,10 @@ do
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
                     if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
                     then
-                        ./CTA.EFFAREA.sub_analyse_list.sh $NFILARRAY ANASUM.GammaHadron.TMVA $PARA BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
-                        ./CTA.EFFAREA.sub_analyse_list.sh $NFILARRAY ANASUM.GammaHadron95p008deg.TMVA $PARA BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p008deg.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     fi
 ##########################################
 # CTA WP Phys files
@@ -429,10 +424,10 @@ do
                   then
                      if [[ $OFFAXIS == "cone" ]]
                      then
-                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                        ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                      else
-                        ./CTA.WPPhysWriter.sub.sh $NFILARRAY ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                        ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                  fi
 # unknown run set
