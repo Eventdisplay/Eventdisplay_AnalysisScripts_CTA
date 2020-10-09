@@ -129,7 +129,7 @@ then
   echo "list of sim_telarray files not found: $RUNLIST"
   exit
 fi
-RUNLISTN=$(basename $RUNLIST)
+RUNLISTN=$(basename "$RUNLIST")
 
 #########################################################################3
 # separate job for north and south
@@ -139,9 +139,9 @@ do
 # run lists for north or south
     RUNLISTNdeg=$SHELLDIR/$RUNLISTN.$D.${DSET}
     rm -f "$RUNLISTNdeg"
-    grep "_$D" $RUNLIST > $RUNLISTNdeg
+    grep "_$D" "$RUNLIST" > "$RUNLISTNdeg"
 
-    NRUN=$(wc -l $RUNLISTNdeg | awk '{print $1}')
+    NRUN=$(wc -l "$RUNLISTNdeg" | awk '{print $1}')
     if [[ $NRUN = "0" ]]
     then
        if [[ $D = "0" ]]
@@ -168,7 +168,7 @@ do
 
     FNAM="$SHELLDIR/$DSET-$PART-$FLL-$D"
 
-    LIST=$(awk '{printf "%s ",$0} END {print ""}' $ARRAY)
+    LIST=$(awk '{printf "%s ",$0} END {print ""}' "$ARRAY")
 
     sed -e "s|SIMTELLIST|$RUNLISTNdeg|" \
         -e "s|PAAART|$PART|" \
@@ -180,10 +180,10 @@ do
         -e "s|PPPP|$PEDFIL|" \
         -e "s|STST|$STEPSIZE|" "$FSCRIPT.sh" > "$FNAM.sh"
 
-    chmod u+x $FNAM.sh
-    echo $FNAM.sh
+    chmod u+x "$FNAM.sh"
+    echo "$FNAM.sh"
 
-    NUMDCAC=$(grep acs $RUNLISTNdeg | wc -l)
+    NUMDCAC=$(grep acs "$RUNLISTNdeg" | wc -l)
     DCACHEOPT=""
     # save dCache from heart attack
     if [[ $NUMDCAC -ge 1000 ]]
