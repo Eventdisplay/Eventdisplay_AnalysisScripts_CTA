@@ -1,5 +1,7 @@
 # Eventdisplay Analysis Scripts for CTA
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4d356e6133ee4548ba8e4650c25c3a03)](https://app.codacy.com/gh/Eventdisplay/Eventdisplay_AnalysisScripts_CTA?utm_source=github.com&utm_medium=referral&utm_content=Eventdisplay/Eventdisplay_AnalysisScripts_CTA&utm_campaign=Badge_Grade)
+
 Run scripts for CTA
 
 Expects the following directory for all software and analysis products:
