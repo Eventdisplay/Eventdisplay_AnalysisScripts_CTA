@@ -46,7 +46,7 @@ NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
 ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
 DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
-echo $NIMAGESMIN $ANADIR $DDIR
+echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DDIR"
 DSET=$3
 OFIL="BDT"
 CONE="FALSE"
@@ -54,19 +54,20 @@ if [[ $2 == cone ]]
 then
   CONE="TRUE"
 fi
-VARRAY=$(awk '{printf "%s ",$0} END {print ""}' $1)
+VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
-RXPAR=$(basename $RPAR.runparameter runparameter)
+RXPAR=$(basename "$RPAR".runparameter runparameter)
 #####################################
 if [ -n "$6" ]
 then
   MCAZ=$6
 fi
 
-if [ -n $5 ]
+# batch farm submission options
+if [ -n "$5" ]
 then
    QSUBOPT="$5"
 fi
@@ -76,13 +77,12 @@ QSUBOPT=${QSUBOPT//\"/}
 
 #####################################
 # energy bins
-# EMIN=( -1.90 -1.90 -1.45 -1.20 -1.00 -0.50 0.00 0.50 1.25 )
-# EMAX=( -1.40 -1.30 -1.15 -0.80 -0.25  0.25 0.75 1.50 2.50 )
-EMIN=( -1.90 -1.90 -1.45 -1.20 -1.00 -0.50 0.00 0.50 1.00 )
-EMAX=( -1.40 -1.30 -1.15 -0.80 -0.25  0.25 0.75 1.50 2.50 )
-# (until 2016-09-11)
-# EMIN=( -1.90 -1.90 -1.45 -1.00 -0.50 0.00 0.50 1.25 )
-# EMAX=( -1.40 -1.30 -0.75 -0.25  0.25 0.75 1.50 2.50 )
+# pre-20201009
+#EMIN=( -1.90 -1.90 -1.45 -1.20 -1.00 -0.50 0.00 0.50 1.00 )
+#EMAX=( -1.40 -1.30 -1.15 -0.80 -0.25  0.25 0.75 1.50 2.50 )
+# 20201009
+EMIN=( -1.90 -1.20 -0.75 0.00 0.50 )
+EMAX=( -1.15 -0.50  0.25 1.50 2.50 )
 NENE=${#EMIN[@]}
 #####################################
 # offset bins 
@@ -110,7 +110,7 @@ NOFF=${#OFFMIN[@]}
 
 ######################################
 # software paths
-source ../setSoftwarePaths.sh $DSET
+source ../setSoftwarePaths.sh "$DSET"
 # checking the path for binary
 if [ -z "$EVNDISPSYS" ]
 then
@@ -123,8 +123,8 @@ fi
 DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
 QLOG=$LDIR
-mkdir -p $LDIR
-echo "log directory: " $LDIR
+mkdir -p "$LDIR"
+echo "Log directory: " "$LDIR"
 
 ######################################
 # script name template
@@ -178,20 +178,20 @@ do
 #       IF DIRECTORY EXISTS, NO NEW ONES ARE CREATED
     ANAEFF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ}"
     # rm -rf $ANAEFF
-    if [ ! -e $ANAEFF ]
+    if [ ! -e "$ANAEFF" ]
     then
-        mkdir -p $ANAEFF
+        mkdir -p "$ANAEFF"
         # testing signal list
         for arg in $SFIL2
         do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
+            BW=$(basename "$arg")
+            ln -s $arg "$ANAEFF"/"$BW"
         done
         # testing proton list
         for arg in $BFIL2
         do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
+            BW=$(basename "$arg")
+            ln -s $arg "$ANAEFF"/"$BW"
         done
         # depending on CONE parameter: either onSource (if CONE=TRUE) or cone (if CONE=FALSE)
         for arg in $GFIL
@@ -210,7 +210,7 @@ do
     fi
     ###############################################################
     # add a 'continue' here if linking file is the main purpose
-    # continue
+    #continue
     ###############################################################
 
 ###############################################################
@@ -227,7 +227,6 @@ do
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
    NTELTYPE=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
-   echo "$EVNDISPSYS/bin/printRunParameter $1 -nteltypes"
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
@@ -247,7 +246,7 @@ do
            TYPECUT="$TYPECUT\|\|NImages_Ttype[${N}]>=${!NCUT}"
        fi
    done
-   if [ ! -z $TYPECUT ]
+   if [ ! -z "$TYPECUT" ]
    then
        TYPECUT="${TYPECUT})"
    fi
@@ -257,34 +256,26 @@ do
 ###############################################################
 # Temporary run parameter file
    TEMPPAR=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ$MCAZ.$NIMAGESMIN.runpar
-   touch ${TEMPPAR}
+   touch "${TEMPPAR}"
    # write signal and background files
    # (note: training is in splitmode=block)
    for arg in $SFIL1
    do
-      echo "* SIGNALFILE $arg" >> ${TEMPPAR}
+      echo "* SIGNALFILE $arg" >> "${TEMPPAR}"
    done
-  # for arg in $SFIL2
-  # do
-  #    echo "* SIGNALFILE $arg" >> ${TEMPPAR}
-  # done
    for arg in $BFIL1
    do
-      echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
+      echo "* BACKGROUNDFILE $arg" >> "${TEMPPAR}"
    done
-  # for arg in $BFIL2
-  # do
-  #    echo "* BACKGROUNDFILE $arg" >> ${TEMPPAR}
-  # done
 
 ###############################################################
 # loop over all wobble offset
    for (( W = 0; W < $NOFF; W++ ))
    do
       ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/TMVA/$DDIR-${OFFMEA[$W]}
-      mkdir -p $ODIR
+      mkdir -p "$ODIR"
 # copy run parameter file
-      cp -f $RPAR.runparameter $ODIR
+      cp -f "$RPAR".runparameter "$ODIR"
 
 ###############################################################
 # loop over all energy bins and prepare run parameter files
@@ -301,7 +292,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
 * MCXYCUTSignalOnly 1
 * OUTPUTFILE $ODIR $OFIL"_$i" " > $RFIL.runparameter
 	 grep "*" $RPAR.runparameter | grep -v ENERGYBINS | grep -v OUTPUTFILE | grep -v SIGNALFILE | grep -v BACKGROUNDFILE | grep -v MCXYOFF >> $RFIL.runparameter
-         cat ${TEMPPAR} >> $RFIL.runparameter
+         cat "${TEMPPAR}" >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
 
@@ -315,14 +306,12 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
-     MEM=16000M
      MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
      qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
-     #qsub $QSUBOPT -V -R y -t 1-$NENE:1 -l h_cpu=05:59:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
-  rm -f ${TEMPPAR}
+  rm -f "${TEMPPAR}"
 done
 
 exit
