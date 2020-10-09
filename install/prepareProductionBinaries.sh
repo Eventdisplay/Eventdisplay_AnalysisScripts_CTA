@@ -7,7 +7,7 @@
 #
 if [ ! -n "$1" ]
 then
-    echo "./setSoftwarePaths.sh <data set>"
+    echo "././prepareProductionBinaries.sh data set>"
     echo
     echo "   will install hessioxx, Eventdisplay analysis files and code"
     echo
