@@ -35,15 +35,13 @@ ROOTCONF=`root-config --libdir`
 export LD_LIBRARY_PATH=${ROOTCONF}
 
 # EVNDISPSYS settings
-if [[ -e ${MAINDIR}/code ]]; then
+if [[ -d ${MAINDIR}/code ]]; then
     EVNDISPSYS="${MAINDIR}/code"
-else
+elif [[ -d ${MAINDIR}/Eventdisplay/ ]]; then
     EVNDISPSYS="${MAINDIR}/Eventdisplay/"
-fi
-if [ ! -e ${EVNDISPSYS} ]
-then
+else
    echo "Error: directory with software not found"
-   echo ${EVNDISPSYS}
+   echo ${MAINDIR}
    return
 fi
 

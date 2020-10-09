@@ -17,23 +17,19 @@ then
    
      <sub array list>          text file with list of subarray IDs
    
-     <particle>                gamma_onSource , gamma_diffuse, proton , electron (helium, ...)
+     <particle>                gamma_onSource , gamma_cone, proton , electron (helium, ...)
    
-     <data set>                e.g. paranal, ...
+     <data set>                e.g. prod5-LaPalma-20deg-sq2-LL, ...
    
    NOTE: HARDWIRED FILE NAMES IN QSUB SCRIPTS !!
    
      [keep DST.root files]  keep and copy converted simtel files (DST files) to output directory (default off=0)
    
-    output will be written to: CTA_USER_DATA_DIR/analysis/<subarray>/<particle>/
-   
+    output will be written to: CTA_USER_DATA_DIR/analysis/<subarray>/EVNDISP/<particle>/
   
-    REMINDER:
-     - compile CTA converter before starting the scripts (make CTA.convert_hessio_to_VDST)
    "
    exit
 fi
-
 
 ARRAY=$1
 RUNLIST=$2
@@ -46,11 +42,11 @@ QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-} 
 
 # software paths
-echo $DSET
-source ../setSoftwarePaths.sh $DSET
+echo "$DSET"
+source ../setSoftwarePaths.sh "$DSET"
 
 # checking the path for binaries
-if [ -z $EVNDISPSYS ]
+if [ -z "$EVNDISPSYS" ]
 then
     echo "no EVNDISPSYS env variable defined"
     exit
@@ -65,32 +61,32 @@ fi
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
-DATE=`date +"%y%m%d"`
 
 # output directory for shell scripts and run lists
 SHELLDIR=$CTA_USER_LOG_DIR"/queueShellDir/"
-mkdir -p $SHELLDIR
+mkdir -p "$SHELLDIR"
 
 # skeleton script
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # log files
+#DATE=$(date +"%y%m%d")
 #QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
 #mkdir -p $QLOG
 QLOG="/dev/null"
 
 ########################
-# producution depedendent parameters
+# production depedendent parameters
 if [[ $DSET == *"prod3b"* ]]
 then
     ARRAYCUTS="EVNDISP.prod3.reconstruction.runparameter.NN.LL"
     # calibration file with IPR graphs
     if [[ $DSET = *"paranal"* ]]
     then
-       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/prod3b.Paranal-20171214.ped.root"
+       PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod3b/prod3b.Paranal-20171214.ped.root"
     elif [[ $DSET = *"LaPalma"* ]]
     then
-       PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod3b-Calibration/pedestal_nsb1x_LaPalma.root"
+       PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod3b/pedestal_nsb1x_LaPalma.root"
     else
        echo "Unknown data set for calibration file search with IPR graph"
        exit
@@ -101,9 +97,9 @@ then
     # calibration file with IPR graphs
     if [[ $DSET = *"SST"* ]]
     then
-        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-SST-IPR.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod4/prod4b-SST-IPR.root"
     else
-        PEDFIL="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod4-Calibration/prod4b-MST-FlashCam.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod4/prod4b-MST-FlashCam.root"
     fi
 elif [[ $DSET == *"prod5"* ]]
 then
@@ -119,21 +115,21 @@ else
 fi
 
 echo "PEDFIL: $PEDFIL"
-if [ ! -e $PEDFIL ]
+if [ ! -e "$PEDFIL" ]
 then
    echo "error: missing calibration file with IPR graphs"
-   echo $PEDFIL
+   echo "$PEDFIL"
    exit
 fi
 
 ########################################################
 # get run list and number of runs
-if [ ! -e $RUNLIST ]
+if [ ! -e "$RUNLIST" ]
 then
   echo "list of sim_telarray files not found: $RUNLIST"
   exit
 fi
-RUNLISTN=`basename $RUNLIST`
+RUNLISTN=$(basename "$RUNLIST")
 
 #########################################################################3
 # separate job for north and south
@@ -142,19 +138,19 @@ do
 
 # run lists for north or south
     RUNLISTNdeg=$SHELLDIR/$RUNLISTN.$D.${DSET}
-    rm -f $RUNLISTNdeg
-    grep "_$D" $RUNLIST > $RUNLISTNdeg
+    rm -f "$RUNLISTNdeg"
+    grep "_$D" "$RUNLIST" > "$RUNLISTNdeg"
 
-    NRUN=`wc -l $RUNLISTNdeg | awk '{print $1}'`
+    NRUN=$(wc -l "$RUNLISTNdeg" | awk '{print $1}')
     if [[ $NRUN = "0" ]]
     then
        if [[ $D = "0" ]]
        then
-          grep north $RUNLIST > $RUNLISTNdeg
+          grep north "$RUNLIST" > "$RUNLISTNdeg"
        else
-          grep south $RUNLIST > $RUNLISTNdeg
+          grep south "$RUNLIST" > "$RUNLISTNdeg"
        fi
-       NRUN=`wc -l $RUNLISTNdeg | awk '{print $1}'`
+       NRUN=$(wc -l $RUNLISTNdeg | awk '{print $1}')
     fi
     RUNFROMTO="1-$NRUN"
     NSTEP=1
@@ -172,7 +168,7 @@ do
 
     FNAM="$SHELLDIR/$DSET-$PART-$FLL-$D"
 
-    LIST=`awk '{printf "%s ",$0} END {print ""}' $ARRAY`
+    LIST=$(awk '{printf "%s ",$0} END {print ""}' "$ARRAY")
 
     sed -e "s|SIMTELLIST|$RUNLISTNdeg|" \
         -e "s|PAAART|$PART|" \
@@ -182,28 +178,28 @@ do
         -e "s|DATASET|$DSET|" \
         -e "s|FLL|$FLL|" \
         -e "s|PPPP|$PEDFIL|" \
-        -e "s|STST|$STEPSIZE|" $FSCRIPT.sh > $FNAM.sh
+        -e "s|STST|$STEPSIZE|" "$FSCRIPT.sh" > "$FNAM.sh"
 
-    chmod u+x $FNAM.sh
-    echo $FNAM.sh
+    chmod u+x "$FNAM.sh"
+    echo "$FNAM.sh"
 
-    NUMDCAC=`grep acs $RUNLISTNdeg | wc -l`
+    NUMDCAC=$(grep acs "$RUNLISTNdeg" | wc -l)
     DCACHEOPT=""
     # save dCache from heart attack
     if [[ $NUMDCAC -ge 1000 ]]
     then
         DCACHEOPT=" -l cta_dcache=1 "
     fi
-    echo $DCACHEOPT
+    echo "$DCACHEOPT"
 
     if [[ $NRUN -ne 0 ]]
     then
         if [[ $DSET == "SCT" ]]
         then
             # SCT prod3 files need more memory:
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
         else
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
         fi
     echo "submit"
     fi
