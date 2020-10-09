@@ -61,22 +61,22 @@ fi
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
-DATE=`date +"%y%m%d"`
 
 # output directory for shell scripts and run lists
 SHELLDIR=$CTA_USER_LOG_DIR"/queueShellDir/"
-mkdir -p $SHELLDIR
+mkdir -p "$SHELLDIR"
 
 # skeleton script
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # log files
+#DATE=$(date +"%y%m%d")
 #QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
 #mkdir -p $QLOG
 QLOG="/dev/null"
 
 ########################
-# producution depedendent parameters
+# production depedendent parameters
 if [[ $DSET == *"prod3b"* ]]
 then
     ARRAYCUTS="EVNDISP.prod3.reconstruction.runparameter.NN.LL"
@@ -115,21 +115,21 @@ else
 fi
 
 echo "PEDFIL: $PEDFIL"
-if [ ! -e $PEDFIL ]
+if [ ! -e "$PEDFIL" ]
 then
    echo "error: missing calibration file with IPR graphs"
-   echo $PEDFIL
+   echo "$PEDFIL"
    exit
 fi
 
 ########################################################
 # get run list and number of runs
-if [ ! -e $RUNLIST ]
+if [ ! -e "$RUNLIST" ]
 then
   echo "list of sim_telarray files not found: $RUNLIST"
   exit
 fi
-RUNLISTN=`basename $RUNLIST`
+RUNLISTN=$(basename $RUNLIST)
 
 #########################################################################3
 # separate job for north and south
@@ -138,19 +138,19 @@ do
 
 # run lists for north or south
     RUNLISTNdeg=$SHELLDIR/$RUNLISTN.$D.${DSET}
-    rm -f $RUNLISTNdeg
+    rm -f "$RUNLISTNdeg"
     grep "_$D" $RUNLIST > $RUNLISTNdeg
 
-    NRUN=`wc -l $RUNLISTNdeg | awk '{print $1}'`
+    NRUN=$(wc -l $RUNLISTNdeg | awk '{print $1}')
     if [[ $NRUN = "0" ]]
     then
        if [[ $D = "0" ]]
        then
-          grep north $RUNLIST > $RUNLISTNdeg
+          grep north "$RUNLIST" > "$RUNLISTNdeg"
        else
-          grep south $RUNLIST > $RUNLISTNdeg
+          grep south "$RUNLIST" > "$RUNLISTNdeg"
        fi
-       NRUN=`wc -l $RUNLISTNdeg | awk '{print $1}'`
+       NRUN=$(wc -l $RUNLISTNdeg | awk '{print $1}')
     fi
     RUNFROMTO="1-$NRUN"
     NSTEP=1
@@ -168,7 +168,7 @@ do
 
     FNAM="$SHELLDIR/$DSET-$PART-$FLL-$D"
 
-    LIST=`awk '{printf "%s ",$0} END {print ""}' $ARRAY`
+    LIST=$(awk '{printf "%s ",$0} END {print ""}' $ARRAY)
 
     sed -e "s|SIMTELLIST|$RUNLISTNdeg|" \
         -e "s|PAAART|$PART|" \
@@ -178,28 +178,28 @@ do
         -e "s|DATASET|$DSET|" \
         -e "s|FLL|$FLL|" \
         -e "s|PPPP|$PEDFIL|" \
-        -e "s|STST|$STEPSIZE|" $FSCRIPT.sh > $FNAM.sh
+        -e "s|STST|$STEPSIZE|" "$FSCRIPT.sh" > "$FNAM.sh"
 
     chmod u+x $FNAM.sh
     echo $FNAM.sh
 
-    NUMDCAC=`grep acs $RUNLISTNdeg | wc -l`
+    NUMDCAC=$(grep acs $RUNLISTNdeg | wc -l)
     DCACHEOPT=""
     # save dCache from heart attack
     if [[ $NUMDCAC -ge 1000 ]]
     then
         DCACHEOPT=" -l cta_dcache=1 "
     fi
-    echo $DCACHEOPT
+    echo "$DCACHEOPT"
 
     if [[ $NRUN -ne 0 ]]
     then
         if [[ $DSET == "SCT" ]]
         then
             # SCT prod3 files need more memory:
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
         else
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
         fi
     echo "submit"
     fi
