@@ -32,20 +32,20 @@ fi
 #######################################
 # read values from parameter file
 ANAPAR=$4
-if [ ! -e $ANAPAR ]
+if [ ! -e "$ANAPAR" ]
 then
   echo "error: analysis parameter file not found: $ANAPAR" 
   exit
 fi
 echo "reading analysis parameter from $ANAPAR"
-NIMAGESMIN=`grep NIMAGESMIN $ANAPAR | awk {'print $2'}`
-NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
-NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
-NCUTSST=`grep NSST $ANAPAR | awk {'print $2'}`
-NCUTMSCT=`grep NSCMST $ANAPAR | awk {'print $2'}`
-ANADIR=`grep MSCWSUBDIRECTORY  $ANAPAR | awk {'print $2'}`
-DDIR=`grep TMVASUBDIR $ANAPAR | awk {'print $2'}`
-RECID=`grep RECID $ANAPAR | awk {'print $2'}`
+NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk {'print $2'})
+NCUTLST=$(grep NLST "$ANAPAR" | awk {'print $2'})
+NCUTMST=$(grep NMST "$ANAPAR" | awk {'print $2'})
+NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
+NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
+ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
+DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
+RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
 echo $NIMAGESMIN $ANADIR $DDIR
 DSET=$3
 OFIL="BDT"
@@ -54,12 +54,12 @@ if [[ $2 == cone ]]
 then
   CONE="TRUE"
 fi
-VARRAY=`awk '{printf "%s ",$0} END {print ""}' $1`
+VARRAY=$(awk '{printf "%s ",$0} END {print ""}' $1)
 
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
-RXPAR=`basename $RPAR.runparameter runparameter`
+RXPAR=$(basename $RPAR.runparameter runparameter)
 #####################################
 if [ -n "$6" ]
 then
@@ -112,7 +112,7 @@ NOFF=${#OFFMIN[@]}
 # software paths
 source ../setSoftwarePaths.sh $DSET
 # checking the path for binary
-if [ -z $EVNDISPSYS ]
+if [ -z "$EVNDISPSYS" ]
 then
     echo "no EVNDISPSYS env variable defined"
     exit
@@ -120,7 +120,7 @@ fi
 
 ######################################
 # log files
-DATE=`date +"%y%m%d"`
+DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
 QLOG=$LDIR
 mkdir -p $LDIR
@@ -148,27 +148,27 @@ do
 # different namings for GRID and local productions
    if [[ ${DSET:0:2} == "GR" ]]
    then
-       SFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 1'`
-       SFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 0'`
-       BFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1'`
-       BFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0'`
-       GFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$ATYPE"*.mscw.root`
-       EFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"deg$MCAZ"*mscw.root`
+       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
+       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
+       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$ATYPE"*.mscw.root)
+       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"deg$MCAZ"*mscw.root)
     elif [[ $DSET == *"NSB"* ]]
     then
-       SFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1'`
-       SFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0'`
-       BFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1'`
-       BFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0'`
-       GFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF*"_ID"$RECID"$MCAZ"*.mscw.root`
-       EFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"_ID"$RECID"$MCAZ"*mscw.root`
+       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
+       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
+       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF*"_ID"$RECID"$MCAZ"*.mscw.root)
+       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"_ID"$RECID"$MCAZ"*mscw.root)
     else
-       SFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1'`
-       SFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0'`
-       BFIL1=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1'`
-       BFIL2=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0'`
-       GFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root`
-       EFIL=`ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root`
+       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
+       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
     fi
 
 ##########################################################
@@ -184,25 +184,25 @@ do
         # testing signal list
         for arg in $SFIL2
         do
-            BW=`basename $arg`
+            BW=$(basename $arg)
             ln -s $arg $ANAEFF/$BW
         done
         # testing proton list
         for arg in $BFIL2
         do
-            BW=`basename $arg`
+            BW=$(basename $arg)
             ln -s $arg $ANAEFF/$BW
         done
         # depending on CONE parameter: either onSource (if CONE=TRUE) or cone (if CONE=FALSE)
         for arg in $GFIL
         do
-            BW=`basename $arg`
+            BW=$(basename $arg)
             ln -s $arg $ANAEFF/$BW
         done
         # electrons (not used in training)
         for arg in $EFIL
         do
-            BW=`basename $arg`
+            BW=$(basename $arg)
             ln -s $arg $ANAEFF/$BW
         done
     else
@@ -226,13 +226,13 @@ do
        continue
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
-   NTELTYPE=`$EVNDISPSYS/bin/printRunParameter $1 -nteltypes`
+   NTELTYPE=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
    echo "$EVNDISPSYS/bin/printRunParameter $1 -nteltypes"
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
-       TELTYP=`$EVNDISPSYS/bin/printRunParameter $1 -ntype$N`
+       TELTYP=$($EVNDISPSYS/bin/printRunParameter $1 -ntype$N)
        if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
           echo "Error: telescope type not found: $N"
           echo "(check printRunParameters)"
