@@ -157,12 +157,17 @@ then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
        ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
        ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
-       ARRAY=( "subArray.prod5.North-tmvaTest.list" )
        if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.lis" )
+           ARRAY=( "subArray.prod5.North-LST.list" )
        fi
        if [[ $P2 == *"VTS"* ]]; then
            ARRAY=( "subArray.prod5.North-VTS.list" )
+       fi
+   elif [[ $P2 == *"sq07"* ]]; then
+       EDM=( "-sq07-LL" )
+       ARRAY=( "subArray.prod5.North-XST.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-LST.list" )
        fi
    else
        echo "DSet not found: $P2"
@@ -193,12 +198,18 @@ then
        if [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.South-LST.list" )
        fi
+   elif [[ $P2 ==  *"sq07"* ]]; then
+       EDM=( "-sq07-LL" )
+       ARRAY=( "subArray.prod5.South-XST.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.South-LST.list" )
+       fi
    else
        ARRAY=( "subArray.prod5.South-BGR.list" )
    fi
    ARRAYDIR=( "prod5" )
-   TDATE="g20200909"
-   ANADATE="g20200909"
+   TDATE="g20210909"
+   ANADATE="${ANADATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
 else
