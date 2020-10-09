@@ -17,23 +17,19 @@ then
    
      <sub array list>          text file with list of subarray IDs
    
-     <particle>                gamma_onSource , gamma_diffuse, proton , electron (helium, ...)
+     <particle>                gamma_onSource , gamma_cone, proton , electron (helium, ...)
    
-     <data set>                e.g. paranal, ...
+     <data set>                e.g. prod5-LaPalma-20deg-sq2-LL, ...
    
    NOTE: HARDWIRED FILE NAMES IN QSUB SCRIPTS !!
    
      [keep DST.root files]  keep and copy converted simtel files (DST files) to output directory (default off=0)
    
-    output will be written to: CTA_USER_DATA_DIR/analysis/<subarray>/<particle>/
-   
+    output will be written to: CTA_USER_DATA_DIR/analysis/<subarray>/EVNDISP/<particle>/
   
-    REMINDER:
-     - compile CTA converter before starting the scripts (make CTA.convert_hessio_to_VDST)
    "
    exit
 fi
-
 
 ARRAY=$1
 RUNLIST=$2
@@ -46,11 +42,11 @@ QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-} 
 
 # software paths
-echo $DSET
-source ../setSoftwarePaths.sh $DSET
+echo "$DSET"
+source ../setSoftwarePaths.sh "$DSET"
 
 # checking the path for binaries
-if [ -z $EVNDISPSYS ]
+if [ -z "$EVNDISPSYS" ]
 then
     echo "no EVNDISPSYS env variable defined"
     exit
