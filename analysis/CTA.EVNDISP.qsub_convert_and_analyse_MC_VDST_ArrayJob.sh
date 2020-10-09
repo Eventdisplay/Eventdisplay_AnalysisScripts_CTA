@@ -32,8 +32,8 @@ fi
 COPT="$COPT -c $PEDFILE"
 
 # eventdisplay command line parameter
-OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
-#OPT="-imagesquared -averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+#OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+OPT="-imagesquared -averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 if [[ $DSET == *"prod3"* ]] 
 then
     # needs to be the same as used for IPR graph preparation
@@ -172,6 +172,14 @@ do
       fi
 
       cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}HD_${ILINE}_${MCAZ}deg.root
+  else
+      echo "No root files found!" 
+      if [ -e $TMPDIR/$OFIL.$N.convert.log ]; then
+         cp -f -v $TMPDIR/$OFIL.$N.convert.log $ODIR/
+      fi
+      if [ -e $TMPDIR/$OFIL.$N.evndisp.log ]; then
+         cp -f -v $TMPDIR/$OFIL.$N.evndisp.log $ODIR/
+      fi
   fi
 
 ####################################################################

@@ -69,15 +69,22 @@ NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
 NCUTSST=`grep NSST $ANAPAR | awk {'print $2'}`
 NCUTSCMST=`grep NSCMST $ANAPAR | awk {'print $2'}`
 if [[ $DSET == *"prod5"* ]]; then
-   if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat ]]; then
-       TELTYPESLST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep LST | awk '{ $1=""; $2=""; print}')
-       TELTYPESMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep MST | awk '{ $1=""; $2=""; print}')
-       TELTYPESSST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SST | awk '{ $1=""; $2=""; print}')
-       TELTYPESSCMST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat | grep SCMST | awk '{ $1=""; $2=""; print}')
-   else
-      echo "Problem / error? Prod5 teltype file not found"
-   fi
+   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat
+elif [[ $DSET == *"prod4"* ]]; then
+   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat
+elif [[ $DSET == *"prod3"* ]]; then
+   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3.teltypes.dat
 fi
+if [[ -e ${TELLIST} ]]; then
+   TELTYPESLST=$(grep "*" ${TELLIST} | grep LST | awk '{ $1=""; $2=""; print}')
+   TELTYPESMST=$(grep "*" ${TELLIST} | grep MST | grep -v SCMST | awk '{ $1=""; $2=""; print}')
+   TELTYPESSST=$(grep "*" ${TELLIST} | grep SST | awk '{ $1=""; $2=""; print}')
+   TELTYPESSCMST=$(grep "*" ${TELLIST} | grep SCMST | awk '{ $1=""; $2=""; print}')
+else
+  echo "Problem / error? ${TELLIST} teltype file not found"
+  exit
+fi
+
 for T in LST MST SST SCMST 
 do
     NCUT="NCUT${T}"

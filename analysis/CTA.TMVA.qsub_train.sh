@@ -11,7 +11,7 @@ let "EBIN = $SGE_TASK_ID - 1"
 ulimit -n 2056
 
 # set the right observatory (environmental variables)
-source ${EVNDISPSYS}/setObservatory.sh CTA
+source "${EVNDISPSYS}"/setObservatory.sh CTA
 
 PFIL=${RPARA}_${EBIN}
 rm -f $PFIL.log
@@ -22,21 +22,21 @@ touch ${PFIL}.RUNNING
 
 echo ${PFIL}.runparameter
 
-${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation ${PFIL}.runparameter > ${PFIL}.log
+${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter > "${PFIL}".log
 
-CDIR=`dirname $PFIL.log`
+CDIR=$(dirname "$PFIL".log)
 # remove .C files (never used; we use the XML files)
-rm -f $CDIR/BDT_${EBIN}*.C
+rm -f "$CDIR"/BDT_"${EBIN}"*.C
 # remove complete_BDTroot at the end of the run
 # (generally not used, but takes up lots of disk space)
 # rm -rf $CDIR/complete_BDTroot/BDT_${EBIN}*
-rm -rf $CDIR/complete_BDTroot
+rm -rf "$CDIR"/complete_BDTroot
 
 # check successful completion of training
 # remove temporary file
 if [ -e ${PFIL}.log ]; then
    TSTRING=$(tail -n 1 ${PFIL}.log | grep Complete)
-   echo $TSTRING
+   echo "$TSTRING"
    if [ ! -z "$TSTRING" ]; then
       rm -f ${PFIL}.RUNNING
    fi
