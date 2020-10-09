@@ -8,8 +8,8 @@ SITE="Paranal"
 SITE="LaPalma"
 
 # Particle types:
-TYPE="gamma_cone"
 TYPE="gamma_onSource"
+TYPE="gamma_cone"
 
 IPR="$EVNDISPSYS/../Eventdisplay_AnalysisFiles_CTA/Calibration/prod5/prod5-IPR.root"
 ODIR="$CTA_USER_DATA_DIR/DST_testDevelopment_prod5/"
