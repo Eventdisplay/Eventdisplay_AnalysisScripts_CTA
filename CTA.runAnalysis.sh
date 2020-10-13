@@ -182,6 +182,7 @@ then
        ANADATE="20201012"
        TMVADATE="${ANADATE}"
        EFFDATE="${TMVADATE}"
+       ARRAY=( "subArray.prod5.North-Hyper.list" )
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
