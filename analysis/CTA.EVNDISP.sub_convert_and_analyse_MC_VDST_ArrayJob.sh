@@ -104,7 +104,6 @@ then
 elif [[ $DSET == *"prod5"* ]]
 then
     ARRAYCUTS="EVNDISP.prod5.reconstruction.runparameter"
-    ARRAYCUTS="EVNDISP.prod5.reconstruction.runparameter.SSTLL"
     if [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-halfmoon-IPR.root"
     else
