@@ -6,9 +6,9 @@
 #
 if [ ! -n "$4" ]
 then
-    echo "./linkEvndispProduction.sh <EVNDISP data set> <target data set> <list of layouts> <MST type>"
+    echo "./linkEvndispProduction.sh <EVNDISP data set> <target data set> <list of layouts> <site>"
     echo
-    echo "   <MST type>:   MSTF or MSTN"
+    echo "   <site> North or South"
     echo 
     exit
 fi
@@ -39,8 +39,10 @@ do
 
    for P in gamma_cone gamma_onSource proton electron
    do
-#     ln -s "${HDIR}/N.${4}.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
-      ln -s "${HDIR}/N.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
-#      ln -s "${HDIR}/S.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
+      if [[ $4 == "North" ]]; then
+          ln -s "${HDIR}/N.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
+      else
+          ln -s "${HDIR}/S.hyperarray/EVNDISP/${P}" "${TDIR}/${A}/EVNDISP/${P}"
+      fi
    done
 done
