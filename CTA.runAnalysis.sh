@@ -80,7 +80,6 @@ fi
 # _0deg = north
 MCAZ=( "" "_180deg" "_0deg" )
 
-
 ##########################################################
 # PROD3B Analysis
 EDM=( "u05b-LL" )
@@ -142,38 +141,60 @@ then
    ARRAY=( "subArray.prod4-SST.list" )
    ARRAYDIR=( "prod4" )
 ###############################################################
+###############################################################
 # PROD5 Analysis
 # prod5-N
-# prod5-N-moon
+# prod5-N-moon (NSB5x)
 elif [[ $P2 == "prod5-N"* ]]
 then
    TDATE="g20200909"
-   ANADATE="g20200930-TWdispE"
-   TMVADATE="${ANADATE}-TMVAbins"
-   EFFDATE="${TMVADATE}"
-   #EFFDATE="${ANADATE}"
    if [[ $P2 == *"sq2"* ]]; then
+       ANADATE="${TDATE}"
+       TMVADATE="${ANADATE}"
+       EFFDATE="${TMVADATE}"
        EDM=( "-sq2-LL" )
        ARRAY=( "subArray.prod5.North-Hyper.list" )
        ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
        ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
-       ARRAY=( "subArray.prod5.North-tmvaTest.list" )
        if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.lis" )
+           ARRAY=( "subArray.prod5.North-LST.list" )
        fi
-       if [[ $P2 == *"VTS"* ]]; then
-           ARRAY=( "subArray.prod5.North-VTS.list" )
+   fi
+   if [[ $P2 == *"sq07"* ]]; then
+       # accident in naming of dates
+       ANADATE="g20200930-TWdispE"
+       TMVADATE="${ANADATE}-TMVAbins"
+       EFFDATE="${TMVADATE}"
+       EDM=( "-sq07-LL" )
+       ARRAY=( "subArray.prod5.North-XST.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-LSTX.list" )
        fi
    else
        echo "DSet not found: $P2"
        exit
    fi
+   if [[ $P2 == *"VTS"* ]]; then
+       ARRAY=( "subArray.prod5.North-VTS.list" )
+   fi
    if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-LaPalma-20deg-Moon" )
+       SITE=( "prod5-LaPalma-20deg-NSB5x" )
+       ANADATE="20201012"
+       TMVADATE="${ANADATE}"
+       EFFDATE="${TMVADATE}"
+       ARRAY=( "subArray.prod5.North-Hyper.list" )
+       ARRAY=( "subArray.prod5.North-BL.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-LST.list" )
+       fi
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
    ARRAYDIR=( "prod5" )
+####################################
+# prod5 - Paranal
+# prod5-S
+# prod5-S-moon (NSB5x)
 elif [[ $P2 == "prod5-S"* ]]
 then
    if [[ $P2 == *"moon"* ]]; then
@@ -193,13 +214,31 @@ then
        if [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.South-LST.list" )
        fi
+   elif [[ $P2 ==  *"sq07"* ]]; then
+       EDM=( "-sq07-LL" )
+       ARRAY=( "subArray.prod5.South-XST.list" )
+       ARRAY=( "subArray.prod5.South-TS.list" )
+       if [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.South-LST.list" )
+       fi
+   elif [[ $P2 ==  *"sqS7"* ]]; then
+       EDM=( "-sqS7-LL" )
+       ARRAY=( "subArray.prod5.South-Hyper.list" )
+       ARRAY=( "subArray.prod5.South.list" )
    else
        ARRAY=( "subArray.prod5.South-BGR.list" )
    fi
+   if [[ $P2 == *"moon"* ]]; then
+       SITE=( "prod5-Paranal-20deg-NSB5x" )
+       ARRAY=( "subArray.prod5.South-Hyper.list" )
+       ARRAY=( "subArray.prod5.South.list" )
+   fi
    ARRAYDIR=( "prod5" )
-   TDATE="g20200909"
-   ANADATE="g20200909"
+   TDATE="g20210909"
+   ANADATE="g20201012"
+   ANADATE="g20200817"
    TMVADATE="${ANADATE}"
+   TMVADATE="g20201012"
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -211,8 +250,10 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_cone" "gamma_onSource" "electron" )
+PARTICLE=( "proton" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
@@ -426,9 +467,11 @@ do
                      then
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
+                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                      else
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
+                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]

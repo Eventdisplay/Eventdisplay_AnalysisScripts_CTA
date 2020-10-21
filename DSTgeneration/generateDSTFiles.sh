@@ -8,8 +8,8 @@ SITE="Paranal"
 SITE="LaPalma"
 
 # Particle types:
-TYPE="gamma_cone"
 TYPE="gamma_onSource"
+TYPE="gamma_cone"
 
 IPR="$EVNDISPSYS/../Eventdisplay_AnalysisFiles_CTA/Calibration/prod5/prod5-IPR.root"
 ODIR="$CTA_USER_DATA_DIR/DST_testDevelopment_prod5/"
@@ -59,11 +59,11 @@ if [[ $SITE == "LaPalma" ]]; then
         $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${ARRAY} -c ${IPR} -o ${OFILE}.root ${MCFILE} > ${OFILE}.log
     done
 elif [[ $SITE == "Paranal" ]]; then
-    MCDIR="/lustre/fs21/group/cta/prod5-grid/Prod5_LaPalma_AdvancedBaseline_NSB1x/"
+    MCDIR="/lustre/fs21/group/cta/prod5-grid/Prod5_Paranal_AdvancedBaseline_NSB1x/"
     if [[ $TYPE == "gamma_onSource" ]]; then
-        MCFILE="${MCDIR}/gamma_onSource/gamma_20deg_180deg_run100___cta-prod5-lapalma_desert-2158m-LaPalma-dark.simtel.zst"
+        MCFILE="${MCDIR}/gamma_onSource/gamma_20deg_180deg_run985___cta-prod5-paranal_desert-2147m-Paranal-dark.simtel.zst"
     elif [[ $TYPE == "gamma_cone" ]]; then
-        MCFILE="${MCDIR}/gamma_cone/gamma_20deg_180deg_run9974___cta-prod5-lapalma_desert-2158m-LaPalma-dark_cone10.simtel.zst"
+        MCFILE="${MCDIR}/gamma_cone/gamma_20deg_180deg_run9986___cta-prod5-paranal_desert-2147m-Paranal-dark_cone10.simtel.zst"
     fi
     #######################
     # LSTs
