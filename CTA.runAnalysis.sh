@@ -147,50 +147,25 @@ then
 # prod5-N-moon (NSB5x)
 elif [[ $P2 == "prod5-N"* ]]
 then
-   TDATE="g20200909"
-   if [[ $P2 == *"sq2"* ]]; then
-       ANADATE="${TDATE}"
-       TMVADATE="${ANADATE}"
-       EFFDATE="${TMVADATE}"
-       EDM=( "-sq2-LL" )
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.list" )
-       fi
-   fi
-   if [[ $P2 == *"sq07"* ]]; then
-       # accident in naming of dates
-       ANADATE="g20200930-TWdispE"
-       TMVADATE="${ANADATE}-TMVAbins"
-       EFFDATE="${TMVADATE}"
-       EDM=( "-sq07-LL" )
-       ARRAY=( "subArray.prod5.North-XST.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LSTX.list" )
-       fi
-   else
-       echo "DSet not found: $P2"
-       exit
-   fi
-   if [[ $P2 == *"VTS"* ]]; then
-       ARRAY=( "subArray.prod5.North-VTS.list" )
-   fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-NSB5x" )
-       ANADATE="20201012"
-       TMVADATE="${ANADATE}"
-       EFFDATE="${TMVADATE}"
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-       ARRAY=( "subArray.prod5.North-BL.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.list" )
-       fi
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
+   EDM=( "-sq08-LL" )
+   ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
+   ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+   if [[ $P2 == *"Hyper"* ]]; then
+       ARRAY=( "subArray.prod5.North-Hyper.list" )
+   fi
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.North-LST.list" )
+   fi
    ARRAYDIR=( "prod5" )
+   TDATE="g20201021"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${TMVADATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -198,47 +173,22 @@ then
 elif [[ $P2 == "prod5-S"* ]]
 then
    if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-Paranal-20deg-Moon" )
+       SITE=( "prod5-Paranal-20deg-NSB5x" )
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
-   EDM=( "-h05-LL" )
+   EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
-       EDM=( "-sq2-LL" )
-   elif [[ $P2 ==  *"sq2"* ]]; then
-       EDM=( "-sq2-LL" )
-       ARRAY=( "subArray.prod5.South-BGR.list" )
-       ARRAY=( "subArray.prod5.South.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.South-LST.list" )
-       fi
-   elif [[ $P2 ==  *"sq07"* ]]; then
-       EDM=( "-sq07-LL" )
-       ARRAY=( "subArray.prod5.South-XST.list" )
-       ARRAY=( "subArray.prod5.South-TS.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.South-LST.list" )
-       fi
-   elif [[ $P2 ==  *"sqS7"* ]]; then
-       EDM=( "-sqS7-LL" )
-       ARRAY=( "subArray.prod5.South-Hyper.list" )
-       ARRAY=( "subArray.prod5.South.list" )
-   else
-       ARRAY=( "subArray.prod5.South-BGR.list" )
    fi
-   if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-Paranal-20deg-NSB5x" )
-       ARRAY=( "subArray.prod5.South-Hyper.list" )
-       ARRAY=( "subArray.prod5.South.list" )
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.South-LST.list" )
    fi
    ARRAYDIR=( "prod5" )
-   TDATE="g20210909"
-   ANADATE="g20201012"
-   ANADATE="g20200817"
+   TDATE="g20210921"
+   ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
-   TMVADATE="g20201012"
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -250,10 +200,6 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" "electron" "proton" )
-PARTICLE=( "gamma_cone" )
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" )
-PARTICLE=( "proton" )
 PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
 
 #####################################
