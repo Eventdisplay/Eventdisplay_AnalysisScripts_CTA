@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
 
 #####################################
 # output directory for script parameter files
@@ -185,6 +185,10 @@ then
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.South-LST.list" )
    fi
+   if [[ $P2 == *"SV0"* ]]; then
+      EDM=( "-1MST-LL" )
+      ARRAY=( "subArray.prod5.South-SV0.list" )
+   fi
    ARRAYDIR=( "prod5" )
    TDATE="g20210921"
    ANADATE="${TDATE}"
@@ -306,18 +310,19 @@ do
                       TABLE="tables_CTA-$S$M-ID0${AZ}-$TDATE"
                       if [[ $RUN == "MAKETABLES" ]]
                       then
-                              echo "Filling table $TABLE with mintel option ${LST}"
+                              echo "Filling table $TABLE with mintel option ${NIMAGESMIN}"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS $S$M ${AZ} ${LST} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS $S$M ${AZ} ${NIMAGESMIN} $QSUBOPT
                               cd ../
                               continue
     ##########################################
 # analyse with lookup tables
                        elif [[ $RUN == "ANATABLES" ]]
                        then
-                              echo "Using table $TABLE"
+                              echo "Analysing files with mintel option ${NIMAGESMIN}"
+                              echo "    using table $TABLE"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} ${NIMAGESMIN} $QSUBOPT
                               cd ../
                               continue
                         fi
