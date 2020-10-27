@@ -30,6 +30,7 @@ then
 fi
 # (prod4 effective focal lengths included in simulation file)
 COPT="$COPT -c $PEDFILE"
+# COPT="$COPT -pe"
 
 # eventdisplay command line parameter
 #OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
