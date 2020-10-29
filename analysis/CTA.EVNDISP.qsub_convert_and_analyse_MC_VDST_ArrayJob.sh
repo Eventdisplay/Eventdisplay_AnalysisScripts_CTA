@@ -28,7 +28,7 @@ if [[ $DSET == *"prod3"* ]]
 then
     COPT="-rfile ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
 fi
-# (prod4 effective focal lengths included in simulation file)
+# (prod4 and later effective focal lengths included in simulation file)
 COPT="$COPT -c $PEDFILE"
 
 # eventdisplay command line parameter
