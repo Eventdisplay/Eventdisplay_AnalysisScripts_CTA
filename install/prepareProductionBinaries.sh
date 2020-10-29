@@ -51,7 +51,10 @@ cd hessioxxx
 # FLAGS for hessioxx and Eventdisplay compilation
 if [[ $DSET = *"prod3"* ]]
 then
-    if [[ $DSET = *"paranal"* ]]
+    if [[ $DSET = *"SCT"* ]]
+    then
+        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_SC"
+    elif [[ $DSET = *"paranal"* ]]
     then
         export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
         EFLAGS="PROD3b_South"
@@ -66,7 +69,7 @@ then
 elif [[ $DSET = *"prod4"* ]]
 then
    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
-   EFLAGS="PROD5"
+   EFLAGS="PROD4b_South"
 elif [[ $DSET = *"prod5"* ]]
 then
    export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
