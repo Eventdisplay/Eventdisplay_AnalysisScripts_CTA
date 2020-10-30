@@ -27,14 +27,15 @@ COPT=""
 if [[ $DSET == *"prod3"* ]] 
 then
     COPT="-rfile ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
+    COPT="$COPT -pe"
 fi
 # (prod4 effective focal lengths included in simulation file)
 COPT="$COPT -c $PEDFILE"
-# COPT="$COPT -pe"
 
 # eventdisplay command line parameter
-#OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+# OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 OPT="-imagesquared -averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
+OPT="$OPT -writeimagepixellist"
 if [[ $DSET == *"prod3"* ]] 
 then
     # needs to be the same as used for IPR graph preparation
