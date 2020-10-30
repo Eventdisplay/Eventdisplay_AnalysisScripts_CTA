@@ -13,6 +13,7 @@ then
     echo
     exit
 fi
+set -e
 
 DSET="$1"
 TDIR=$(pwd)
@@ -53,7 +54,8 @@ if [[ $DSET = *"prod3"* ]]
 then
     if [[ $DSET = *"SCT"* ]]
     then
-        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_SC"
+        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+        EFLAGS="PROD3b_SCT"
     elif [[ $DSET = *"paranal"* ]]
     then
         export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
@@ -69,7 +71,7 @@ then
 elif [[ $DSET = *"prod4"* ]]
 then
    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
-   EFLAGS="PROD4b_South"
+   EFLAGS="PROD4b"
 elif [[ $DSET = *"prod5"* ]]
 then
    export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
