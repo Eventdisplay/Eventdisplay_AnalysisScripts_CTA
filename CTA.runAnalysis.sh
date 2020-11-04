@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_99"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
@@ -117,7 +117,8 @@ then
 elif [[ $P2 == "prod3b-N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
-   ARRAY="subArray.prod3b.North.list"
+   SITE=( "prod3b-LaPalma-20deg-NSB1x" )
+   ARRAY="subArray.prod3b.North.NSB1x.list"
    EDM=( "-sq2-LL" )
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "prod3b-N40deg" ]]
@@ -137,9 +138,16 @@ then
 # for other prod4(b) SST data sets:
 # - set file lists correctly
 # - prepare and install software (each SST type is a DSET)
-   SITE=( "prod4-SST-paranal-20deg-sst-astri-chec-s" )
+   SITE=( "prod4b-SST-paranal20deg" )
+   EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod4-SST.list" )
+   ARRAY=( "subArray.prod4-SST-A.list" )
    ARRAYDIR=( "prod4" )
+   TDATE="g20201021"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${TMVADATE}"
+####################################
 ###############################################################
 ###############################################################
 # PROD5 Analysis
@@ -154,7 +162,8 @@ then
    fi
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-   ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+   ARRAY=( "subArray.prod5.North-XST.list" )
+   ARRAY=( "subArray.prod5.North-BL.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
    fi
@@ -179,11 +188,18 @@ then
    fi
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
+   ARRAY=( "subArray.prod5.South-Opt" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.South-LST.list" )
+   fi
+   if [[ $P2 == *"SST"* ]]; then
+       ARRAY=( "subArray.prod5.South-SST.list" )
+   fi
+   if [[ $P2 == *"1ST"* ]]; then
+       ARRAY=( "subArray.prod5.South-1ST.list" )
    fi
    if [[ $P2 == *"SV0"* ]]; then
       EDM=( "-1MST-LL" )
@@ -193,6 +209,7 @@ then
    TDATE="g20210921"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
+   TMVADATE="g20201021"
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -204,7 +221,7 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 
 #####################################
 # cut on number of images
