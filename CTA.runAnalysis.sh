@@ -188,7 +188,7 @@ then
    fi
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
-   ARRAY=( "subArray.prod5.South-Opt" )
+   ARRAY=( "subArray.prod5.South-Opt.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
