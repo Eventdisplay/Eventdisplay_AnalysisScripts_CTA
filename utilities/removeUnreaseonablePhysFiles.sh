@@ -18,8 +18,14 @@ fi
 
 OPTION="-delete -print"
 
+# North LST arrays
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" -print -delete
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" -print -delete
 find "$1" -name "*NIM3LST3*2LSTs00MSTs-*" -print -delete
+# South LST arrays
+find "$1" -name "*NIM4LST4*3LSTs00MSTs00SSTs-*" -print -delete
+find "$1" -name "*NIM4LST4*2LSTs00MSTs00SSTs-*" -print -delete
+find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs-*" -print -delete
+
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" -print -delete
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" -print -delete
