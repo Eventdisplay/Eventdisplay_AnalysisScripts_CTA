@@ -15,13 +15,13 @@ Main directory for all software and analysis products:
 ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}
 ```
 
-$DSET is the name of the data set to be analysed, e.g. *prod3b-paranal20deg_SCT-sq08-LL*
+$DSET is the name of the data set to be analysed, e.g. *prod3b-paranal20deg_SCT-sq08-LL*. 
 
 The following subdirectories are expected:
 
 1. *Eventdisplay_AnalysisScripts_CTA* - the directory with this repository
 2. *FileList_prod3b* - directory with the lists for the simulation files (see below)
-3. *{DSET}* - the directory with all software and analysis products (several subdirectories will be prepared from the analysis scripts
+3. *{DSET}* - the directory with all software and analysis products (several subdirectories will be prepared from the analysis scripts)
 
 ### Installation of scripts and Eventdisplay
 
@@ -48,7 +48,7 @@ This installs the following packages:
 - Eventdisplay analysis files
 - Eventdisplay code
 
-Note that only the data set name needs to be given here (e.g., *prod3b-paranal20deg_SCT-sq08-LL*)
+Note that only the data set name needs to be given here (e.g., *prod3b-paranal20deg_SCT-sq08-LL*), and not a full path name.
 
 ### Path setting
 
@@ -63,13 +63,28 @@ source ./setSoftwarePaths.sh ${DSET}
 
 For the first stage of the analysis, a list with file names (full paths) for all MC input files needs to be filled.
 
-Expected directory structure:
+Expected directory structure (first level):
 
 1. prod3b: *${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_prod3b/*
+2. prod5: *${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_prod5/*
 
+Second level directory structure expects a substring of ${DSET} (without the analysis version number). E.g. for the example of *prod3b-paranal20deg_SCT-sq08-LL*, it should be only *prod3b-paranal20deg_SCT*.
 
+In this directory, the list of files for the different particle types are:
 
+- *gamma_cone.list*
+- *gamma_onSource.list*
+- *electron.list*
+- *proton.list*
 
+e.g., 
+```
+/lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_0deg_run945___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_0deg_run2962___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_180deg_run2634___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_180deg_run4722___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+/lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_0deg_run2762___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
+```
 
 
 ## Utilities
