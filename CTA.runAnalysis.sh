@@ -126,6 +126,13 @@ then
    SITE=( "prod3b-LaPalma-40deg" )
    ARRAY="subArray.prod3b.North.list"
    ARRAYDIR=( "prod3b" )
+elif [[ $P2 == "prod3b-S20deg-SCT" ]]
+then
+   prod3b-paranal20deg_SCT-sq08-LL
+   SITE=( "prod3b-paranal20deg_SCT" )
+   ARRAY="subArray.prod3b.South-SCT.list"
+   ARRAYDIR=( "prod3b" )
+   EDM=( "-sq08-LL" )
 ###############################################################
 # PROD4 Analysis
 elif [[ $P2 == "prod4-S20deg-MST" ]]
@@ -188,7 +195,10 @@ then
    fi
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "subArray.prod5.South-Opt.v2.list" )
    ARRAY=( "subArray.prod5.South-Opt.list" )
+   ARRAY=( "subArray.prod5.South-XST.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -222,6 +232,7 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
+PARTICLE=( "gamma_onSource" )
 
 #####################################
 # cut on number of images
@@ -375,6 +386,7 @@ do
                   echo "WRITING PARAMETERFILE $PARA"
                   EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
                   EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas/$EFFDIR/"
+                  EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas_firstRun/$EFFDIR/"
                   echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR $EFFDIR" >> "$PARA"
