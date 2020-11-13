@@ -86,6 +86,36 @@ e.g.,
 /lustre/fs24/group/cta/prod3b/CTA-ProdX-Download-DESY/Prod3b_Paranal_20deg_HB9//electron/electron_20deg_0deg_run2762___cta-prod3-sct_desert-2150m-Paranal-SCT.simtel.gz
 ```
 
+## Running the analysis
+
+Central execution script is [CTA.runAnalysis.sh](CTA.runAnalysis.sh). In the best case, no changes are required to this script.
+
+e.g., to run the first step of the analysis with evndisp, do
+```
+./CTA.runAnalysis.sh prod3b-S20deg-SCT EVNDISP 0 2 2 2 2
+```
+(or set any other data set, as outlined in ./CTA.runAnalysis.sh)
+
+The script does the following:
+
+- read a list of arrays from a subdirectory specificed for your data set in ./CTA.runAnalysis.sh (e.g., prod3b/subArray.prod3b.South-SCT.list)
+- execute scripts to submit jobs from the ./analysis directory
+- all output products are written to *${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}*
+
+On the list of arrays:
+- arrays are defined by the telescope numbering as defined during the simulations.
+- array layout definition files can be found in *$$CTA_EVNDISP_AUX_DIR}/DetectorGeometry*
+
+For a complete analysis, one needs to cycle through all reconstruction steps in the following sequence:
+
+1. EVNDISP - calibration and image analysis
+2. MAKETABLES and DISPBDT - lookup table filling and disp BDT training (can be done in parallel)
+3. ANATABLES - stereo analysis using lookup tables and disp BDTs
+4. TRAIN - train BDTs for gamma/hadron separation
+5. ANGRES - determine angular resolution for 40% signal efficiency
+6. QC - determine data rates after quality cuts (used for cut optimisation)
+7. CUTS - optimise gamma/hadron cuts and calculate instrument response functions
+8. PHYS - fill instrument response functions
 
 ## Utilities
 
