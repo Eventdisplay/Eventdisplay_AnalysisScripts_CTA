@@ -55,7 +55,7 @@ Note that only the data set name needs to be given here (e.g., *prod3b-paranal20
 Before running any scripts, the correct paths for all executables and libraries needs to be set.
 
 ```
-cd ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}
+cd ${CTA_USER_DATA_DIR}/analysis/AnalysisData/Eventdisplay_AnalysisScripts_CTA
 source ./setSoftwarePaths.sh ${DSET}
 ```
 
