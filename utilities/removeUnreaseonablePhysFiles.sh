@@ -29,3 +29,9 @@ find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs-*" -print -delete
 
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" -print -delete
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" -print -delete
+
+# South SST arrays only
+find "$1" -name "*ID2*-[0-9][0-9]SSTs.*" -print -delete
+
+# South MST arrays only
+find "$1" -name "*ID3*-[0-9][0-9]MSTs-MSTF*" -print -delete
