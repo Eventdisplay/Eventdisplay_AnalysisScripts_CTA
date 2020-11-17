@@ -114,7 +114,7 @@ do
 	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
 	 NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
 	 echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
-         NJOBTOT=$(( NTMPLIST / FILEN + 1))
+         NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
          echo "total number of jobs: $NJOBTOT"
 
 # output file name for mscw_energy
