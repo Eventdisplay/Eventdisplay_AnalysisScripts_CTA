@@ -10,18 +10,23 @@ Run scripts for CTA. Allows to efficiently run all analysis steps starting from 
 
 All scripts expect the following setup for directories. Any deviation from this will break the scripts.
 
-Main directory for all software and analysis products:
+Main directory for all analysis products:
 ```
 ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}
+```
+Main directory for all software and auxilaury files:
+```
+${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}
 ```
 
 $DSET is the name of the data set to be analysed, e.g. *prod3b-paranal20deg_SCT-sq08-LL*. 
 
 The following subdirectories are expected:
 
-1. *Eventdisplay_AnalysisScripts_CTA* - the directory with this repository
-2. *FileList_prod3b* - directory with the lists for the simulation files (see below)
-3. *{DSET}* - the directory with all software and analysis products (several subdirectories will be prepared from the analysis scripts)
+1. *${CTA_USER_WORK_DIR}/analysis/AnalysisData/Eventdisplay_AnalysisScripts_CTA* - the directory with this repository
+2. *${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_prod3b* - directory with the lists for the simulation files (see below)
+3. *${CTA_USER_DATA_DIR}/analysis/AnalysisData/{DSET}* - the directory with all analysis products (several subdirectories will be prepared from the analysis scripts)
+4. *${CTA_USER_WORK_DIR}/analysis/AnalysisData/{DSET}* -  the directory with all and auxiliary files
 
 ### Installation of scripts and Eventdisplay
 

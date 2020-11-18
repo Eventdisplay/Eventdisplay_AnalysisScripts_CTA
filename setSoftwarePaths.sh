@@ -19,9 +19,11 @@ fi
 
 TDIR=$(pwd)
 
-# main working directory
+# main working directory (logs and code)
 DSET="${1}"
-MAINDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+WORKDIR="${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}"
+# main data results
+DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
 
 # ROOT installation expected
 if [[ -z ${ROOTSYS} ]]; then
@@ -35,13 +37,13 @@ ROOTCONF=`root-config --libdir`
 export LD_LIBRARY_PATH=${ROOTCONF}
 
 # EVNDISPSYS settings
-if [[ -d ${MAINDIR}/code ]]; then
-    EVNDISPSYS="${MAINDIR}/code"
-elif [[ -d ${MAINDIR}/Eventdisplay/ ]]; then
-    EVNDISPSYS="${MAINDIR}/Eventdisplay/"
+if [[ -d ${WORKDIR}/code ]]; then
+    EVNDISPSYS="${WORKDIR}/code"
+elif [[ -d ${WORKDIR}/Eventdisplay/ ]]; then
+    EVNDISPSYS="${WORKDIR}/Eventdisplay/"
 else
    echo "Error: directory with software not found"
-   echo ${MAINDIR}
+   echo ${WORKDIR}
    return
 fi
 
@@ -49,7 +51,7 @@ export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
 if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then
     export HESSIOSYS=${EVNDISPSYS}/hessioxxx
 else
-    export HESSIOSYS=${MAINDIR}/hessioxxx
+    export HESSIOSYS=${WORKDIR}/hessioxxx
 fi
 export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
 
@@ -59,7 +61,7 @@ then
 fi
 export ROOT_INCLUDE_PATH=${EVNDISPSYS}/inc
 
-export CTA_EVNDISP_AUX_DIR=${MAINDIR}/Eventdisplay_AnalysisFiles_CTA/
-export CTA_USER_LOG_DIR="${MAINDIR}/LOGS/"
+export CTA_EVNDISP_AUX_DIR=${WORKDIR}/Eventdisplay_AnalysisFiles_CTA/
+export CTA_USER_LOG_DIR="${WORKDIR}/LOGS/"
 
 export SOFASYS=${EVNDISPSYS}/sofa
