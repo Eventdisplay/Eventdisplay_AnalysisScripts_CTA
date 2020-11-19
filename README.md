@@ -14,7 +14,7 @@ Main directory for all analysis products:
 ```
 ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}
 ```
-Main directory for all software and auxilaury files:
+Main directory for all software and auxilaury files plus all log files from the analysis:
 ```
 ${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}
 ```
