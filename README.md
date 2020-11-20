@@ -37,7 +37,7 @@ Install *Eventdisplay_AnalysisScripts_CTA* from github and select the correspond
 ```
 git clone https://github.com/Eventdisplay/Eventdisplay_AnalysisScripts_CTA.git
 cd Eventdisplay_AnalysisScripts_CTA
-git checkout -b prod5-v08
+git checkout prod5-v08
 ```
 
 Install and compile eventdisplay:
