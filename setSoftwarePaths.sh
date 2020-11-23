@@ -38,9 +38,9 @@ export LD_LIBRARY_PATH=${ROOTCONF}
 
 # EVNDISPSYS settings
 if [[ -d ${WORKDIR}/code ]]; then
-    EVNDISPSYS="${WORKDIR}/code"
+    export EVNDISPSYS="${WORKDIR}/code"
 elif [[ -d ${WORKDIR}/Eventdisplay/ ]]; then
-    EVNDISPSYS="${WORKDIR}/Eventdisplay/"
+    export EVNDISPSYS="${WORKDIR}/Eventdisplay/"
 else
    echo "Error: directory with software not found"
    echo ${WORKDIR}
