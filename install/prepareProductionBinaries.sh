@@ -29,7 +29,7 @@ echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
 git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
-EVNDISPSYS="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/code/"
+export EVNDISPSYS="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/code/"
 rm -rf $EVNDISPSYS
 mkdir -p $EVNDISPSYS
 echo "Software installation into $EVNDISPSYS"
