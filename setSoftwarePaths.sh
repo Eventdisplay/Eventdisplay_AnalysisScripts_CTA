@@ -62,6 +62,7 @@ fi
 export ROOT_INCLUDE_PATH=${EVNDISPSYS}/inc
 
 export CTA_EVNDISP_AUX_DIR=${WORKDIR}/Eventdisplay_AnalysisFiles_CTA/
+export OBS_EVNDISP_AUX_DIR=${CTA_EVNDISP_AUX_DIR}
 export CTA_USER_LOG_DIR="${WORKDIR}/LOGS/"
 
 export SOFASYS=${EVNDISPSYS}/sofa
