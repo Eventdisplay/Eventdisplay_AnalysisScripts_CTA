@@ -70,7 +70,8 @@ do
          echo "F $F"
          G=`basename $F`
          echo "G $G"
-         dccp $F $TMPDIR"/"$G
+         #dccp $F $TMPDIR"/"$G
+         cp -v -f /pnfs/ifh.de/$F $TMPDIR"/"$G
     else
          cp -v -f $F $TMPDIR"/"
     fi
