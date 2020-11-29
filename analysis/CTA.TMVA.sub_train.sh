@@ -219,13 +219,14 @@ do
 # use first file
    set -- $SFIL1
    # check the file exists - otherwise continue
-   if [ -z "$1" ]
+   if [ -z "$1" ] || [ ! -e "$1" ]
    then
        echo "No training file found - continuing"
        echo $1
-       continue
+       exit
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
+   echo $1
    NTELTYPE=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
@@ -295,7 +296,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
          cat "${TEMPPAR}" >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
-
+  
          sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
@@ -306,9 +307,11 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
+     #MEM=8000M
      MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
+     #qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
      qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
   rm -f "${TEMPPAR}"
