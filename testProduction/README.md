@@ -15,10 +15,21 @@ e.g.,
 ./test-CTA.DISPTRAINING.sh prod5b-LaPalma-20deg-sq08-LL subArray.prod5b.North-test2.list
 ```
 
+## Testing TMVA stage
+
+This script:
+
+- tests for existence of BDT root files
+- tests for missing BDT XML files
+
+e.g.,
+```
+./test-TMVA.sh prod5b-LaPalma-20deg-sq08-LL subArray.prod5b.North-test2.list 0
+```
 
 ## Testing effective area stage
 
-This script
+This script:
 
 - counts number of linked mscw_energy files used as input to effective area stage (observe the numbers)
 - test for existence of effective area output files
