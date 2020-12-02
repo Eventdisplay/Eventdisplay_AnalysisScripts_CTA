@@ -24,7 +24,7 @@ This script:
 
 e.g.,
 ```
-./test-TMVA.sh prod5b-LaPalma-20deg-sq08-LL subArray.prod5b.North-test2.list 0
+./test-CTA.TMVA.sh prod5b-LaPalma-20deg-sq08-LL subArray.prod5b.North-test2.list 0
 ```
 
 ## Testing effective area stage
