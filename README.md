@@ -122,6 +122,11 @@ For a complete analysis, one needs to cycle through all reconstruction steps in 
 7. CUTS - optimise gamma/hadron cuts and calculate instrument response functions
 8. PHYS - fill instrument response functions
 
+## Testing
+
+Running the analysis is complex and involves the reading and creating of many files (possibly >100k files).
+Testing the results for consistent is important; please look into the testProduction directory for testing scripts.
+
 ## Utilities
 
 Set links to EVNDISP production directory:
