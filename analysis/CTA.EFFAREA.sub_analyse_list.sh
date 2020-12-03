@@ -87,7 +87,6 @@ OBSTIME=`grep OBSERVINGTIME_H $ANAPAR | awk {'print $2'}`
 #arrays
 VARRAY=`awk '{printf "%s ",$0} END {print ""}' $SUBAR`
 
-
 #################################################
 # directories
 DATE=`date +"%y%m%d"`

@@ -503,7 +503,7 @@ then
      ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
      echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
      rm -f $LLOG
-     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
+     ${EVNDISPSYS}/bin/logFile writeRateLog $ODIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      # cone
      LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
      rm -f $LLOG
@@ -515,7 +515,7 @@ then
      # off-axis std binning
          ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $ODIR $AXDIR > $LLOG
      fi
-     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
+     ${EVNDISPSYS}/bin/logFile writeRateLog $ODIR/ParticleNumbers.${ARRAY}.00.root $LLOG
      rm -f $LLOG
 fi
 
