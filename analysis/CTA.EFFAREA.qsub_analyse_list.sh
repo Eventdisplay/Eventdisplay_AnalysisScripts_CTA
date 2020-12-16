@@ -380,6 +380,7 @@ do
              -e "s|NTELTYPELST|$NCUTLST|" \
              -e "s|NTELTYPEMST|$NCUTMST|" \
              -e "s|NTELTYPESST|$NCUTSST|" \
+             -e "s|NTELTYPESCMST|$NCUTSCMST|" \
              -e "s|TELTYPESLST|$TELTYPESLST|" \
              -e "s|TELTYPESMST|$TELTYPESMST|" \
              -e "s|TELTYPESSST|$TELTYPESSST|" \
