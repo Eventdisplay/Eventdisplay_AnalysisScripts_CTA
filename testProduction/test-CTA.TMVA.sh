@@ -25,7 +25,9 @@ NOFF=${#OFFMEA[@]}
 # number of energy bins
 NBINS="9"
 # directory names
-DIRN="ID${3}-NIM3LST3MST3SST3SCMST3-g20201021"
+DIRN="ID${3}-NIM3LST3MST3SST3SCMST3-g20201203"
+DIRN="ID${3}-NIM2LST2MST2SST2SCMST2-g20201021"
+DIRN="ID${3}-NIM4LST4MST4SST4SCMST4-g20201021"
 # (end of) hardwired values
 ###########################################
 
