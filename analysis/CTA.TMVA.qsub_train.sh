@@ -18,7 +18,7 @@ rm -f $PFIL.log
 
 # this file is deleted after successful 
 # completion of training
-touch ${PFIL}.RUNNING
+touch ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
 
 echo ${PFIL}.runparameter
 
@@ -38,11 +38,11 @@ if [ -e ${PFIL}.log ]; then
    TSTRING=$(tail -n 1 ${PFIL}.log | grep Complete)
    echo "$TSTRING"
    if [ ! -z "$TSTRING" ]; then
-      rm -f ${PFIL}.RUNNING
+      rm -f ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
    fi
    TSTRING=$(tail -n 3 ${PFIL}.log | grep "not enough")
    if [ ! -z "$TSTRING" ]; then
-      rm -f ${PFIL}.RUNNING
+      rm -f ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
    fi
 fi
 

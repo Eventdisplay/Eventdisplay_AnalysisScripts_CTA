@@ -170,7 +170,6 @@ then
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
    ARRAY=( "subArray.prod5.North-XST.list" )
-   ARRAY=( "subArray.prod5.North-BL.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
    fi
@@ -182,6 +181,25 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
+####################################
+# PROD5 Analysis
+# prod5-N
+elif [[ $P2 == "prod5b-N"* ]]
+then
+   SITE=( "prod5b-LaPalma-20deg" )
+   EDM=( "-sq08-LL" )
+   ARRAY=( "subArray.prod5b.North.list" )
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.North-LST.list" )
+   fi
+   if [[ $P2 == *"XST"* ]]; then
+       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+   fi
+   ARRAYDIR=( "prod5" )
+   TDATE="g20201203"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -196,7 +214,6 @@ then
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   ARRAY=( "subArray.prod5.South-Opt.v2.list" )
    ARRAY=( "subArray.prod5.South-Opt.list" )
    ARRAY=( "subArray.prod5.South-XST.list" )
    if [[ $P2 == *"Hyper"* ]]; then
@@ -232,7 +249,6 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
-PARTICLE=( "gamma_onSource" )
 
 #####################################
 # cut on number of images
@@ -386,7 +402,6 @@ do
                   echo "WRITING PARAMETERFILE $PARA"
                   EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
                   EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas/$EFFDIR/"
-                  EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/EffectiveAreas_firstRun/$EFFDIR/"
                   echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR $EFFDIR" >> "$PARA"
@@ -447,11 +462,9 @@ do
                      then
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
-                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                      else
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
-                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]
