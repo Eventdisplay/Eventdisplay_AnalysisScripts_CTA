@@ -471,22 +471,48 @@ do
       echo $iCFIL
       echo $PNF
 
+      minimumsize=500
+      #### temp
+      # only run when analysis needs to be repeated
+      # require file size of at least 1 M
+      #if [[ -e $OFIX.root ]]; then
+      #    DS=$(du -k $OFIX.root | cut -f 1)
+      #    if [[ ${DS} -ge $minimumsize ]]; then
+      #        continue
+      #    fi
+      #fi
+      #### (end) temp
+
   ##############################
   # run effective area code
       ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
+
+      # cross check if run was successfull
+      # (expect simply > 800k)
+      DS=$(du -k $OFIX.root | cut -f 1)
+      if [[ ${DS} -le $minimumsize ]]; then
+          touch $OFIX.SMALLFILE
+          continue
+      fi
 
   ##############################
   #  cleanup
   # (reduce number of files)
 
-      ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
-      rm -f $MSCF
+      if [[ -e $OFIX.root ]] && [[ -e $MSCF ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
+          rm -f $MSCF
+      fi
 
-      ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
-      rm -f $iCFIL
+      if [[ -e $OFIX.root ]] && [[ -e $iCFIL ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
+          rm -f $iCFIL
+      fi
 
-      ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
-      rm -f $OFIX.log
+      if [[ -e $OFIX.root ]] && [[ -e $OFIX.log ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
+          rm -f $OFIX.log
+      fi
 
    done
 done
