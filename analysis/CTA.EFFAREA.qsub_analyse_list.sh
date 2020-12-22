@@ -471,7 +471,7 @@ do
       echo $iCFIL
       echo $PNF
 
-      minimumsize=500
+      minimumsize=300
       #### temp
       # only run when analysis needs to be repeated
       # require file size of at least 1 M

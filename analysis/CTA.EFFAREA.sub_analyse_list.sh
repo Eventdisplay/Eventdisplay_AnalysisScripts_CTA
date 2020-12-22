@@ -5,6 +5,7 @@
 # particle names and directories fixed by CTA setup
 #
 #
+set -e
 
 if [ $# -lt 6 ] 
 then
@@ -119,8 +120,18 @@ do
 ###########################################
 # prepare cut files
    CCUT=$ODIR/$CFIL.$ARRAY
-   cp $CDIR/$CFIL.gamma.dat $CCUT.gamma.dat
-   cp $CDIR/$CFIL.CRbck.dat $CCUT.CRbck.dat
+   if [[ -e $CDIR/$CFIL.gamma.dat ]]; then
+       cp -f $CDIR/$CFIL.gamma.dat $CCUT.gamma.dat
+   else
+       echo "Gamma/hadron cut files not found: $CDIR/$CFIL.gamma.dat"
+       exit 1
+   fi
+   if [[ -e $CDIR/$CFIL.CRbck.dat ]]; then
+       cp -f $CDIR/$CFIL.CRbck.dat $CCUT.CRbck.dat
+   else
+       echo "Gamma/hadron cut files not found: $CDIR/$CFIL.CRbck.dat"
+       exit 1
+   fi
 
 ###########################################
 # prepare run script
