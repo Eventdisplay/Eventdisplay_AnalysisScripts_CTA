@@ -24,6 +24,7 @@ ANADATE="g20210921"
 # effarea dates
 EFFDATE="g20210921"
 # observation time
+OBSTIME="30m"
 OBSTIME="50h"
 # Number of off-axis bins
 NWBINS=5
@@ -57,7 +58,7 @@ if  [[ -e ${FILENAME}.SMALLFILE ]]; then
        FILELOGSTATUS="FALSE"
        FFN=$(basename ${FILENAME}.SMALLFILE) 
        DFN=$(dirname ${FILENAME}.SMALLFILE)
-       echo "Error: effective area log file ${FFN} in ${DFN}"
+       echo "Error: effective area small file ${FFN} in ${DFN}"
     fi
 fi
 }
@@ -98,7 +99,7 @@ do
      #################################################
      # check output of effective area stage
      #for E in AngularResolution QualityCuts001CU BDT.50h-V3.${EFFDATE}
-     for E in AngularResolution
+     for E in BDT.${OBSTIME}-V3.${EFFDATE}
      do
          #################### 
          # multiplicity loop 
@@ -159,10 +160,11 @@ do
                   fi
                   rm -f ../prod5/runlist.testRedo
                   echo "$A" > ../prod5/runlist.testRedo
-                  cd ../
                   echo "REDO ${A}"
+                  cd ../
                   echo "RERUNNING ./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}"
-                  ./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
+                  #./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
+                  #./CTA.runAnalysis.sh.testRedo prod5-S-sq08 QC ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
                   cd ./testProduction
               fi
             done
