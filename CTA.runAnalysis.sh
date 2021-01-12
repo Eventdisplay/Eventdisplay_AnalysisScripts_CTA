@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -170,6 +170,8 @@ then
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
    ARRAY=( "subArray.prod5.North-XST.list" )
+   # prod5-prod5b comparision
+   ARRAY=( "subArray.prod5-prod5b.North.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
    fi
@@ -189,11 +191,12 @@ then
    SITE=( "prod5b-LaPalma-20deg" )
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5b.North.list" )
+   ARRAY=( "subArray.prod5-prod5b.North.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    if [[ $P2 == *"XST"* ]]; then
-       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
+       ARRAY=( "subArray.prod5.North-XST.list" )
    fi
    ARRAYDIR=( "prod5" )
    TDATE="g20201203"
@@ -214,8 +217,11 @@ then
    EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   ARRAY=( "subArray.prod5.South-Opt.list" )
    ARRAY=( "subArray.prod5.South-XST.list" )
+   ARRAY=( "subArray.prod5.South-Opt.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "subArray.prod5.South-Opt-15MSTs50SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Opt-13MSTs30SSTs.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -264,6 +270,7 @@ OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" )
+OBSTIME=( "30m" )
 
 echo "$RUN" "$SITE"
 
@@ -405,6 +412,8 @@ do
                   echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR $EFFDIR" >> "$PARA"
+                  EFFBDIR=EffectiveArea-50h-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
+                  echo "EFFAREASUBBASEDIR $EFFBDIR" >> "$PARA"
                   echo "RECID $ID" >> "$PARA"
                   echo "NIMAGESMIN $NIMAGESMIN" >> "$PARA"
                   echo "NLST $LST" >> "$PARA"
@@ -434,7 +443,7 @@ do
 # IRFs: effective areas after quality cuts
                   elif [[ $RUN == "QC" ]]
                   then
-                    if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
+                    if [[ "$MST" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
                     # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
@@ -447,7 +456,7 @@ do
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
-                    if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
+                    if [[ "$MST" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
