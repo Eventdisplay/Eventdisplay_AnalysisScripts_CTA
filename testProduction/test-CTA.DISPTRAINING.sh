@@ -42,12 +42,14 @@ do
           FDIR=${DDIR}/${BDT}/${MCAZ}/
           if [[ ! -d ${DDIR} ]]; then
              echo "ERROR: directory with BDT disp data not found: ${DDIR}"
+             echo "REDO ${A}"
              continue
           fi
           # number of XML files
           NXML=$(ls -1 ${FDIR}/*.xml | wc -l)
           if [[ $NXML == "0" ]]; then
              echo "ERROR: no XML files found for ${BDT} at ${MCAZ}"
+             echo "REDO ${A}"
           else
               echo "INFO: number of XML files (=teltypes): $NXML (for ${BDT} at ${MCAZ})"
           fi
@@ -57,6 +59,7 @@ do
           else
              if [[ ${NXML} != ${NXMLF} ]]; then
                 echo "ERROR: different number of XML files (${NXML} vs ${NXMLF}) for ${BDT} at ${MCAZ} (reference is BDTDisp,0deg)"
+                echo "REDO ${A}"
              fi
           fi
           # test that XML files are note of zero length
@@ -65,6 +68,7 @@ do
           do
              if [[ ! -s ${X} ]]; then
                 echo "ERROR: XML file of zero length: ${X}"
+                echo "REDO ${A}"
              fi
           done
         done
