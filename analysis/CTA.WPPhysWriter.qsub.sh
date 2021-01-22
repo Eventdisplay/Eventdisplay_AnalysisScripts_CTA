@@ -38,7 +38,7 @@ then
    if [[ -z ${DE} ]] && [[ -z ${DF} ]]; then
        bzip2 -f $OXUTNAME.$AXRRAY.$OXBSTIME.log
        # root file
-       DROOT=$(cat $OXUTNAME.$AXRRAY.$OXBSTIME.log | grep grep "writing histograms" | awk '{print $4}')
+       DROOT=$(cat $OXUTNAME.$AXRRAY.$OXBSTIME.log | grep "writing histograms" | awk '{print $4}')
        if [[ -e ${DROOT} ]]; then
            $EVNDISPSYS/bin/logFile IRFLog $OXUTNAME.$AXRRAY.$OXBSTIME.log
        fi
