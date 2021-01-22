@@ -47,7 +47,7 @@ echo "Telescope multiplicities: LST $LST MST $MST SST $SST SCMST $SCMST"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -117,7 +117,8 @@ then
 elif [[ $P2 == "prod3b-N20deg" ]]
 then
    SITE=( "prod3b-LaPalma-20deg" )
-   ARRAY="subArray.prod3b.North.list"
+   SITE=( "prod3b-LaPalma-20deg-NSB1x" )
+   ARRAY="subArray.prod3b.North.NSB1x.list"
    EDM=( "-sq2-LL" )
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "prod3b-N40deg" ]]
@@ -125,6 +126,13 @@ then
    SITE=( "prod3b-LaPalma-40deg" )
    ARRAY="subArray.prod3b.North.list"
    ARRAYDIR=( "prod3b" )
+elif [[ $P2 == "prod3b-S20deg-SCT" ]]
+then
+   prod3b-paranal20deg_SCT-sq08-LL
+   SITE=( "prod3b-paranal20deg_SCT" )
+   ARRAY="subArray.prod3b.South-SCT.list"
+   ARRAYDIR=( "prod3b" )
+   EDM=( "-sq08-LL" )
 ###############################################################
 # PROD4 Analysis
 elif [[ $P2 == "prod4-S20deg-MST" ]]
@@ -137,9 +145,16 @@ then
 # for other prod4(b) SST data sets:
 # - set file lists correctly
 # - prepare and install software (each SST type is a DSET)
-   SITE=( "prod4-SST-paranal-20deg-sst-astri-chec-s" )
+   SITE=( "prod4b-SST-paranal20deg" )
+   EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod4-SST.list" )
+   ARRAY=( "subArray.prod4-SST-A.list" )
    ARRAYDIR=( "prod4" )
+   TDATE="g20201021"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${TMVADATE}"
+####################################
 ###############################################################
 ###############################################################
 # PROD5 Analysis
@@ -147,50 +162,47 @@ then
 # prod5-N-moon (NSB5x)
 elif [[ $P2 == "prod5-N"* ]]
 then
-   TDATE="g20200909"
-   if [[ $P2 == *"sq2"* ]]; then
-       ANADATE="${TDATE}"
-       TMVADATE="${ANADATE}"
-       EFFDATE="${TMVADATE}"
-       EDM=( "-sq2-LL" )
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-       ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-       ARRAY=( "subArray.prod5.North-MSTN-Arrays.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.list" )
-       fi
-   fi
-   if [[ $P2 == *"sq07"* ]]; then
-       # accident in naming of dates
-       ANADATE="g20200930-TWdispE"
-       TMVADATE="${ANADATE}-TMVAbins"
-       EFFDATE="${TMVADATE}"
-       EDM=( "-sq07-LL" )
-       ARRAY=( "subArray.prod5.North-XST.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LSTX.list" )
-       fi
-   else
-       echo "DSet not found: $P2"
-       exit
-   fi
-   if [[ $P2 == *"VTS"* ]]; then
-       ARRAY=( "subArray.prod5.North-VTS.list" )
-   fi
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-LaPalma-20deg-NSB5x" )
-       ANADATE="20201012"
-       TMVADATE="${ANADATE}"
-       EFFDATE="${TMVADATE}"
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-       ARRAY=( "subArray.prod5.North-BL.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.North-LST.list" )
-       fi
    else
        SITE=( "prod5-LaPalma-20deg" )
    fi
+   EDM=( "-sq08-LL" )
+   ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
+   ARRAY=( "subArray.prod5.North-XST.list" )
+   # prod5-prod5b comparision
+   ARRAY=( "subArray.prod5-prod5b.North.list" )
+   if [[ $P2 == *"Hyper"* ]]; then
+       ARRAY=( "subArray.prod5.North-Hyper.list" )
+   fi
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.North-LST.list" )
+   fi
    ARRAYDIR=( "prod5" )
+   TDATE="g20201021"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${TMVADATE}"
+####################################
+# PROD5 Analysis
+# prod5-N
+elif [[ $P2 == "prod5b-N"* ]]
+then
+   SITE=( "prod5b-LaPalma-20deg" )
+   EDM=( "-sq08-LL" )
+   ARRAY=( "subArray.prod5b.North.list" )
+   ARRAY=( "subArray.prod5-prod5b.North.list" )
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.North-LST.list" )
+   fi
+   if [[ $P2 == *"XST"* ]]; then
+       ARRAY=( "subArray.prod5.North-XST.list" )
+   fi
+   ARRAYDIR=( "prod5" )
+   TDATE="g20201203"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -198,47 +210,39 @@ then
 elif [[ $P2 == "prod5-S"* ]]
 then
    if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-Paranal-20deg-Moon" )
+       SITE=( "prod5-Paranal-20deg-NSB5x" )
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
-   EDM=( "-h05-LL" )
+   EDM=( "-sq08-LL" )
    ARRAY=( "subArray.prod5.South.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "subArray.prod5.South-XST.list" )
+   ARRAY=( "subArray.prod5.South-Opt.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "subArray.prod5.South-Opt-15MSTs50SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Opt-13MSTs30SSTs.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
-       EDM=( "-sq2-LL" )
-   elif [[ $P2 ==  *"sq2"* ]]; then
-       EDM=( "-sq2-LL" )
-       ARRAY=( "subArray.prod5.South-BGR.list" )
-       ARRAY=( "subArray.prod5.South.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.South-LST.list" )
-       fi
-   elif [[ $P2 ==  *"sq07"* ]]; then
-       EDM=( "-sq07-LL" )
-       ARRAY=( "subArray.prod5.South-XST.list" )
-       ARRAY=( "subArray.prod5.South-TS.list" )
-       if [[ $P2 == *"LST"* ]]; then
-           ARRAY=( "subArray.prod5.South-LST.list" )
-       fi
-   elif [[ $P2 ==  *"sqS7"* ]]; then
-       EDM=( "-sqS7-LL" )
-       ARRAY=( "subArray.prod5.South-Hyper.list" )
-       ARRAY=( "subArray.prod5.South.list" )
-   else
-       ARRAY=( "subArray.prod5.South-BGR.list" )
    fi
-   if [[ $P2 == *"moon"* ]]; then
-       SITE=( "prod5-Paranal-20deg-NSB5x" )
-       ARRAY=( "subArray.prod5.South-Hyper.list" )
-       ARRAY=( "subArray.prod5.South.list" )
+   if [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.South-LST.list" )
+   fi
+   if [[ $P2 == *"SST"* ]]; then
+       ARRAY=( "subArray.prod5.South-SST.list" )
+   fi
+   if [[ $P2 == *"1ST"* ]]; then
+       ARRAY=( "subArray.prod5.South-1ST.list" )
+   fi
+   if [[ $P2 == *"SV0"* ]]; then
+      EDM=( "-1MST-LL" )
+      ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR=( "prod5" )
-   TDATE="g20210909"
-   ANADATE="g20201012"
-   ANADATE="g20200817"
+   TDATE="g20210921"
+   ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
-   TMVADATE="g20201012"
+   TMVADATE="g20201021"
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -250,11 +254,7 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_onSource" "electron" "proton" )
-PARTICLE=( "gamma_cone" )
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" )
-PARTICLE=( "proton" )
-PARTICLE=( "gamma_cone" "gamma_onSource" "electron" "proton" )
+PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 
 #####################################
 # cut on number of images
@@ -270,6 +270,7 @@ OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" )
+OBSTIME=( "30m" )
 
 echo "$RUN" "$SITE"
 
@@ -360,18 +361,19 @@ do
                       TABLE="tables_CTA-$S$M-ID0${AZ}-$TDATE"
                       if [[ $RUN == "MAKETABLES" ]]
                       then
-                              echo "Filling table $TABLE with mintel option ${LST}"
+                              echo "Filling table $TABLE with mintel option ${NIMAGESMIN}"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS $S$M ${AZ} ${LST} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS $S$M ${AZ} ${NIMAGESMIN} $QSUBOPT
                               cd ../
                               continue
     ##########################################
 # analyse with lookup tables
                        elif [[ $RUN == "ANATABLES" ]]
                        then
-                              echo "Using table $TABLE"
+                              echo "Analysing files with mintel option ${NIMAGESMIN}"
+                              echo "    using table $TABLE"
                               cd ./analysis/
-                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} $QSUBOPT
+                              ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" $S$M $MSCWSUBDIRECTORY $OFFAXIS ${AZ} ${NIMAGESMIN} $QSUBOPT
                               cd ../
                               continue
                         fi
@@ -410,6 +412,8 @@ do
                   echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR $EFFDIR" >> "$PARA"
+                  EFFBDIR=EffectiveArea-50h-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
+                  echo "EFFAREASUBBASEDIR $EFFBDIR" >> "$PARA"
                   echo "RECID $ID" >> "$PARA"
                   echo "NIMAGESMIN $NIMAGESMIN" >> "$PARA"
                   echo "NLST $LST" >> "$PARA"
@@ -439,7 +443,7 @@ do
 # IRFs: effective areas after quality cuts
                   elif [[ $RUN == "QC" ]]
                   then
-                    if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
+                    if [[ "$MST" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
                     # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
@@ -452,7 +456,7 @@ do
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
-                    if [[ "$OOTIME" = "50h" ]] && [[ "$MST" -ge "4" ]]
+                    if [[ "$MST" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
@@ -467,11 +471,9 @@ do
                      then
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
-                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 1 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                      else
                         ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                         $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
-                        #$OOTIME DESY.g20201012.${EFFVERSION}.ID$ID$AZ$ETYPF.$S$M 0 $ID $S$M $BFINEBINNING $EFFDATE $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]

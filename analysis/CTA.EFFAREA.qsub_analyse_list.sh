@@ -142,7 +142,6 @@ echo "output data directory"
 echo $ODIR
 mkdir -p $ODIR
 
-
 ######################################################################
 # maximum core distance to a telescope
 ######################################################################
@@ -305,7 +304,6 @@ NTH2=${#THETA2MIN[@]}
 echo "Number of offaxis bins $NOFF $NTH2 $BFINEBINNING"
 ######################################################################
 
-
 ###############################################################################
 # loop over all off-axis bins
 for ((i=0; i < $NOFF; i++))
@@ -327,6 +325,34 @@ do
       fi
 
 ###############################################################################
+     # run particle rate file calculator for BDT
+     if [[ $ODIR == *"BDT"* ]]
+     then
+         echo "RUNNING PARTILE RATE DETERMINATION"
+         AXDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/"
+         QCDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/"
+         echo "ANGRESDIR ${AXDIR}"
+         echo "QCDIR ${QCDIR}"
+         LLOG=$TMPDIR/ParticleNumbers.$ARRAY.$RECID.log
+         rm -f $LLOG
+
+         # onSource
+         if [[ $PART == *"onSource"* ]]; then
+             ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
+             echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
+         else
+             # cone
+             # off-axis fine binning
+             if [ $BFINEBINNING = "TRUE" ]
+             then
+                 ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
+             else
+             # off-axis std binning
+                 ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
+             fi
+         fi
+    fi
+###############################################################################
 # create cut file
       iCBFILE=`basename $CFIL`      
       if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
@@ -335,7 +361,7 @@ do
       else
           CFILP="${CFIL}.CRbck.dat"
       fi
-      iCFIL=$ODIR/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
+      iCFIL=$TMPDIR/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
 
       if [ ! -e $CFILP ]
       then
@@ -362,12 +388,12 @@ do
 # particle number file
       if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
       then
-         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".00.root
+         PNF=$TMPDIR/ParticleNumbers."$ARRAY".00.root
       elif [ $PART = "gamma_cone" ]
       then
-         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$i.root
+         PNF=$TMPDIR/ParticleNumbers."$ARRAY".$i.root
       else
-         PNF=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/ParticleNumbers."$ARRAY".$j.root
+         PNF=$TMPDIR/ParticleNumbers."$ARRAY".$j.root
       fi
 
       sed -i -e "s|OFFMIN|$iMIN|" \
@@ -380,6 +406,7 @@ do
              -e "s|NTELTYPELST|$NCUTLST|" \
              -e "s|NTELTYPEMST|$NCUTMST|" \
              -e "s|NTELTYPESST|$NCUTSST|" \
+             -e "s|NTELTYPESCMST|$NCUTSCMST|" \
              -e "s|TELTYPESLST|$TELTYPESLST|" \
              -e "s|TELTYPESMST|$TELTYPESMST|" \
              -e "s|TELTYPESSST|$TELTYPESSST|" \
@@ -396,7 +423,7 @@ do
 
 ###############################################################################
 # create run list
-      MSCF=$ODIR/effectiveArea-CTA-$DSET-$PART-$i-$j.$ARRAY-MCAZ${MCAZ}-${ANADIR}.dat
+      MSCF=$TMPDIR/effectiveArea-CTA-$DSET-$PART-$i-$j.$ARRAY-MCAZ${MCAZ}-${ANADIR}.dat
       rm -f $MSCF
       echo "effective area data file for $PART $i $j" > $MSCF
 ###############################################################################
@@ -457,9 +484,11 @@ do
 # output file
       if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
       then
-         OFIX=$ODIR/$OFIL-$i
+         OFIX=$TMPDIR/$OFIL-$i
+         OLOG=$ODIR/$OFIL-$i
       else
-         OFIX=$ODIR/$OFIL-$j
+         OFIX=$TMPDIR/$OFIL-$j
+         OLOG=$ODIR/$OFIL-$j
       fi
 
       echo
@@ -470,53 +499,58 @@ do
       echo $iCFIL
       echo $PNF
 
+      minimumsize=300
+      #### temp
+      # only run when analysis needs to be repeated
+      # require file size of at least 1 M
+      #if [[ -e $OLOG.root ]]; then
+      #    DS=$(du -k $OLOG.root | cut -f 1)
+      #    if [[ ${DS} -ge $minimumsize ]]; then
+      #        continue
+      #    fi
+      #fi
+      #### (end) temp
+
   ##############################
   # run effective area code
-      ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OFIX.log
+      ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OLOG.log
+
+      # cross check if run was successfull
+      # (expect simply > 800k)
+      DS=$(du -k $OFIX.root | cut -f 1)
+      if [[ ${DS} -le $minimumsize ]]; then
+          touch $OLOG.SMALLFILE
+          mv -v $OFIX.root ${ODIR}/
+          continue
+      fi
 
   ##############################
   #  cleanup
   # (reduce number of files)
+      if [[ -e $OFIX.root ]] && [[ -e $MSCF ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
+          rm -f $MSCF
+      fi
 
-      ${EVNDISPSYS}/bin/logFile effAreaParameters $OFIX.root $MSCF
-      rm -f $MSCF
+      if [[ -e $OFIX.root ]] && [[ -e $iCFIL ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
+          rm -f $iCFIL
+      fi
 
-      ${EVNDISPSYS}/bin/logFile effAreaCuts $OFIX.root $iCFIL
-      rm -f $iCFIL
+      if [[ -e $OFIX.root ]] && [[ -e $OLOG.log ]]; then
+          ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OLOG.log
+          rm -f $OLOG.log
+      fi
 
-      ${EVNDISPSYS}/bin/logFile effAreaLog $OFIX.root $OFIX.log
-      rm -f $OFIX.log
-
+      if [[ -e $TMPDIR/ParticleNumbers.$ARRAY.$RECID.log ]]; then
+         ${EVNDISPSYS}/bin/logFile writeRateLog $OFIX.root $TMPDIR/ParticleNumbers.$ARRAY.$RECID.log
+      fi
+      # final results file
+      mv -v $OFIX.root ${ODIR}/
    done
 done
 
-#############
-# run particle rate file calculator for QualityCutsStep
-if [[ $ODIR == *"QualityCuts"* ]]
-then
-     echo "RUNNING PARTILE RATE DETERMINATION"
-     AXDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/"
+exit
 
-     # onSource
-     LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.onSource.log
-     rm -f $LLOG
-     ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY onSource $RECID $ODIR $AXDIR > $LLOG
-     echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
-     rm -f $LLOG
-     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
-     # cone
-     LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID.cone.log
-     rm -f $LLOG
-     # off-axis fine binning
-     if [ $BFINEBINNING = "TRUE" ]
-     then
-         ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $ODIR $AXDIR > $LLOG
-     else
-     # off-axis std binning
-         ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $ODIR $AXDIR > $LLOG
-     fi
-     ${EVNDISPSYS}/bin/logFile writeRateLog $AXDIR/ParticleNumbers.${ARRAY}.00.root $LLOG
-     rm -f $LLOG
-fi
 
 exit

@@ -13,6 +13,7 @@ ADIR=AAAAADIR
 MCAZ=AZIMUTH
 FILEN=FILELENGTH
 TFILE=FILELIST
+MINIMAGE=NNNIMAGE
 
 # counter
 l=$((SGE_TASK_ID * FILEN))
@@ -147,8 +148,7 @@ MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################
 # allow single image events
-#MOPT="$MOPT -minImages=1"
-MOPT="$MOPT -minImages=2"
+MOPT="$MOPT -minImages=${MINIMAGE}"
 
 ################################
 # telescope type dependent weight

@@ -7,20 +7,21 @@
 #
 if [ ! -n "$1" ]
 then
-    echo "././prepareProductionBinaries.sh data set>"
+    echo "./prepareProductionBinaries.sh <data set>"
     echo
     echo "   will install hessioxx, Eventdisplay analysis files and code"
     echo
     exit
 fi
+set -e
 
 DSET="$1"
 TDIR=$(pwd)
 
-VERSION="prod5-v07"
+VERSION="prod5-v08"
 
 # parameter and configuration files
-AUXDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/"
+AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
 mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
@@ -28,7 +29,7 @@ echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
 git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
-EVNDISPSYS="$CTA_USER_DATA_DIR/analysis/AnalysisData/${DSET}/code/"
+export EVNDISPSYS="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/code/"
 rm -rf $EVNDISPSYS
 mkdir -p $EVNDISPSYS
 echo "Software installation into $EVNDISPSYS"
@@ -51,7 +52,11 @@ cd hessioxxx
 # FLAGS for hessioxx and Eventdisplay compilation
 if [[ $DSET = *"prod3"* ]]
 then
-    if [[ $DSET = *"paranal"* ]]
+    if [[ $DSET = *"SCT"* ]]
+    then
+        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+        EFLAGS="PROD3b_SCT"
+    elif [[ $DSET = *"paranal"* ]]
     then
         export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
         EFLAGS="PROD3b_South"
@@ -66,7 +71,7 @@ then
 elif [[ $DSET = *"prod4"* ]]
 then
    export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
-   EFLAGS="PROD5"
+   EFLAGS="PROD4b"
 elif [[ $DSET = *"prod5"* ]]
 then
    export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"

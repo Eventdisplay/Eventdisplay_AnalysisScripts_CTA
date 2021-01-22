@@ -5,10 +5,10 @@
 #
 
 
-if [ $# -lt 6 ]
+if [ $# -lt 7 ]
 then
    echo
-   echo "CTA.MSCW_ENERGY.sub_analyse_MC.sh <tablefile> <recid> <subarray list> <data set> <output directory> <onSource/cone> <azimuth bin> [qsub options]"
+   echo "CTA.MSCW_ENERGY.sub_analyse_MC.sh <tablefile> <recid> <subarray list> <data set> <output directory> <onSource/cone> <azimuth bin> <minimage> [qsub options]"
    echo
    echo "  <tablefile>     table file name (without .root)"
    echo "                  expected file name: xxxxxx-SUBARRAY.root; SUBARRAY is added by this script"
@@ -38,10 +38,11 @@ then
    ANADIR=$ANADIR-onAxis
 fi
 MCAZ=$7
+MINIMAGE=$8
 QSUBOPT=""
-if [ -n $8 ]
+if [ -n $9 ]
 then
-   QSUBOPT="$8"
+   QSUBOPT="$9"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 
@@ -70,8 +71,6 @@ mkdir -p $SHELLDIR
 
 ###########################
 # particle types
-VPART=( "gamma_cone" )
-VPART=( "gamma_onSource" "electron" "proton" )
 VPART=( "gamma_onSource" "gamma_cone" "electron" "proton" )
 NPART=${#VPART[@]}
 
@@ -115,7 +114,7 @@ do
 	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
 	 NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
 	 echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
-         NJOBTOT=$(( NTMPLIST / FILEN + 1))
+         NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
          echo "total number of jobs: $NJOBTOT"
 
 # output file name for mscw_energy
@@ -135,6 +134,7 @@ do
             -e "s|AZIMUTH|$MCAZ|" \
             -e "s|FILELIST|${TMPLIST}|" \
             -e "s|FILELENGTH|$FILEN|" \
+            -e "s|NNNIMAGE|$MINIMAGE| " \
             -e "s|AAAAADIR|$ANADIR|" $FSCRIPT.sh > $FNAM.sh 
 
         chmod u+x $FNAM.sh
