@@ -219,9 +219,13 @@ then
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    ARRAY=( "subArray.prod5.South-XST.list" )
    ARRAY=( "subArray.prod5.South-Opt.list" )
-   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "subArray.prod5.South-Opt-14MSTs40SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Opt-14MSTs40SSTs.list" )
    ARRAY=( "subArray.prod5.South-Opt-15MSTs50SSTs.list" )
-   ARRAY=( "subArray.prod5.South-Opt-13MSTs30SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Opt-13MSTs40SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "set_X.list" )
+   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -269,8 +273,8 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
-OBSTIME=( "50h" )
 OBSTIME=( "30m" )
+OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
 
