@@ -351,6 +351,8 @@ do
                  ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
              fi
          fi
+         echo "END writeParticleRateFilesFromEffectiveAreas"
+         tail $LLOG
     fi
 ###############################################################################
 # create cut file
@@ -442,7 +444,9 @@ do
       fi
 # fill IRFs only
       echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
-      echo "* ENERGYAXISBINS 60" >> $MSCF
+      echo "* ENERGYAXISBINS 60 -2. 4." >> $MSCF
+      echo "* ENERGYAXISBINHISTOS 25 -1.9 3.1" >> $MSCF
+      echo "* ANGULARRESOLUTIONBINHISTOS 100 -4. 1." >> $MSCF
       echo "* ENERGYRECONSTRUCTIONQUALITY 0" >> $MSCF
 # one azimuth bin only
       echo "* AZIMUTHBINS $AZBINS" >> $MSCF
@@ -522,6 +526,9 @@ do
           touch $OLOG.SMALLFILE
           mv -v $OFIX.root ${ODIR}/
           continue
+      # remove possilble leftover SMALL file
+      else
+         rm -f $OLOG.SMALLFILE
       fi
 
   ##############################
