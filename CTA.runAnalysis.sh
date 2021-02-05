@@ -128,11 +128,16 @@ then
    ARRAYDIR=( "prod3b" )
 elif [[ $P2 == "prod3b-S20deg-SCT" ]]
 then
-   prod3b-paranal20deg_SCT-sq08-LL
    SITE=( "prod3b-paranal20deg_SCT" )
    ARRAY="subArray.prod3b.South-SCT.list"
    ARRAYDIR=( "prod3b" )
-   EDM=( "-sq08-LL" )
+   EDM=( "-sq09-LL" )
+elif [[ $P2 == "prod3b-S20deg-SCTlin" ]]
+then
+   SITE=( "prod3b-paranal20deg_SCTlin" )
+   ARRAY="subArray.prod3b.South-SCT.list"
+   ARRAYDIR=( "prod3b" )
+   EDM=( "-sq09-LL" )
 ###############################################################
 # PROD4 Analysis
 elif [[ $P2 == "prod4-S20deg-MST" ]]
@@ -211,6 +216,8 @@ elif [[ $P2 == "prod5-S"* ]]
 then
    if [[ $P2 == *"moon"* ]]; then
        SITE=( "prod5-Paranal-20deg-NSB5x" )
+   elif [[ $P2 == *"60deg"* ]]; then
+       SITE=( "prod5-Paranal-60deg" )
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
@@ -269,8 +276,8 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
-OBSTIME=( "50h" )
 OBSTIME=( "30m" )
+OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
 
