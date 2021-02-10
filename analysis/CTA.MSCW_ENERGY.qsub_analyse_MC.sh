@@ -113,11 +113,12 @@ MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFIL
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
 # MST small array analysis
-if [[ $DSET == *"paranal"* ]]; then
-    MOPT="$MOPT -maxdistfraction=0.70"
-else
-    MOPT="$MOPT -maxdistfraction=0.80"
-fi
+#if [[ $DSET == *"paranal"* ]]; then
+#    MOPT="$MOPT -maxdistfraction=0.70"
+#else
+#    MOPT="$MOPT -maxdistfraction=0.80"
+#fi
+MOPT="$MOPT -maxdistfraction=0.80"
 
 #########################################
 # disp main directory name
