@@ -27,7 +27,7 @@ EFFDATE="g20210921"
 OBSTIME="30m"
 OBSTIME="50h"
 # Number of off-axis bins
-NWBINS=5
+NWBINS=6
 # (end of) hardwired values
 ##########################################################
 
@@ -99,7 +99,11 @@ do
      #################################################
      # check output of effective area stage
      #for E in AngularResolution QualityCuts001CU BDT.50h-V3.${EFFDATE}
-     for E in BDT.${OBSTIME}-V3.${EFFDATE}
+     #for E in BDT.${OBSTIME}-V3.${EFFDATE}
+     #for E in AngularResolution
+     #for E in QualityCuts001CU
+     #for E in BDT.${OBSTIME}-V3.${EFFDATE}
+     for E in BDT.30m-V3.${EFFDATE}
      do
          #################### 
          # multiplicity loop 
@@ -115,7 +119,7 @@ do
                   fi
                fi
 
-               echo "  testing ${E} ${M}MSTs ${S}SSTs"
+               echo "  testing ${E} ${M}MSTs ${S}SSTs (${E})"
                FILESTATUS="TRUE"
                FILELOGSTATUS="TRUE"
                # (will always rerun all AZ bins, even if only one is wrong)
@@ -128,6 +132,7 @@ do
                    ADIR=${EFFDIR}/EffectiveArea-${OBSTIME}-ID${I}${MCAZ}-${NIM}-${EFFDATE}-V3/${E}/
                    if [[ ! -d ${ADIR} ]]; then
                        echo "ERROR: directory with effarea data not found: ${ADIR}"
+                       FILESTATUS="FALSE"
                        continue
                    fi
                    for P in gamma_onSource gamma_cone electron proton
@@ -163,8 +168,9 @@ do
                   echo "REDO ${A}"
                   cd ../
                   echo "RERUNNING ./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}"
-                  #./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
+                  ./CTA.runAnalysis.sh.testRedo prod5-S-sq08 ${RMODE} ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
                   #./CTA.runAnalysis.sh.testRedo prod5-S-sq08 QC ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
+                  #./CTA.runAnalysis.sh.testRedo prod5-S-sq08 TRAIN ${I} ${NIMMIN} ${M} ${S} ${NIMMIN}
                   cd ./testProduction
               fi
             done

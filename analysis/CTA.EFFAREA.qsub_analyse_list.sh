@@ -61,6 +61,12 @@ if grep -q OFFAXISFINEBINNING $ANAPAR
 then
     BFINEBINNING=`grep OFFAXISFINEBINNING $ANAPAR | awk {'print $2'}`
 fi
+# DL2 filling
+DL2FILLING="FALSE"
+if grep -q DL2 $ANAPAR
+then
+   DL2FILLING=`grep DL2 $ANAPAR | awk {'print $2'}`
+fi
 
 NIMAGESMIN=`grep NIMAGESMIN $ANAPAR | awk {'print $2'}`
 # get telescope type dependent cuts 
@@ -338,8 +344,8 @@ do
 
          # onSource
          if [[ $PART == *"onSource"* ]]; then
+             echo "PPPP $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR"
              ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
-             echo $AXDIR/ParticleNumbers.${ARRAY}.00.root
          else
              # cone
              # off-axis fine binning
@@ -348,6 +354,7 @@ do
                  ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
              else
              # off-axis std binning
+                 echo "PPP $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR"
                  ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
              fi
          fi
@@ -481,9 +488,11 @@ do
       fi
       echo "* CUTFILE $iCFIL" >> $MSCF
       echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
-      # to write full data tress 
+      # to write full data trees (DL2)
       # (note: very large output files!)
-      # echo "* WRITEEVENTDATATREE 1" >> $MSCF
+      if [[ $DL2FILLING = "TRUE" ]]; then
+          echo "* WRITEEVENTDATATREE 1" >> $MSCF
+      fi
 
 # output file
       if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
