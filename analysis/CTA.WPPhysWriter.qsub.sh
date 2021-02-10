@@ -36,11 +36,11 @@ then
    DE=$(grep "error filling" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    DF=$(grep "error, cannot find effective area tree" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    if [[ -z ${DE} ]] && [[ -z ${DF} ]]; then
-       bzip2 -f $OXUTNAME.$AXRRAY.$OXBSTIME.log
        # root file
        DROOT=$(cat $OXUTNAME.$AXRRAY.$OXBSTIME.log | grep "writing histograms" | awk '{print $4}')
        if [[ -e ${DROOT} ]]; then
-           $EVNDISPSYS/bin/logFile IRFLog $OXUTNAME.$AXRRAY.$OXBSTIME.log
+           $EVNDISPSYS/bin/logFile IRFLog ${DROOT} $OXUTNAME.$AXRRAY.$OXBSTIME.log
+           rm -f $OXUTNAME.$AXRRAY.$OXBSTIME.log
        fi
    fi
 fi
