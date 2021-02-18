@@ -62,12 +62,6 @@ $EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST $ODIR 0.5 ${RECID} ${TT
 ##############
 # cleanup
 
-# remove root output file of no telescope of this type is fine (declutter)
-if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
-then
-     rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
-fi
-
 # pipe file list into log file
 if [ -e $TLIST ]
 then
@@ -76,8 +70,26 @@ then
     cat $TLIST >> $ODIR/${BDT}-${TTYPE}.training.log
     rm -f $TLIST
 fi
-# cleanup
-bzip2 -v -f $ODIR/${BDT}-${TTYPE}.training.log
+
+# remove everything if telescope type is not found
+if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
+then
+     rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
+     rm -f $ODIR/${BDT}-${TTYPE}.training.log
+fi
+# move everything into root files
+if [[ -e $ODIR/${BDT}_BDT_${TTYPE}.weights.xml ]]; then
+    $EVNDISPSYS/bin/logFile dispXML-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}_BDT_${TTYPE}.weights.xml
+    rm -f $ODIR/${BDT}_BDT_${TTYPE}.weights.xml
+fi
+if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
+    $EVNDISPSYS/bin/logFile dispLog-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}-${TTYPE}.training.log
+    rm -f $ODIR/${BDT}-${TTYPE}.training.log
+fi
+
+rm -f $ODIR/${BDT}_${TTYPE}.root
+rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
+
 
 
 exit
