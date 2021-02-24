@@ -117,7 +117,7 @@ fi
 ######################################
 # log files
 DATE=$(date +"%y%m%d")
-LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
+LDIR=$CTA_USER_LOG_DIR/$DATE/PRETMVATRAINING/
 QLOG=$LDIR
 mkdir -p "$LDIR"
 echo "Log directory: " "$LDIR"
@@ -290,7 +290,7 @@ echo "* ENERGYBINS 1 -5. 5.
 
       FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
       sed -e "s|RUNPARA|$RFIL|" \
-          -e "s|OOOFILE|$ODIR/MVA${MCAZ}.training|" $FSCRIPT.sh > $FNAM.sh
+          -e "s|OOOFILE|$ODIR/MVA${MCAZ}-${OFFMEA[$W]}.training|" $FSCRIPT.sh > $FNAM.sh
       chmod u+x $FNAM.sh
       echo "SCRIPT $FNAM.sh"
 
