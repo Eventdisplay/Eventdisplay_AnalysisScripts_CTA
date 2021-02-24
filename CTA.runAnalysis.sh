@@ -23,7 +23,7 @@ then
          prod5-S
          (to be added: moon light runs)
    
-    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES TRAIN ANGRES QC CUTS PHYS 
+    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
    
     <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
    "
@@ -221,7 +221,7 @@ then
    else
        SITE=( "prod5-Paranal-20deg" )
    fi
-   EDM=( "-sq08-LL" )
+   EDM=( "-sq10-LL" )
    ARRAY=( "subArray.prod5.South.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    ARRAY=( "subArray.prod5.South-XST.list" )
@@ -233,6 +233,8 @@ then
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    ARRAY=( "set_X.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   ARRAY=( "sq10-LL2.dat" )
+   ARRAY=( "sq10-LL.dat" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -437,14 +439,22 @@ do
 
                   cd ./analysis/
 ##########################################
+# prepare train BDTs   
+                  if [[ $RUN == "PREPARETMVA" ]] 
+                  then
+                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     then
+                         ./CTA.prepareTMVA.sub_train.sh "$NFILARRAY" $OFFAXIS $S$M "$PARA" $QSUBOPT $AZ
+                  fi
+##########################################
 # train BDTs   
 # (note: BDT training does not need to be done for all observing periods)
-                  if [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
+                  elif [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
                   then
-                     if [ ${o} -eq 0 ]
+                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
                          ./CTA.TMVA.sub_train.sh "$NFILARRAY" $OFFAXIS $S$M "$PARA" $QSUBOPT $AZ
-                     fi
+                  fi
 ##########################################
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]
