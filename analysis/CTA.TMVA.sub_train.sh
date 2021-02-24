@@ -174,7 +174,8 @@ do
    then
        TYPECUT="${TYPECUT})"
    fi
-   TYPECUT="$NTYPECUT\&\&$TYPECUT"
+   #TYPECUT="$NTYPECUT\&\&$TYPECUT"
+   TYPECUT="$TYPECUT"
    echo "Telescope type cut: $TYPECUT"
 
 ###############################################################
@@ -211,6 +212,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
          sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
+     rm -f -v ${ODIR}/TMVA.BDT.runparameter
 
      FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
      RRFIL=$ODIR/$RXPAR$ARRAY

@@ -16,10 +16,6 @@ source "${EVNDISPSYS}"/setObservatory.sh CTA
 PFIL=${RPARA}_${EBIN}
 rm -f $PFIL.log
 
-# this file is deleted after successful 
-# completion of training
-touch ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
-
 echo ${PFIL}.runparameter
 
 ${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter > "${PFIL}".log
@@ -32,20 +28,6 @@ rm -f "$CDIR"/BDT_"${EBIN}"*.C
 # rm -rf $CDIR/complete_BDTroot/BDT_${EBIN}*
 rm -rf "$CDIR"/complete_BDTroot
 
-# check successful completion of training
-# remove temporary file
-if [ -e ${PFIL}.log ]; then
-   TSTRING=$(tail -n 1 ${PFIL}.log | grep Complete)
-   echo "$TSTRING"
-   if [ ! -z "$TSTRING" ]; then
-      rm -f ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
-   fi
-   TSTRING=$(tail -n 3 ${PFIL}.log | grep "not enough")
-   if [ ! -z "$TSTRING" ]; then
-      rm -f ${PFIL}.${SGE_JOB_ID}.${SGE_TASK_ID}.RUNNING
-   fi
-fi
-
 # mv log file into root file
 if [ -e ${PFIL}.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
@@ -56,6 +38,12 @@ if [ -e ${PFIL}.runparameter ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
     ${EVNDISPSYS}/bin/logFile tmvaRunparameter $CDIR/BDT_${EBIN}.root ${PFIL}.runparameter
     rm -f ${PFIL}.runparameter
+fi
+# mv xml file into root file
+if [ -e $CDIR/BDT_${EBIN}_BDT_0.weights.xml ] && [ -e $CDIR/BDT_${EBIN}.root ]
+then
+   ${EVNDISPSYS}/bin/logFile tmvaXML $CDIR/BDT_${EBIN}.root $CDIR/BDT_${EBIN}_BDT_0.weights.xml
+   rm -f $CDIR/BDT_${EBIN}_BDT_0.weights.xml
 fi
 
 exit
