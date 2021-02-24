@@ -70,10 +70,10 @@ mkdir -p "$SHELLDIR"
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # log files
-#DATE=$(date +"%y%m%d")
-#QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
-#mkdir -p $QLOG
-QLOG="/dev/null"
+DATE=$(date +"%y%m%d")
+QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
+mkdir -p $QLOG
+#QLOG="/dev/null"
 
 ########################
 # production depedendent parameters
