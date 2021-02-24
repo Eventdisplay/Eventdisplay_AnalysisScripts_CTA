@@ -47,7 +47,7 @@ if [ -e ${PFIL}.log ]; then
 fi
 
 # mv log file into root file
-if [ -e ${PFIL}.log ]
+if [ -e ${PFIL}.log ] && [ -e $CDIR/BDT_${EBIN}.root ]
 then
     ${EVNDISPSYS}/bin/logFile tmvaLog $CDIR/BDT_${EBIN}.root ${PFIL}.log
     rm -f ${PFIL}.log
