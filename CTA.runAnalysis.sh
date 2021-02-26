@@ -79,6 +79,7 @@ fi
 # _180deg = south
 # _0deg = north
 MCAZ=( "" "_180deg" "_0deg" )
+MCAZ=( "" )
 
 ##########################################################
 # PROD3B Analysis
@@ -233,8 +234,8 @@ then
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    ARRAY=( "set_X.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   ARRAY=( "sq10-LL2.dat" )
    ARRAY=( "sq10-LL.dat" )
+   ARRAY=( "sq10-LL1.dat" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -459,25 +460,29 @@ do
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]
                   then
-                    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVAFixedSignal "$PARA" AngularResolution $S$M 2 $QSUBOPT $AZ
+                    if [[ ! -z ${AZ} ]]; then
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVAFixedSignal "$PARA" AngularResolution $S$M 2 $QSUBOPT $AZ
+                    fi
 ##########################################
 # IRFs: effective areas after quality cuts
                   elif [[ $RUN == "QC" ]]
                   then
-                    if [[ "$MST" -ge "4" ]]
-                    then
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
-                    # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
-                    # (never done for 50h observation, as those are expected to require higher resolution)
-                    else
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron008deg.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
-                    fi
+                    if [[ ! -z ${AZ} ]]; then
+                        if [[ "$MST" -ge "4" ]]
+                        then
+                            ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
+                        # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
+                        # (never done for 50h observation, as those are expected to require higher resolution)
+                        else
+                            ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron008deg.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
+                        fi
+                     fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
-                    if [[ "$MST" -ge "4" ]]
+                    if [[ "$MST" -ge "7" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)

@@ -25,6 +25,7 @@ ODIR=PPPODIR
 GFILLING=PPPGMOD
 DSET=PPPDSET
 MCAZ="PPPMCAZ"
+######################################################################
 
 # Choose PARTICLE type from job id
 let "PARTID = $SGE_TASK_ID - 1"
@@ -106,9 +107,8 @@ do
     echo "NCUT${T}" "TELTYPES${T}"
 done
 
-
-
 # get all directories
+PRODBASEDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET"
 ANADIR=`grep MSCWSUBDIRECTORY  $ANAPAR | awk {'print $2'}`
 TMVACUT=`grep TMVASUBDIR $ANAPAR | awk {'print $2'}`
 EFFAREADIR=`grep EFFAREASUBDIR $ANAPAR | awk {'print $2'}`
@@ -119,7 +119,7 @@ then
 fi
 # see if strict separation of training/testing events if possible
 # (mscw files would be in a directory ....EFF)
-if [ -e ${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
+if [ -e ${PRODBASEDIR}/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
 then
     ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
 fi
@@ -128,9 +128,9 @@ fi
 OBSTIME=`grep OBSERVINGTIME_H $ANAPAR | awk {'print $2'}`
 GETXOFFYOFFAFTERCUTS=`grep GETXOFFYOFFAFTERCUTS $ANAPAR | awk  {'print $2'}`
 echo "Input parameters read from $ANAPAR"
-echo "  Analysis parameters: $NIMAGESMIN $ANADIR $TMVACUT $EFFAREADIR $OBSTIME"
+echo "  Analysis parameters: $NIMAGESMIN $ANADIR $TMVACUT $EFFAREABASEDIR $OBSTIME"
 
-if [ -z "$ANADIR" ] || [ -z "$NIMAGESMIN" ] || [ -z "$TMVACUT" ] || [ -z "$EFFAREADIR" ] || [ -z "$OBSTIME" ]
+if [ -z "$ANADIR" ] || [ -z "$NIMAGESMIN" ] || [ -z "$TMVACUT" ] || [ -z "$EFFAREABASEDIR" ] || [ -z "$OBSTIME" ]
 then
   echo "error: analysis parameter file not correct: $ANAPAR" 
   echo " one variable missing"
@@ -141,7 +141,7 @@ fi
 # directories
 ######################################################################
 echo "data (input) directory"
-DDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/
+DDIR=${PRODBASEDIR}/${ARRAY}/${ANADIR}/
 echo $DDIR
 mkdir -p $DDIR
 echo "output data directory"
@@ -331,104 +331,146 @@ do
       fi
 
 ###############################################################################
-     # run particle rate file calculator for BDT
-     if [[ $ODIR == *"BDT"* ]]
-     then
-         echo "RUNNING PARTILE RATE DETERMINATION"
-         AXDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/"
-         QCDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/QualityCuts001CU/"
-         echo "ANGRESDIR ${AXDIR}"
-         echo "QCDIR ${QCDIR}"
-         LLOG=$TMPDIR/ParticleNumbers.$ARRAY.$RECID.log
-         rm -f $LLOG
-
-         # onSource
-         if [[ $PART == *"onSource"* ]]; then
-             echo "PPPP $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR"
-             ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
+# cut file preparation and particle rates
+     if [[ ! -z ${MZAZ} ]]; then
+        declare -a VMCAZLIST=( "_0deg" "_180deg" )
+     else
+        declare -a VMCAZLIST=( ${MCAZ} )
+     fi
+     for VMCAZ in "${VMCAZLIST[@]}"
+     do
+         CUTFILEDIRAZ=$TMPDIR/CUTS${VMCAZ}
+         mkdir -p ${CUTFILEDIRAZ}
+         if [[ ! -z ${MZAZ} ]]; then
+             EFFMCAZDIR=${EFFAREABASEDIR/-NIM/${VMCAZ}-NIM}
          else
-             # cone
-             # off-axis fine binning
-             if [ $BFINEBINNING = "TRUE" ]
-             then
-                 ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
-             else
-             # off-axis std binning
-                 echo "PPP $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR"
-                 ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR > $LLOG
-             fi
+             EFFMCAZDIR=${EFFAREABASEDIR}
          fi
-         echo "END writeParticleRateFilesFromEffectiveAreas"
-         tail $LLOG
-    fi
+         # run particle rate file calculator for BDT
+         # (for average AZ: to be done for all pointing directions)
+         if [[ ${ODIR} == *"BDT"* ]]
+         then
+             echo "RUNNING PARTILE RATE DETERMINATION"
+             AXDIR="${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/AngularResolution/"
+             QCDIR="${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/QualityCuts001CU/"
+             echo "ANGRESDIR ${AXDIR}"
+             echo "QCDIR ${QCDIR}"
+             LLOG=${CUTFILEDIRAZ}/ParticleNumbers.$ARRAY.$RECID.log
+             rm -f $LLOG
+
+             # onSource
+             if [[ $PART == *"onSource"* ]]; then
+                 echo "PPPP $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR"
+                 ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas $ARRAY onSource $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
+             else
+                 # cone
+                 # off-axis fine binning
+                 if [ $BFINEBINNING = "TRUE" ]
+                 then
+                     ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
+                 else
+                 # off-axis std binning
+                     echo "PPP $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR"
+                     ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
+                 fi
+             fi
+             echo "END writeParticleRateFilesFromEffectiveAreas"
+             tail $LLOG
+          fi
+    ###############################################################################
+    # create cut file
+          iCBFILE=`basename $CFIL`      
+          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+          then
+              CFILP="${CFIL}.gamma.dat"
+          else
+              CFILP="${CFIL}.CRbck.dat"
+          fi
+          iCFIL=${CUTFILEDIRAZ}/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
+
+          if [ ! -e $CFILP ]
+          then
+            echo "ERROR: cut file does not exist:"
+            echo $CFILP
+            exit
+          fi
+          cp -f $CFILP $iCFIL
+
+    # wobble offset
+          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+          then
+             WOBBLEOFFSET=${OFFMEA[$i]}
+          else
+             WOBBLEOFFSET=${OFFMEA[$j]}
+          fi
+    # angular resolution file
+          if [ $PART = "gamma_onSource" ] 
+          then
+             ANGRESFILE=${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
+          else
+             ANGRESFILE=${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root
+          fi
+    # particle number file
+          if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
+          then
+             PNF=${CUTFILEDIRAZ}/ParticleNumbers."$ARRAY".00.root
+          elif [ $PART = "gamma_cone" ]
+          then
+             PNF=${CUTFILEDIRAZ}/ParticleNumbers."$ARRAY".$i.root
+          else
+             PNF=${CUTFILEDIRAZ}/ParticleNumbers."$ARRAY".$j.root
+          fi
+
+          sed -i -e "s|OFFMIN|$iMIN|" \
+                 -e "s|OFFMAX|$iMAX|" \
+                 -e "s|THETA2MIN|$jMIN|" \
+                 -e "s|THETA2MAX|$jMAX|" \
+                 -e "s|DIRECTIONCUT|$DIRECTIONCUT|" \
+                 -e "s|SUBARRAY|$ARRAY|" \
+                 -e "s|MINIMAGES|$NIMAGESMIN|" \
+                 -e "s|NTELTYPELST|$NCUTLST|" \
+                 -e "s|NTELTYPEMST|$NCUTMST|" \
+                 -e "s|NTELTYPESST|$NCUTSST|" \
+                 -e "s|NTELTYPESCMST|$NCUTSCMST|" \
+                 -e "s|TELTYPESLST|$TELTYPESLST|" \
+                 -e "s|TELTYPESMST|$TELTYPESMST|" \
+                 -e "s|TELTYPESSST|$TELTYPESSST|" \
+                 -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
+                 -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
+                 -e "s|TMVACUTDIR|$TMVACUT|" \
+                 -e "s|MCAZIMUTH|${MCAZ}|" \
+                 -e "s|DATASET|$DSET|" \
+                 -e "s|ANGRESFILE|$ANGRESFILE|" \
+                 -e "s|PARTICLENUMBERFILE|$PNF|" \
+                 -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
+                 -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
+
+          echo  "CUTFIL $iCFIL"
 ###############################################################################
-# create cut file
-      iCBFILE=`basename $CFIL`      
-      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
-      then
-          CFILP="${CFIL}.gamma.dat"
+# unpack XML files from TMVA
+      if [[ ${ODIR} == *"QualityCuts"* ]]; then
+         echo "no unpacking of TMVA XML"
       else
-          CFILP="${CFIL}.CRbck.dat"
+         echo "unpacking TMVA XML"
+         TMVAXMLDIR="$TMPDIR/tmva${MCAZ}"
+         mkdir -p ${TMVAXMLDIR}
+         rm -f ${TMVAXMLDIR}/*
+         XMLL=$(find ${PRODBASEDIR}/${ARRAY}/TMVA/${TMVACUT}-${WOBBLEOFFSET} -name "BDT*.root")
+         for xml in ${XMLL}
+         do
+             FXML=$(basename ${xml} .root)
+             NXML=${FXML##*_}
+             OXML="${TMVAXMLDIR}/BDT_${NXML}_BDT_0.weights.xml"
+             $EVNDISPSYS/bin/logFile tmvaXML ${xml} > ${OXML}
+             if grep -q NOXML ${OXML}
+             then
+                rm -f ${OXML}
+             fi
+             cp -v -f ${xml} ${TMVAXMLDIR}/
+         done
+         ls -l ${TMVAXMLDIR}
       fi
-      iCFIL=$TMPDIR/ANASUM.GammaHadron-$DSET-$PART-$i-$j-MCAZ${MCAZ}.$iCBFILE.dat
-
-      if [ ! -e $CFILP ]
-      then
-        echo "ERROR: cut file does not exist:"
-        echo $CFILP
-        exit
-      fi
-      cp -f $CFILP $iCFIL
-
-# wobble offset
-      if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
-      then
-         WOBBLEOFFSET=${OFFMEA[$i]}
-      else
-         WOBBLEOFFSET=${OFFMEA[$j]}
-      fi
-# angular resolution file
-      if [ $PART = "gamma_onSource" ] 
-      then
-         ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
-      else
-         ANGRESFILE=${CTA_USER_DATA_DIR}/analysis/AnalysisData/$DSET/EffectiveAreas/$EFFAREABASEDIR/AngularResolution/gamma_cone."$ARRAY"_ID"$RECID".eff-$i.root
-      fi
-# particle number file
-      if [ $PART = "gamma_onSource" ] || [ $PART = "electron_onSource" ] || [ $PART = "proton_onSource" ]
-      then
-         PNF=$TMPDIR/ParticleNumbers."$ARRAY".00.root
-      elif [ $PART = "gamma_cone" ]
-      then
-         PNF=$TMPDIR/ParticleNumbers."$ARRAY".$i.root
-      else
-         PNF=$TMPDIR/ParticleNumbers."$ARRAY".$j.root
-      fi
-
-      sed -i -e "s|OFFMIN|$iMIN|" \
-             -e "s|OFFMAX|$iMAX|" \
-             -e "s|THETA2MIN|$jMIN|" \
-             -e "s|THETA2MAX|$jMAX|" \
-             -e "s|DIRECTIONCUT|$DIRECTIONCUT|" \
-             -e "s|SUBARRAY|$ARRAY|" \
-             -e "s|MINIMAGES|$NIMAGESMIN|" \
-             -e "s|NTELTYPELST|$NCUTLST|" \
-             -e "s|NTELTYPEMST|$NCUTMST|" \
-             -e "s|NTELTYPESST|$NCUTSST|" \
-             -e "s|NTELTYPESCMST|$NCUTSCMST|" \
-             -e "s|TELTYPESLST|$TELTYPESLST|" \
-             -e "s|TELTYPESMST|$TELTYPESMST|" \
-             -e "s|TELTYPESSST|$TELTYPESSST|" \
-             -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
-             -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
-             -e "s|TMVACUTDIR|$TMVACUT|" \
-             -e "s|DATASET|$DSET|" \
-             -e "s|ANGRESFILE|$ANGRESFILE|" \
-             -e "s|PARTICLENUMBERFILE|$PNF|" \
-             -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
-             -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
-
-      echo $iCFIL
+     done  # loop over MCAZ
 
 ###############################################################################
 # create run list
@@ -509,7 +551,7 @@ do
       echo "--------------------------"
       echo
       echo "gamma/hadron separation file"
-      echo $iCFIL
+      echo "CUTFILE $iCFIL"
       echo $PNF
 
       minimumsize=300

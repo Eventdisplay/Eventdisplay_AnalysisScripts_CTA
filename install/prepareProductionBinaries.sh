@@ -18,7 +18,7 @@ set -e
 DSET="$1"
 TDIR=$(pwd)
 
-VERSION="prod5-v09"
+VERSION="prod5-v10"
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
