@@ -332,17 +332,25 @@ do
 
 ###############################################################################
 # cut file preparation and particle rates
-     if [[ ! -z ${MZAZ} ]]; then
+# - define 0deg/180 deg cut files for average performance calculation
+# - keep MCaz for other cases
+     if [[ ! -n "${MCAZ}" ]]; then
         declare -a VMCAZLIST=( "_0deg" "_180deg" )
+        declare -a CUTFILIST=( "CFIL" "CFIL" )
      else
         declare -a VMCAZLIST=( ${MCAZ} )
+        declare -a CUTFILIST=( "CFIL" )
+             echo "SETTING 0"
      fi
-     for VMCAZ in "${VMCAZLIST[@]}"
+     echo "${VMCAZLIST[@]}"
+     for ii in "${!VMCAZLIST[@]}"
      do
+         VMCAZ=${VMCAZLIST[$ii]}
          CUTFILEDIRAZ=$TMPDIR/CUTS${VMCAZ}
          mkdir -p ${CUTFILEDIRAZ}
-         if [[ ! -z ${MZAZ} ]]; then
+         if [[ ! -n "${MCAZ}" ]]; then
              EFFMCAZDIR=${EFFAREABASEDIR/-NIM/${VMCAZ}-NIM}
+             echo "SETTING 1"
          else
              EFFMCAZDIR=${EFFAREABASEDIR}
          fi
@@ -355,6 +363,7 @@ do
              QCDIR="${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/QualityCuts001CU/"
              echo "ANGRESDIR ${AXDIR}"
              echo "QCDIR ${QCDIR}"
+             echo "PARTICLEFILEDIR ${CUTFILEDIRAZ}"
              LLOG=${CUTFILEDIRAZ}/ParticleNumbers.$ARRAY.$RECID.log
              rm -f $LLOG
 
@@ -438,7 +447,7 @@ do
                  -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
                  -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
                  -e "s|TMVACUTDIR|$TMVACUT|" \
-                 -e "s|MCAZIMUTH|${MCAZ}|" \
+                 -e "s|MCAZIMUTH|${VMCAZ}|" \
                  -e "s|DATASET|$DSET|" \
                  -e "s|ANGRESFILE|$ANGRESFILE|" \
                  -e "s|PARTICLENUMBERFILE|$PNF|" \
@@ -446,16 +455,21 @@ do
                  -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
 
           echo  "CUTFIL $iCFIL"
+          CUTFILIST[$ii]=$iCFIL
 ###############################################################################
 # unpack XML files from TMVA
       if [[ ${ODIR} == *"QualityCuts"* ]]; then
          echo "no unpacking of TMVA XML"
       else
-         echo "unpacking TMVA XML"
-         TMVAXMLDIR="$TMPDIR/tmva${MCAZ}"
+         TMVAXMLDIR="$TMPDIR/tmva${VMCAZ}"
+         echo "unpacking TMVA XML into ${TMVAXMLDIR}"
          mkdir -p ${TMVAXMLDIR}
          rm -f ${TMVAXMLDIR}/*
-         XMLL=$(find ${PRODBASEDIR}/${ARRAY}/TMVA/${TMVACUT}-${WOBBLEOFFSET} -name "BDT*.root")
+         TMVACUTAZ=${TMVACUT}
+         if [[ ! -n "${MCAZ}" ]]; then
+             TMVACUTAZ=${TMVACUT/-NIM/${VMCAZ}-NIM}
+         fi
+         XMLL=$(find ${PRODBASEDIR}/${ARRAY}/TMVA/${TMVACUTAZ}-${WOBBLEOFFSET} -name "BDT*.root")
          for xml in ${XMLL}
          do
              FXML=$(basename ${xml} .root)
@@ -528,7 +542,13 @@ do
          echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
          echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CrabNebula.dat 5" >> $MSCF
       fi
-      echo "* CUTFILE $iCFIL" >> $MSCF
+      # cut file (might be several) and characteristics
+      for ii in "${!VMCAZLIST[@]}"
+      do
+          TMPMCAZ=${VMCAZLIST[$ii]/_/}
+          TMPMCAZ=${TMPMCAZ/deg/}
+          echo "* CUTFILE ${CUTFILIST[$ii]} ${TMPMCAZ}" >> $MSCF
+      done
       echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
       # to write full data trees (DL2)
       # (note: very large output files!)
