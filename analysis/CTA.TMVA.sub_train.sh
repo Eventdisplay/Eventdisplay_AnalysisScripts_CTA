@@ -216,7 +216,8 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
 
      FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
      RRFIL=$ODIR/$RXPAR$ARRAY
-     sed -e "s|RUNPARA|$RRFIL|" $FSCRIPT.sh > $FNAM.sh
+     sed -e "s|RUNPARA|$RRFIL|" \
+         -e "s|NBINSNBINS|$NENE|" $FSCRIPT.sh > $FNAM.sh
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
@@ -224,8 +225,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
-     #qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
-     qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+     qsub $QSUBOPT -V -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
 done
 
