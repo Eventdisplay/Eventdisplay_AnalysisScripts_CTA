@@ -79,7 +79,6 @@ fi
 # _180deg = south
 # _0deg = north
 MCAZ=( "" "_180deg" "_0deg" )
-MCAZ=( "" )
 
 ##########################################################
 # PROD3B Analysis
@@ -468,26 +467,19 @@ do
                   elif [[ $RUN == "QC" ]]
                   then
                     if [[ ! -z ${AZ} ]]; then
-                        if [[ "$MST" -ge "4" ]]
-                        then
-                            ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
-                        # min angle cut depends on observation time: 50h stricter, 5h and and 30 min more relaxed
-                        # (never done for 50h observation, as those are expected to require higher resolution)
-                        else
-                            ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron008deg.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
-                        fi
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU $S$M 3 $QSUBOPT $AZ
                      fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
-                    if [[ "$MST" -ge "7" ]]
+                    if [[ "$MST" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p008deg.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE $S$M 0 $QSUBOPT $AZ
                     fi
 ##########################################
 # CTA WP Phys files
