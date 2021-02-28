@@ -79,16 +79,20 @@ then
 fi
 # move everything into root files
 if [[ -e $ODIR/${BDT}_BDT_${TTYPE}.weights.xml ]]; then
-    $EVNDISPSYS/bin/logFile dispXML-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}_BDT_${TTYPE}.weights.xml
+    $EVNDISPSYS/bin/logFile dispXML-BDT-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}_BDT_${TTYPE}.weights.xml
     rm -f $ODIR/${BDT}_BDT_${TTYPE}.weights.xml
+fi
+if [[ -e $ODIR/${BDT}_MLP_${TTYPE}.weights.xml ]]; then
+    $EVNDISPSYS/bin/logFile dispXML-MLP-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}_MLP_${TTYPE}.weights.xml
+    rm -f $ODIR/${BDT}_MLP_${TTYPE}.weights.xml
 fi
 if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
     $EVNDISPSYS/bin/logFile dispLog-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}-${TTYPE}.training.log
     rm -f $ODIR/${BDT}-${TTYPE}.training.log
 fi
 
-rm -f $ODIR/${BDT}_${TTYPE}.root
-rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
+#rm -f $ODIR/${BDT}_${TTYPE}.root
+#rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
 
 
 
