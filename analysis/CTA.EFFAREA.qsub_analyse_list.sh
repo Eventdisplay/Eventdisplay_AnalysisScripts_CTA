@@ -435,7 +435,6 @@ do
                  -e "s|THETA2MIN|$jMIN|" \
                  -e "s|THETA2MAX|$jMAX|" \
                  -e "s|DIRECTIONCUT|$DIRECTIONCUT|" \
-                 -e "s|SUBARRAY|$ARRAY|" \
                  -e "s|MINIMAGES|$NIMAGESMIN|" \
                  -e "s|NTELTYPELST|$NCUTLST|" \
                  -e "s|NTELTYPEMST|$NCUTMST|" \
@@ -445,10 +444,7 @@ do
                  -e "s|TELTYPESMST|$TELTYPESMST|" \
                  -e "s|TELTYPESSST|$TELTYPESSST|" \
                  -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
-                 -e "s|WOBBLEOFFSET|$WOBBLEOFFSET|" \
-                 -e "s|TMVACUTDIR|$TMVACUT|" \
                  -e "s|MCAZIMUTH|${VMCAZ}|" \
-                 -e "s|DATASET|$DSET|" \
                  -e "s|ANGRESFILE|$ANGRESFILE|" \
                  -e "s|PARTICLENUMBERFILE|$PNF|" \
                  -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
