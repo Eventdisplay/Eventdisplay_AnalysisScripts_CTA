@@ -127,6 +127,8 @@ DISPSUBDIR="DISPBDT/BDTdisp.${ARRAY}.T1"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
+MVATYPE="BDT"
+MVATYPE="MLP"
 for ML in BDTDisp BDTDispError BDTDispEnergy
 do
    MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/${ML}/${MCAZ}/"
@@ -138,32 +140,32 @@ do
       if [[ -e ${MLFIL} ]]; then
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
-           $EVNDISPSYS/bin/logFile dispXML-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_BDT_${TTYPE}.weights.xml
+           $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
       fi
    done 
 done
 
 #########################################
 # options for DISP method (direction)
-DISPDIR="${TMPDIR}/BDTDisp/${MCAZ}/BDTDisp_BDT_"
+DISPDIR="${TMPDIR}/BDTDisp/${MCAZ}/BDTDisp_${MVATYPE}_"
 MOPT="$MOPT -tmva_nimages_max_stereo_reconstruction=100 -tmva_filename_stereo_reconstruction $DISPDIR"
 
 ##########################################################################################################
 # options for DISP method (direction error)
-DISPERRORDIR="${TMPDIR}/BDTDispError/${MCAZ}/BDTDispError_BDT_"
+DISPERRORDIR="${TMPDIR}/BDTDispError/${MCAZ}/BDTDispError_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperror_weight 50"
 
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-DISPCOREDIR="${TMPDIR}/BDTDispCore/${MCAZ}/BDTDispCore_BDT_"
+DISPCOREDIR="${TMPDIR}/BDTDispCore/${MCAZ}/BDTDispCore_${MVATYPE}_"
 if [[ $ARRAY == *"SV1"* ]]; then
     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
 fi
 
 ##########################################################################################################
 # options for DISP method (energy)
-DISPENERGYDIR="${TMPDIR}/BDTDispEnergy/${MCAZ}/BDTDispEnergy_BDT_"
+DISPENERGYDIR="${TMPDIR}/BDTDispEnergy/${MCAZ}/BDTDispEnergy_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################

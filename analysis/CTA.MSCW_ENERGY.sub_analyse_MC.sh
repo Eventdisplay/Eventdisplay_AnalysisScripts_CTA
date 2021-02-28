@@ -72,6 +72,7 @@ mkdir -p $SHELLDIR
 ###########################
 # particle types
 VPART=( "gamma_onSource" "gamma_cone" "electron" "proton" )
+VPART=( "gamma_onSource" )
 NPART=${#VPART[@]}
 
 ###########################
