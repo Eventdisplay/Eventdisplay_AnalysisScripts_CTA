@@ -121,15 +121,16 @@ MOPT="$MOPT -maxloss=0.2 -minfui=0."
 MOPT="$MOPT -maxdistfraction=0.80"
 
 #########################################
+# disp reconstruction
+# 
+MVATYPE="MLP"
+MVATYPE="BDT"
 # disp main directory name
-DISPSUBDIR="DISPBDT/BDTdisp.${ARRAY}.T1"
-
+DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
-MVATYPE="BDT"
-MVATYPE="MLP"
-for ML in BDTDisp BDTDispError BDTDispEnergy
+for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy
 do
    MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/${ML}/${MCAZ}/"
    FF=$(find ${MLDDIR} -name "$ML*disptmva.root")
@@ -141,31 +142,36 @@ do
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
            $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
+           if grep -q NOXML
+           then
+             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
+             exit
+           fi
       fi
    done 
 done
 
 #########################################
 # options for DISP method (direction)
-DISPDIR="${TMPDIR}/BDTDisp/${MCAZ}/BDTDisp_${MVATYPE}_"
+DISPDIR="${TMPDIR}/BDTDisp/${MCAZ}/${MVATYPE}Disp_${MVATYPE}_"
 MOPT="$MOPT -tmva_nimages_max_stereo_reconstruction=100 -tmva_filename_stereo_reconstruction $DISPDIR"
 
 ##########################################################################################################
 # options for DISP method (direction error)
-DISPERRORDIR="${TMPDIR}/BDTDispError/${MCAZ}/BDTDispError_${MVATYPE}_"
+DISPERRORDIR="${TMPDIR}/BDTDispError/${MCAZ}/${MVATYPE}DispError_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperror_weight 50"
 
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-DISPCOREDIR="${TMPDIR}/BDTDispCore/${MCAZ}/BDTDispCore_${MVATYPE}_"
+DISPCOREDIR="${TMPDIR}/BDTDispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
 if [[ $ARRAY == *"SV1"* ]]; then
     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
 fi
 
 ##########################################################################################################
 # options for DISP method (energy)
-DISPENERGYDIR="${TMPDIR}/BDTDispEnergy/${MCAZ}/BDTDispEnergy_${MVATYPE}_"
+DISPENERGYDIR="${TMPDIR}/BDTDispEnergy/${MCAZ}/${MVATYPE}DispEnergy_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################
