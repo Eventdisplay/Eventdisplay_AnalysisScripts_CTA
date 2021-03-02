@@ -23,7 +23,7 @@ then
          prod5-S
          (to be added: moon light runs)
    
-    possible run modes are EVNDISP MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
+    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
    
     <recids>: 0 = all telescopes, 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
    "
@@ -229,12 +229,11 @@ then
    ARRAY=( "subArray.prod5.South-Opt-14MSTs40SSTs.list" )
    ARRAY=( "subArray.prod5.South-Opt-14MSTs40SSTs.list" )
    ARRAY=( "subArray.prod5.South-Opt-15MSTs50SSTs.list" )
-   ARRAY=( "subArray.prod5.South-Opt-13MSTs40SSTs.list" )
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   ARRAY=( "set_X.list" )
+   ###
    ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   ARRAY=( "sq10-LL.dat" )
-   ARRAY=( "sq10-LL1.dat" )
+   ARRAY=( "subArray.prod5.South-Opt-13MSTs30SSTs.list" )
+   ARRAY=( "sq10-LL2.dat" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
@@ -255,7 +254,6 @@ then
    TDATE="g20210921"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
-   TMVADATE="g20201021"
    EFFDATE="${ANADATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -341,10 +339,15 @@ do
         done
 ##########################################
 # dispBDT training
-        if [[ $RUN == "DISPBDT" ]]
+        if [[ $RUN == "DISP"* ]]
         then
-            BDTDIR="BDTdisp."
-            RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
+            if [[ $RUN == "DISPMLP" ]]; then
+                BDTDIR="MLPdisp."
+                RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.MLPDisp.runparameter"
+            else
+                BDTDIR="BDTdisp."
+                RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
+            fi
             QCPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
             DDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/$S$M/"
             for A in $NXARRAY
