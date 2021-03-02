@@ -53,7 +53,7 @@ if [ $SMOOTH == "TRUE" ]
 then
     $EVNDISPSYS/bin/smoothLookupTables $TABDIR/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
 else
-    cp -v $CTA_EVNDISP_AUX_DIR/Tables/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
+    cp -v $TABDIR/$TABFIL-$ARRAY.root $TMPDIR/$TABFIL-$ARRAY.root > $ODIR/$TFIL.table.log
 fi
 
 #########################################
@@ -123,8 +123,8 @@ MOPT="$MOPT -maxdistfraction=0.80"
 #########################################
 # disp reconstruction
 # 
-MVATYPE="MLP"
 MVATYPE="BDT"
+MVATYPE="MLP"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
 #########################################
@@ -133,6 +133,7 @@ DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
 for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy
 do
    MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/${ML}/${MCAZ}/"
+   echo "Unpacking ${ML} from ${MLDDIR}"
    FF=$(find ${MLDDIR} -name "$ML*disptmva.root")
    for F in ${FF}
    do
@@ -142,7 +143,7 @@ do
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
            $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
-           if grep -q NOXML
+           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
            then
              echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
              exit
@@ -153,25 +154,25 @@ done
 
 #########################################
 # options for DISP method (direction)
-DISPDIR="${TMPDIR}/BDTDisp/${MCAZ}/${MVATYPE}Disp_${MVATYPE}_"
+DISPDIR="${TMPDIR}/${MVATYPE}Disp/${MCAZ}/${MVATYPE}Disp_${MVATYPE}_"
 MOPT="$MOPT -tmva_nimages_max_stereo_reconstruction=100 -tmva_filename_stereo_reconstruction $DISPDIR"
 
 ##########################################################################################################
 # options for DISP method (direction error)
-DISPERRORDIR="${TMPDIR}/BDTDispError/${MCAZ}/${MVATYPE}DispError_${MVATYPE}_"
+DISPERRORDIR="${TMPDIR}/${MVATYPE}DispError/${MCAZ}/${MVATYPE}DispError_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperror_weight 50"
 
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-DISPCOREDIR="${TMPDIR}/BDTDispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
+DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
 if [[ $ARRAY == *"SV1"* ]]; then
     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
 fi
 
 ##########################################################################################################
 # options for DISP method (energy)
-DISPENERGYDIR="${TMPDIR}/BDTDispEnergy/${MCAZ}/${MVATYPE}DispEnergy_${MVATYPE}_"
+DISPENERGYDIR="${TMPDIR}/${MVATYPE}DispEnergy/${MCAZ}/${MVATYPE}DispEnergy_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_energy_reconstruction $DISPENERGYDIR"
 
 ################################
