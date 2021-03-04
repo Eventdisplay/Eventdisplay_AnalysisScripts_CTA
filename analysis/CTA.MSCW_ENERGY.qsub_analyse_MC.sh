@@ -123,8 +123,8 @@ MOPT="$MOPT -maxdistfraction=0.80"
 #########################################
 # disp reconstruction
 # 
-MVATYPE="BDT"
 MVATYPE="MLP"
+MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
 #########################################
