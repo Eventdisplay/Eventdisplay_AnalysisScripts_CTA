@@ -223,12 +223,13 @@ do
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
    echo $1
-   NTELTYPE=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
+   NTELTYPESTRING=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
+   NTELTYPE=$(echo ${NTELTYPESTRING} | awk '{print $1}')
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
-       TELTYP=$($EVNDISPSYS/bin/printRunParameter $1 -ntype$N)
+       TELTYP=$(echo ${NTELTYPESTRING}| cut -d " " -f $((N+2)))
        if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
           echo "Error: telescope type not found: $N"
           echo "(check printRunParameters)"
