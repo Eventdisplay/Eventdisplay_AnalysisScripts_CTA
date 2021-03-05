@@ -21,7 +21,8 @@ do
 
     echo ${PFIL}.runparameter
 
-    ${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter > "${PFIL}".log
+    echo "JOB ID ${SGE_JOB_ID}" > "${PFIL}".log
+    ${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter >> "${PFIL}".log
 
     CDIR=$(dirname "$PFIL".log)
     # remove .C files (never used; we use the XML files)
