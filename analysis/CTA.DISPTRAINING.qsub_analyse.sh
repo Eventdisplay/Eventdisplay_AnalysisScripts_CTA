@@ -74,6 +74,7 @@ fi
 # remove everything if telescope type is not found
 if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
 then
+     echo "No telescopes found of type ${TTYPE}"
      rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
      rm -f $ODIR/${BDT}-${TTYPE}.training.log
 fi
@@ -91,9 +92,7 @@ if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
     rm -f $ODIR/${BDT}-${TTYPE}.training.log
 fi
 
-#rm -f $ODIR/${BDT}_${TTYPE}.root
-#rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
-
-
+rm -f $ODIR/${BDT}_${TTYPE}.root
+rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
 
 exit
