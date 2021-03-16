@@ -35,7 +35,7 @@ do
       echo "ERROR: directory with disp data not found: ${DDIR}" 
       continue
    fi
-   for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore BDTDispPhi
+   for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore
    do
         for MCAZ in 0deg 180deg
         do
@@ -45,29 +45,30 @@ do
              echo "REDO ${A}"
              continue
           fi
-          # number of XML files
-          NXML=$(ls -1 ${FDIR}/*.xml | wc -l)
+          # number of result files
+          NXML=$(ls -1 ${FDIR}/*.disptmva.root | wc -l)
           if [[ $NXML == "0" ]]; then
-             echo "ERROR: no XML files found for ${BDT} at ${MCAZ}"
+             echo "ERROR: no disp result files files found for ${BDT} at ${MCAZ}"
              echo "REDO ${A}"
           else
-              echo "INFO: number of XML files (=teltypes): $NXML (for ${BDT} at ${MCAZ})"
+              echo "INFO: number of disp result files (=teltypes): $NXML (for ${BDT} at ${MCAZ})"
           fi
           # cross check that number of telescope types is the same for all BDT types/directories
           if [[ ${BDT} == "BDTDisp" ]] && [[ ${MCAZ} == "0deg" ]]; then
              NXMLF=${NXML}
           else
              if [[ ${NXML} != ${NXMLF} ]]; then
-                echo "ERROR: different number of XML files (${NXML} vs ${NXMLF}) for ${BDT} at ${MCAZ} (reference is BDTDisp,0deg)"
+                echo "ERROR: different number of disp result files (${NXML} vs ${NXMLF}) for ${BDT} at ${MCAZ} (reference is BDTDisp,0deg)"
                 echo "REDO ${A}"
              fi
           fi
-          # test that XML files are note of zero length
-          XMLF=$(ls -1 ${FDIR}/*.xml)
+          # test that disp result files are at least 1 MB large
+          XMLF=$(ls -1 ${FDIR}/*.disptmva.root)
           for X in ${XMLF}
           do
-             if [[ ! -s ${X} ]]; then
-                echo "ERROR: XML file of zero length: ${X}"
+             I=`wc -c ${X} | cut -d' ' -f1`
+             if [[ ${I} -lt "100000" ]]; then
+                echo "ERROR: disp result file too small: ${X} ({$I})"
                 echo "REDO ${A}"
              fi
           done
