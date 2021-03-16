@@ -232,18 +232,11 @@ then
    EDM="-sq10-LL"
    ARRAY=( "subArray.prod5.South.list" )
    ARRAY=( "subArray.prod5.South-XST.list" )
-   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   # QC
+   ARRAY=( "subArray.prod5.South-Opt-GArrays.list" )
    ###
-   ARRAY=( "sq10-LL2.dat" )
-   ARRAY=( "subArray.prod5.South-Opt-13MSTs40SSTs.list" )
-   ARRAY=( "subArray.prod5.South-Opt-13MSTs30SSTs.list" )
-   # PREPARE TMVA
-   ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-   # MSCW
-   ARRAY=( "tt.list" )
-   ARRAY=( "subArray.prod5.South.list" )
-   # H-array
-   ARRAY=( "subArray.prod5.South-Opt-HArrays.list" )
+   ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
+
    if [[ $P2 == *"moon"* ]]; then
       ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
    fi
@@ -294,7 +287,7 @@ OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "30m" )
-OBSTIME=( "50h" )
+OBSTIME=( "50h" "30m" )
 
 echo "$RUN" "$SITE"
 
@@ -356,7 +349,7 @@ then
     for A in $NXARRAY
     do
         cd ./analysis/
-        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${M} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
         cd ../
     done
     exit
@@ -442,6 +435,9 @@ do
                   echo "OBSERVINGTIME_H $OOTIME" >> "$PARA"
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
+                  if [[ $RUN == "CUTS" ]] && [[ $OOTIME == "50h" ]]; then
+                     echo "DL2FILLING TRUE" >> "$PARA"
+                  fi
 
                   cd ./analysis/
 ##########################################
