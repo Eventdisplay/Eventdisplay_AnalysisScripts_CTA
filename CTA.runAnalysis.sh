@@ -50,7 +50,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -81,6 +81,8 @@ fi
 #
 # _180deg = south
 # _0deg = north
+# (note that not all steps are executed for
+#  the average AZ bin)
 MCAZ=( "" "_180deg" "_0deg" )
 
 ##########################################################
@@ -230,13 +232,10 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South.list" )
-   ARRAY=( "subArray.prod5.South-XST.list" )
-   # QC
-   ARRAY=( "subArray.prod5.South-Opt-GArrays.list" )
-   ###
    ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+   fi
    if [[ $P2 == *"moon"* ]]; then
       ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
    fi
@@ -283,10 +282,9 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 
 #####################################
 # observing time [h]
+# (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
-OBSTIME=( "5h" "30m" "100s" )
-OBSTIME=( "30m" )
 OBSTIME=( "50h" "30m" )
 
 echo "$RUN" "$SITE"
@@ -399,7 +397,15 @@ do
 # loop over all observation times
         for ((o = 0; o < ${#OBSTIME[@]}; o++ ))
             do
-                    OOTIME=${OBSTIME[$o]}
+                   OOTIME=${OBSTIME[$o]}
+
+                   # Only the last two steps are run for all observation times
+                   if [[ ${RUN} != "CUTS" ]] && [[ ${OOTIME} != "50h" ]]; then
+                      continue
+                   fi
+                   if [[ ${RUN} != "PHYS" ]] && [[ ${OOTIME} != "50h" ]]; then
+                      continue
+                   fi
 
 ##########################################
 # loop over all shower directions 
@@ -435,8 +441,11 @@ do
                   echo "OBSERVINGTIME_H $OOTIME" >> "$PARA"
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
-                  if [[ $RUN == "CUTS" ]] && [[ $OOTIME == "50h" ]]; then
-                     echo "DL2FILLING TRUE" >> "$PARA"
+                  if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
+                     # echo "DL2FILLING DL2" >> "$PARA"
+                     echo "DL2FILLING FALSE" >> "$PARA"
+                  else
+                     echo "DL2FILLING FALSE" >> "$PARA"
                   fi
 
                   cd ./analysis/
