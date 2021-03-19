@@ -548,9 +548,7 @@ do
       echo "* SIMULATIONFILE_DATA $MSCFILE" >> $MSCF
       # to write full data trees (DL2)
       # (note: very large output files!)
-      if [[ $DL2FILLING = "TRUE" ]]; then
-          echo "* WRITEEVENTDATATREE 1" >> $MSCF
-      fi
+      echo "* WRITEEVENTDATATREE $DL2FILLING" >> $MSCF
 
 # output file
       if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
