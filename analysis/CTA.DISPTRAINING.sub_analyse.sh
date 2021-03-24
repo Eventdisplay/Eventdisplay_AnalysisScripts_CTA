@@ -131,10 +131,16 @@ else
     exit
 fi
 
+if [[ $TMVAP == *"MLP"* ]]; then
+   declare -a MLPLIST=( "MLPDisp" "MLPDispEnergy" "MLPDispError" "MLPDispCore" )
+else
+   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" )
+fi
+
 #########################################
 # 
 #########################################
-for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore BDTDispPhi
+for MLP in "${MLPLIST[@]}"
 do
     for MCAZ in 0deg 180deg
     do
@@ -150,13 +156,13 @@ do
             OFFDIR=${ODIR}.T${NSTEP}
             ####################
             # output directory
-            TDIR="${OFFDIR}/${BDT}/${MCAZ}/"
+            TDIR="${OFFDIR}/${MLP}/${MCAZ}/"
             mkdir -p $TDIR
 
             for TELTYPE in $TELTYPELIST
             do
                 echo
-                echo "STARTING BDT TRAINING FOR AZ DIRECTION $MCAZ AND TELESCOPE TYPE $TELTYPE"
+                echo "STARTING ${MLP} TRAINING FOR AZ DIRECTION $MCAZ AND TELESCOPE TYPE $TELTYPE"
                 echo "   training options: ${T}"
                 echo "    $DSET $ARRAY"
                 echo "=========================================================================="
@@ -187,19 +193,19 @@ do
                 then
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.50}')
                 fi
-                TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP.list"
+                TLIST="$SHELLDIR/EDISP-$DSET-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP.list"
                 rm -f $TLIST
                 shuf -n $k $SHELLDIR/tempList.list > $TLIST
                 echo "List of $k input files for training: $TLIST"
 
                 ####################
                 # prepare run scripts
-                  FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$BDT-$NSTEP"
-                  cp $FSCRIPT.sh $FNAM.sh
+                FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
+                cp $FSCRIPT.sh $FNAM.sh
 
                   sed -i -e "s|OFILE|$TDIR|" \
                          -e "s|TELTYPE|$TELTYPE|" \
-                         -e "s|BDTTYPE|$BDT|" \
+                         -e "s|MLPTYPE|$MLP|" \
                          -e "s|RECONSTRUCTIONID|$RECID|" \
                          -e "s|ILIST|$TLIST|" \
                          -e "s|TTT|$T|" \
@@ -209,7 +215,7 @@ do
 
                   chmod u+x $FNAM.sh
                   echo "shell script " $FNAM.sh
-
+                 
                   # submit the job
                   qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=12000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
                done

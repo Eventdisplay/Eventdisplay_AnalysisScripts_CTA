@@ -64,6 +64,12 @@ echo "COPYING FILES TO $TMPDIR"
 # check if files are on local disc (lustre) or on dCache
 for F in $IFIL
 do
+    if [ ! -e $F ]
+    then
+       echo "ERROR: SIMTELFILE does not exist:"
+       echo $F
+       exit
+    fi
     if [[ $F = *acs* ]]
     then
          export DCACHE_CLIENT_ACTIVE=1
@@ -74,16 +80,6 @@ do
          cp -v -f /pnfs/ifh.de/$F $TMPDIR"/"$G
     else
          cp -v -f $F $TMPDIR"/"
-    fi
-done
-
-for F in $FIL
-do
-    if [ ! -e $F ]
-    then
-       echo "ERROR: SIMTELFILE does not exist:"
-       echo $F
-       exit
     fi
 done
 
@@ -145,13 +141,13 @@ do
    ls -lh $DETGEO
    ls -lh $SIMFIL
    ls -lh $TMPDIR
-   $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST $COPT -a $DETGEO -o $TMPDIR/$OFIL.root $SIMFIL >& $TMPDIR/$OFIL.$N.convert.log
+   $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST $COPT -a $DETGEO -o $TMPDIR/$OFIL.root $SIMFIL &> $TMPDIR/$OFIL.$N.convert.log
 
 ####################################################################
 # execute eventdisplay
   if [ -e $TMPDIR/$OFIL.root ]
   then
-      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT -outputdirectory $TMPDIR -calibrationdirectory $TMPDIR >& $TMPDIR/$OFIL.$N.evndisp.log
+      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT -outputdirectory $TMPDIR -calibrationdirectory $TMPDIR &> $TMPDIR/$OFIL.$N.evndisp.log
   else
       echo "DST file not found: $TMPDIR/$OFIL.root" >& $TMPDIR/$OFIL.$N.evndisp.log
   fi
@@ -173,7 +169,6 @@ do
       then
           $EVNDISPSYS/bin/logFile convLog $TMPDIR/${RUNN}.root $TMPDIR/$OFIL.$N.convert.log
       fi
-
       cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}HD_${ILINE}_${MCAZ}deg.root
   else
       echo "No root files found!" 

@@ -138,109 +138,30 @@ for ARRAY in $VARRAY
 do
    echo "STARTING $DSET ARRAY $ARRAY MCAZ $MCAZ"
 
-# signal and background files
-# (no electrons are used for the background training)
-# ensure mixed training set for the two different pointing directions
-# two lists for signal and background, alternating from previous lists
-# (list must be sorted; and then mixed)
-# Splitmode=BLOCK
-# SFIL1, BFIL1 used for training
-# SFIL2, BFIL2 used for testing and analysis
-
-# different namings for GRID and local productions
-   if [[ ${DSET:0:2} == "GR" ]]
-   then
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$ATYPE"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"deg$MCAZ"*mscw.root)
-    elif [[ $DSET == *"NSB"* ]]
-    then
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF*"_ID"$RECID"$MCAZ"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"_ID"$RECID"$MCAZ"*mscw.root)
-    else
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-    fi
-
-##########################################################
-# set links for events used in effective area calculation
-# (separate training and events used for analysis)
-# NOTE: ASSUME THAT THIS IS NOT CHANGED
-#       IF DIRECTORY EXISTS, NO NEW ONES ARE CREATED
-    ANAEFF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ}"
-    # rm -rf $ANAEFF
-    if [ ! -e "$ANAEFF" ]
-    then
-        mkdir -p "$ANAEFF"
-        # testing signal list
-        for arg in $SFIL2
-        do
-            BW=$(basename "$arg")
-            ln -s $arg "$ANAEFF"/"$BW"
-        done
-        # testing proton list
-        for arg in $BFIL2
-        do
-            BW=$(basename "$arg")
-            ln -s $arg "$ANAEFF"/"$BW"
-        done
-        # depending on CONE parameter: either onSource (if CONE=TRUE) or cone (if CONE=FALSE)
-        for arg in $GFIL
-        do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
-        done
-        # electrons (not used in training)
-        for arg in $EFIL
-        do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
-        done
-    else
-        echo "EXISTING LINKED ANALYSIS (MSCW) FILES with testing events"
-    fi
-    ###############################################################
-    # add a 'continue' here if linking file is the main purpose
-    #continue
-    ###############################################################
-
 ###############################################################
 # get number of telescopes depending of telescope types
-
-# use first file
-   set -- $SFIL1
-   # check the file exists - otherwise continue
-   if [ -z "$1" ] || [ ! -e "$1" ]
+# (expect that this is the same for all off-axis bins
+   FFF=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/TMVA/MVA${MCAZ}-${OFFMEA[0]}.training.root
+   if [ ! -e "${FFF}" ]
    then
        echo "No training file found - continuing"
-       echo $1
+       echo ${FFF}
        exit
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
-   echo $1
-   NTELTYPE=$($EVNDISPSYS/bin/printRunParameter $1 -nteltypes)
+   echo ${FFF}
+   NTELTYPESTRING=$($EVNDISPSYS/bin/printRunParameter ${FFF} -nteltypes)
+   NTELTYPE=$(echo ${NTELTYPESTRING} | awk '{print $1}')
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
-       TELTYP=$($EVNDISPSYS/bin/printRunParameter $1 -ntype$N)
+       TELTYP=$(echo ${NTELTYPESTRING}| cut -d " " -f $((N+2)))
        if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
           echo "Error: telescope type not found: $N"
           echo "(check printRunParameters)"
           exit
        fi
-
        NCUT="NCUT${TELTYP}"
        if [ $N -eq 0 ]
        then
@@ -253,32 +174,21 @@ do
    then
        TYPECUT="${TYPECUT})"
    fi
-   TYPECUT="$NTYPECUT\&\&$TYPECUT"
+   #TYPECUT="$NTYPECUT\&\&$TYPECUT"
+   TYPECUT="$TYPECUT"
    echo "Telescope type cut: $TYPECUT"
-
-###############################################################
-# Temporary run parameter file
-   TEMPPAR=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ$MCAZ.$NIMAGESMIN.runpar
-   touch "${TEMPPAR}"
-   # write signal and background files
-   # (note: training is in splitmode=block)
-   for arg in $SFIL1
-   do
-      echo "* SIGNALFILE $arg" >> "${TEMPPAR}"
-   done
-   for arg in $BFIL1
-   do
-      echo "* BACKGROUNDFILE $arg" >> "${TEMPPAR}"
-   done
 
 ###############################################################
 # loop over all wobble offset
    for (( W = 0; W < $NOFF; W++ ))
    do
-      ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/TMVA/$DDIR-${OFFMEA[$W]}
+      ODIR=${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/${DDIR}-${OFFMEA[$W]}
       mkdir -p "$ODIR"
 # copy run parameter file
       cp -f "$RPAR".runparameter "$ODIR"
+
+# file with pre-selected training events
+      PREEVENTLIST="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/MVA${MCAZ}-${OFFMEA[$W]}.training.root"
 
 ###############################################################
 # loop over all energy bins and prepare run parameter files
@@ -295,17 +205,19 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
 * MCXYCUTSignalOnly 1
 * OUTPUTFILE $ODIR $OFIL"_$i" " > $RFIL.runparameter
 	 grep "*" $RPAR.runparameter | grep -v ENERGYBINS | grep -v OUTPUTFILE | grep -v SIGNALFILE | grep -v BACKGROUNDFILE | grep -v MCXYOFF >> $RFIL.runparameter
-         cat "${TEMPPAR}" >> $RFIL.runparameter
+         echo "* PREEVENTLIST ${PREEVENTLIST}" >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
   
          sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
+     rm -f -v ${ODIR}/TMVA.BDT.runparameter
 
      FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
      RRFIL=$ODIR/$RXPAR$ARRAY
-     sed -e "s|RUNPARA|$RRFIL|" $FSCRIPT.sh > $FNAM.sh
+     sed -e "s|RUNPARA|$RRFIL|" \
+         -e "s|NBINSNBINS|$NENE|" $FSCRIPT.sh > $FNAM.sh
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
@@ -313,10 +225,8 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
-     #qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
-     qsub $QSUBOPT -V -t 1-$NENE:1 -l h_cpu=00:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+     qsub $QSUBOPT -V -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
   done
-  rm -f "${TEMPPAR}"
 done
 
 exit
