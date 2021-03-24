@@ -72,11 +72,14 @@ then
 fi
 
 # remove everything if telescope type is not found
-if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
-then
-     echo "No telescopes found of type ${TTYPE}"
-     rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
-     rm -f $ODIR/${BDT}-${TTYPE}.training.log
+if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
+    if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
+    then
+         echo "No telescopes found of type ${TTYPE}"
+         head -n 10 ${TLIST}
+    #     rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
+    #     rm -f $ODIR/${BDT}-${TTYPE}.training.log
+    fi
 fi
 # move everything into root files
 if [[ -e $ODIR/${BDT}_BDT_${TTYPE}.weights.xml ]]; then
