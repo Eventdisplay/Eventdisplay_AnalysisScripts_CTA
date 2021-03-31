@@ -19,7 +19,7 @@ then
     Prod4 analysis:
          prod4-S20deg-MST
     Prod5 analysis:
-         prod5-N , prod5-N-s01-F, prod5-N-s01-N
+         prod5b-N
          prod5-South
          prod5-South-40deg
          prod5-South-60deg
@@ -206,6 +206,7 @@ then
    ARRAY=( "subArray.prod5b.North.list" )
    ARRAY=( "subArray.prod5-prod5b.North.list" )
    ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-D25.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
