@@ -68,7 +68,8 @@ then
     echo "========================================" >> $ODIR/${BDT}-${TTYPE}.training.log
     echo "List of files used for training: " >> $ODIR/${BDT}-${TTYPE}.training.log
     cat $TLIST >> $ODIR/${BDT}-${TTYPE}.training.log
-    rm -f $TLIST
+# don't delete list, as it used for other jobs (training of other telescope types)
+#    rm -f $TLIST
 fi
 
 # remove everything if telescope type is not found
