@@ -234,11 +234,20 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-   ARRAY=( "sq60-redo.txt" )
+   ARRAY=( "subArray.prod5.South-Opt-M6C5.list" )
+   ARRAY=( "subArray.prod5.South-BL.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    fi
+   if [[ $P2 == *"60deg"* ]]; then
+       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
+   fi
+   if [[ $P2 == *"40deg"* ]]; then
+       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
+       if [[ $P2 == *"sub"* ]]; then
+           ARRAY=( "subArray.prod5.South-Opt-M6.list" )
+       fi
+   fi 
    if [[ $P2 == *"moon"* ]]; then
       ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
    fi
@@ -255,7 +264,6 @@ then
        ARRAY=( "subArray.prod5.South-1ST.list" )
    fi
    if [[ $P2 == *"SV0"* ]]; then
-      EDM="-1MST-LL"
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
