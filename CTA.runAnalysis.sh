@@ -50,7 +50,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
 
 #####################################
 # output directory for script parameter files
@@ -184,6 +184,7 @@ then
    ARRAY=( "subArray.prod5.North-XST.list" )
    # prod5-prod5b comparision
    ARRAY=( "subArray.prod5-prod5b.North.list" )
+   ARRAY=( "subArray.prod5.North-PB.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
    fi
@@ -201,9 +202,10 @@ then
 elif [[ $P2 == "prod5b-N"* ]]
 then
    SITE="prod5b-LaPalma-20deg"
-   EDM="-sq08-LL"
+   EDM="-sq10-LL"
    ARRAY=( "subArray.prod5b.North.list" )
    ARRAY=( "subArray.prod5-prod5b.North.list" )
+   ARRAY=( "subArray.prod5.North-PB.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
@@ -233,6 +235,7 @@ then
    fi
    EDM="-sq10-LL"
    ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
+   ARRAY=( "sq60-redo.txt" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    fi
@@ -400,11 +403,10 @@ do
                    OOTIME=${OBSTIME[$o]}
 
                    # Only the last two steps are run for all observation times
-                   if [[ ${RUN} != "CUTS" ]] && [[ ${OOTIME} != "50h" ]]; then
-                      continue
-                   fi
-                   if [[ ${RUN} != "PHYS" ]] && [[ ${OOTIME} != "50h" ]]; then
-                      continue
+                   if [[ ${OOTIME} != "50h" ]]; then
+                       if [[ ${RUN} != "CUTS" ]] && [[ ${RUN} != "PHYS" ]]; then
+                          continue
+                       fi
                    fi
 
 ##########################################
