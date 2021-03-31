@@ -18,7 +18,7 @@ set -e
 DSET="$1"
 TDIR=$(pwd)
 
-VERSION="prod5-v10"
+VERSION="prod5-v11"
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
@@ -41,7 +41,8 @@ echo
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
 #git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay.git .
-git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
+#git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
+git clone -b prod5-v10-LL git@github.com:Eventdisplay/Eventdisplay.git .
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx.tar.gz"
