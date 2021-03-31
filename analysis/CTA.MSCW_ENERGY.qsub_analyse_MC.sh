@@ -143,11 +143,11 @@ do
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
            $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
-           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
-           then
-             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
-             exit
-           fi
+#           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
+#           then
+#             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
+#             exit
+#           fi
       fi
    done 
 done
