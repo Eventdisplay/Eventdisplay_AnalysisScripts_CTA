@@ -19,7 +19,7 @@ then
     Prod4 analysis:
          prod4-S20deg-MST
     Prod5 analysis:
-         prod5-N , prod5-N-s01-F, prod5-N-s01-N
+         prod5b-N
          prod5-South
          prod5-South-40deg
          prod5-South-60deg
@@ -282,6 +282,7 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
+PARTICLE=( "gamma_cone" )
 
 #####################################
 # cut on number of images
@@ -358,7 +359,8 @@ then
     for A in $NXARRAY
     do
         cd ./analysis/
-        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+        #./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDTDLL/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
         cd ../
     done
     exit
