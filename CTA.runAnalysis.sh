@@ -206,6 +206,7 @@ then
    ARRAY=( "subArray.prod5b.North.list" )
    ARRAY=( "subArray.prod5-prod5b.North.list" )
    ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-D25.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
