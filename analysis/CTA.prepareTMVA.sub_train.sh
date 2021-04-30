@@ -253,6 +253,7 @@ do
 ###############################################################
 # Temporary run parameter file
    TEMPPAR=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ$MCAZ.$NIMAGESMIN.runpar
+   rm -f ${TEMPPAR}
    touch "${TEMPPAR}"
    # write signal and background files
    # (note: training is in splitmode=block)
