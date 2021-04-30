@@ -188,7 +188,7 @@ do
       cp -f "$RPAR".runparameter "$ODIR"
 
 # file with pre-selected training events
-      PREEVENTLIST="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/MVA${MCAZ}-${OFFMEA[$W]}.training.root"
+      PREEVENTLIST="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/MVA${MCAZ}-${RECID}-${OFFMEA[$W]}.training.root"
 
 ###############################################################
 # loop over all energy bins and prepare run parameter files
