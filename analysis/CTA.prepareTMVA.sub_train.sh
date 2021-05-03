@@ -253,6 +253,7 @@ do
 ###############################################################
 # Temporary run parameter file
    TEMPPAR=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ$MCAZ.$NIMAGESMIN.runpar
+   rm -f ${TEMPPAR}
    touch "${TEMPPAR}"
    # write signal and background files
    # (note: training is in splitmode=block)
@@ -272,14 +273,14 @@ do
    for (( W = 0; W < $NOFF; W++ ))
    do
 # prepare run parameter files
-      RFIL="$ODIR/TMVA.BDT${MCAZ}-${OFFMEA[$W]}"
+      RFIL="$ODIR/TMVA.BDT${MCAZ}-${RECID}-${OFFMEA[$W]}"
       echo $RFIL
       rm -f $RFIL.runparameter
 echo "* ENERGYBINS 1 -5. 5.
 * ZENITHBINS 0 90
 * MCXYOFF (MCxoff*MCxoff+MCyoff*MCyoff)>=${OFFMIN[$W]}*${OFFMIN[$W]}&&(MCxoff*MCxoff+MCyoff*MCyoff)<${OFFMAX[$W]}*${OFFMAX[$W]}
 * MCXYCUTSignalOnly 1
-* OUTPUTFILE $ODIR MVA${MCAZ}-${OFFMEA[$W]}.training" > $RFIL.runparameter
+* OUTPUTFILE $ODIR MVA${MCAZ}-${RECID}-${OFFMEA[$W]}.training" > $RFIL.runparameter
       grep "*" $RPAR.runparameter | grep -v ENERGYBINS | grep -v OUTPUTFILE | grep -v SIGNALFILE | grep -v BACKGROUNDFILE | grep -v MCXYOFF | grep -v MINEVENTS >> $RFIL.runparameter
       echo "* MINEVENTS 0 0" >> $RFIL.runparameter
       cat "${TEMPPAR}" >> $RFIL.runparameter
@@ -291,7 +292,7 @@ echo "* ENERGYBINS 1 -5. 5.
 
       FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
       sed -e "s|RUNPARA|$RFIL|" \
-          -e "s|OOOFILE|$ODIR/MVA${MCAZ}-${OFFMEA[$W]}.training|" $FSCRIPT.sh > $FNAM.sh
+          -e "s|OOOFILE|$ODIR/MVA${MCAZ}-${RECID}-${OFFMEA[$W]}.training|" $FSCRIPT.sh > $FNAM.sh
       chmod u+x $FNAM.sh
       echo "SCRIPT $FNAM.sh"
 
