@@ -50,7 +50,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -196,6 +196,7 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
+   PHYSDATE="${EFFDATE}"
 ####################################
 # PROD5 Analysis
 # prod5b-N (including additional telescopes)
@@ -214,11 +215,11 @@ then
        ARRAY=( "subArray.prod5.North-XST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20201203"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-  PHYSDATE=${EFFDATE}T80p
+   PHYSDATE=${EFFDATE}
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -235,28 +236,12 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South-Opt-M6C5.list" )
-   ARRAY=( "subArray.prod5.South-Opt-LL-test.list" )
-   ARRAY=( "subArray.prod5.South-BL.list" )
-   # IRF-FITs processing
-   ARRAY=( "subArray.prod5.South-M6-14MSTs.list" )
-   ARRAY=( "subArray.prod5.South-M6-14MSTs-M.list" )
+   EDM="-sq11-LL"
+   ARRAY=( "subArray.prod5.South-ax.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Opt-M6.list" )
        ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
    fi
-#   ARRAY="subArray.prod5.South-Opt-SubArray.list"
-#   if [[ $P2 == *"60deg"* ]]; then
-#       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-#   fi
-#   if [[ $P2 == *"40deg"* ]]; then
-#       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-#       if [[ $P2 == *"sub"* ]]; then
-#           ARRAY=( "subArray.prod5.South-Opt-M6.list" )
-#           ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-#       fi
-#   fi 
    if [[ $P2 == *"moon"* ]]; then
       ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
    fi
@@ -276,11 +261,11 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210921"
+   TDATE="g20210616"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   PHYSDATE="g20210409"
+   PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -294,8 +279,8 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 PARTICLE=( "gamma_cone" )
+PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 
 #####################################
 # cut on number of images
@@ -372,8 +357,7 @@ then
     for A in $NXARRAY
     do
         cd ./analysis/
-        #./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
-        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDTDLL/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
         cd ../
     done
     exit
