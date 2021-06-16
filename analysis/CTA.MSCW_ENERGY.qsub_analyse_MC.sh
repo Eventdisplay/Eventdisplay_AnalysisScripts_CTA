@@ -108,7 +108,8 @@ fi
 
 #########################################
 # options for simple stereo reconstruction
-MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
+#MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
+MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=0.01"
 
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
@@ -126,7 +127,7 @@ MOPT="$MOPT -maxdistfraction=0.80"
 MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
-DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
+DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
@@ -143,6 +144,8 @@ do
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
            $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
+           echo "dispXML dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
+           ls -l ${MLODIR}
 #           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
 #           then
 #             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
@@ -193,7 +196,10 @@ echo $MOPT
 
 #########################################
 # analyse MC file
-$EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root -inputfilelist $TMPDIR/iList.list -outputfile $TMPDIR/$TFIL.root >& $ODIR/$TFIL.log
+$EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root \
+                                  -inputfilelist $TMPDIR/iList.list \
+                                  -pixellist \
+                                  -outputfile $TMPDIR/$TFIL.root >& $ODIR/$TFIL.log
 #########################################
 
 #########################################
