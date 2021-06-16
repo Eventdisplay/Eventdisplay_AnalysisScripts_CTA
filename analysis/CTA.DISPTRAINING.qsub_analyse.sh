@@ -56,22 +56,21 @@ fi
 
 #########################################
 # train TMVA
-$EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST $ODIR 0.5 ${RECID} ${TTYPE} ${BDT} ${TMVAO} ${ADIR} "" ${QC} > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
+$EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST \
+                                                  $ODIR \
+                                                  0.8 \
+                                                  ${RECID} \
+                                                  ${TTYPE} \
+                                                  ${BDT} \
+                                                  ${TMVAO} \
+                                                  ${ADIR} \
+                                                  "" \
+                                                  ${QC} \
+                                                  0 > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
 #########################################
 
 ##############
 # cleanup
-
-# pipe file list into log file
-if [ -e $TLIST ]
-then
-    echo "========================================" >> $ODIR/${BDT}-${TTYPE}.training.log
-    echo "List of files used for training: " >> $ODIR/${BDT}-${TTYPE}.training.log
-    cat $TLIST >> $ODIR/${BDT}-${TTYPE}.training.log
-# don't delete list, as it used for other jobs (training of other telescope types)
-#    rm -f $TLIST
-fi
-
 # remove everything if telescope type is not found
 if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
     if grep -Fxq "Number of telescope types: 0" $ODIR/${BDT}-${TTYPE}.training.log
@@ -93,10 +92,10 @@ if [[ -e $ODIR/${BDT}_MLP_${TTYPE}.weights.xml ]]; then
 fi
 if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
     $EVNDISPSYS/bin/logFile dispLog-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}-${TTYPE}.training.log
-    rm -f $ODIR/${BDT}-${TTYPE}.training.log
+#    rm -f $ODIR/${BDT}-${TTYPE}.training.log
 fi
 
-rm -f $ODIR/${BDT}_${TTYPE}.root
-rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
+#rm -f $ODIR/${BDT}_${TTYPE}.root
+#rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
 
 exit
