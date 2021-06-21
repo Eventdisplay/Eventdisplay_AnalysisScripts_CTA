@@ -99,10 +99,10 @@ do
          rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
 
 # take $FILEN files and combine them into one mscw file
-	 FILEN=250
+	 FILEN=125
 	 if [ $PART = "proton" ]
 	 then
-	    FILEN=1000
+	    FILEN=500
 	 fi
 
 #########################################
@@ -142,7 +142,7 @@ do
         echo "queue log and error files written to $QLOG"
 
 # submit the job
-        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=10G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=12G -V -o $QLOG -e $QLOG "$FNAM.sh" 
    done
 done
 
