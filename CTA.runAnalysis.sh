@@ -192,7 +192,7 @@ then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20201021"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
@@ -207,6 +207,7 @@ then
    ARRAY=( "subArray.prod5-prod5b.North.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
    ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-D25.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
@@ -218,7 +219,7 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-  PHYSDATE=${EFFDATE}T80p
+  PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -236,27 +237,11 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South-Opt-M6C5.list" )
-   ARRAY=( "subArray.prod5.South-Opt-LL-test.list" )
+   ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-BL.list" )
-   # IRF-FITs processing
-   ARRAY=( "subArray.prod5.South-M6-14MSTs.list" )
-   ARRAY=( "subArray.prod5.South-M6-14MSTs-M.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-Opt-M6.list" )
-       ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+       ARRAY=( "subArray.prod5.South-BL-sub.list" )
    fi
-#   ARRAY="subArray.prod5.South-Opt-SubArray.list"
-#   if [[ $P2 == *"60deg"* ]]; then
-#       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-#   fi
-#   if [[ $P2 == *"40deg"* ]]; then
-#       ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
-#       if [[ $P2 == *"sub"* ]]; then
-#           ARRAY=( "subArray.prod5.South-Opt-M6.list" )
-#           ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
-#       fi
-#   fi 
    if [[ $P2 == *"moon"* ]]; then
       ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
    fi
@@ -276,11 +261,11 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210921"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   PHYSDATE="g20210409"
+   PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -308,8 +293,8 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # observing time [h]
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
-OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" "30m" )
+OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
 
@@ -517,10 +502,10 @@ do
                     #fi
                     if [[ "${MST}" -ge "4" ]]
                     then
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadronT80p.TMVA "$PARA" BDTT80p."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95pT80p.TMVA "$PARA" BDTT80p."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
                     fi
 ##########################################
 # CTA WP Phys files
@@ -530,7 +515,7 @@ do
                      then
                         ./CTA.WPPhysWriter.sub.sh \
                                 "$NFILARRAY "\
-                                ${EFFFULLDIR}/BDTT80p."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                                ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                                 $OOTIME \
                                 DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
                                 1 \
@@ -542,7 +527,7 @@ do
                      else
                         ./CTA.WPPhysWriter.sub.sh \
                                 "$NFILARRAY" \
-                                ${EFFFULLDIR}/BDTT80p."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                                ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                                 $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
                                 0 \
                                 $ID \
