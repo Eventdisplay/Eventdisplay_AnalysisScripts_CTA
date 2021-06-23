@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# analysis submission for production 3b analysis 
+# analysis submission for production 3b/5 analysis 
 #
 # this script is optimized for the DESY analysis
 #
