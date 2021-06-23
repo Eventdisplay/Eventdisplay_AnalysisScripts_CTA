@@ -22,7 +22,7 @@ FIELD=$SUBA
 
 ###################################
 # converter command line parameter
-COPT=""
+COPT="-pe"
 # prod3(b): read effective focal lengths from external file
 if [[ $DSET == *"prod3"* ]] 
 then
@@ -141,13 +141,18 @@ do
    ls -lh $DETGEO
    ls -lh $SIMFIL
    ls -lh $TMPDIR
-   $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST $COPT -a $DETGEO -o $TMPDIR/$OFIL.root $SIMFIL &> $TMPDIR/$OFIL.$N.convert.log
+   $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST $COPT \
+                                              -a $DETGEO \
+                                              -o $TMPDIR/$OFIL.root \
+                                              $SIMFIL &> $TMPDIR/$OFIL.$N.convert.log
 
 ####################################################################
 # execute eventdisplay
   if [ -e $TMPDIR/$OFIL.root ]
   then
-      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT -outputdirectory $TMPDIR -calibrationdirectory $TMPDIR &> $TMPDIR/$OFIL.$N.evndisp.log
+      $EVNDISPSYS/bin/evndisp -sourcefile $TMPDIR/$OFIL.root $OPT \
+                              -outputdirectory $TMPDIR \
+                              -calibrationdirectory $TMPDIR &> $TMPDIR/$OFIL.$N.evndisp.log
   else
       echo "DST file not found: $TMPDIR/$OFIL.root" >& $TMPDIR/$OFIL.$N.evndisp.log
   fi

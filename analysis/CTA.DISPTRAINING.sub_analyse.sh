@@ -76,15 +76,19 @@ then
     echo "no EVNDISPSYS environmental variable defined"
     exit
 fi
+LOGF="DISPBDT"
+EVNDISP="EVNDISP"
 
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
 DATE=`date +"%y%m%d"`
+# QLOG=$CTA_USER_LOG_DIR/$DATE/${LOGF}/
 QLOG=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
 mkdir -p $QLOG
 
 # output directory for shell scripts
+# SHELLDIR=$CTA_USER_LOG_DIR/$DATE/${LOGF}/
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
 mkdir -p $SHELLDIR
 
@@ -134,7 +138,7 @@ fi
 if [[ $TMVAP == *"MLP"* ]]; then
    declare -a MLPLIST=( "MLPDisp" "MLPDispEnergy" "MLPDispError" "MLPDispCore" )
 else
-   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" )
+   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" "BDTDispPhi" )
 fi
 
 #########################################
@@ -154,6 +158,11 @@ do
 
             let "NSTEP = $NSTEP + 1"
             OFFDIR=${ODIR}.T${NSTEP}
+            OFFDIR=${ODIR}.E${NSTEP}
+            # removed cross and tgrad
+            OFFDIR=${ODIR}.S${NSTEP}
+            # tgrad^2 to trad
+            OFFDIR=${ODIR}.R${NSTEP}
             ####################
             # output directory
             TDIR="${OFFDIR}/${MLP}/${MCAZ}/"
@@ -170,7 +179,7 @@ do
                 ####################
                 # input file list
                 rm -f $SHELLDIR/tempList.list
-                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/EVNDISP/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
+                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${EVNDISP}/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
                 NFIL=`wc -l $SHELLDIR/tempList.list | awk '{print $1}'`
                 echo "Total number of files available: $NFIL"
                 # only use NN% of all evndisp files for training
@@ -215,7 +224,7 @@ do
 
                   chmod u+x $FNAM.sh
                   echo "shell script " $FNAM.sh
-                 
+
                   # submit the job
                   qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=12000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
                done

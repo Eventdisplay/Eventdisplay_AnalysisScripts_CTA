@@ -50,7 +50,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_1"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
@@ -170,6 +170,7 @@ then
 ###############################################################
 ###############################################################
 # PROD5 Analysis
+# NOTE: for N, use prod5b analysis
 # prod5-N
 # prod5-N-moon (NSB5x)
 elif [[ $P2 == "prod5-N"* ]]
@@ -196,6 +197,7 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
+   PHYSDATE="${EFFDATE}"
 ####################################
 # PROD5 Analysis
 # prod5b-N (including additional telescopes)
@@ -203,10 +205,6 @@ elif [[ $P2 == "prod5b-N"* ]]
 then
    SITE="prod5b-LaPalma-20deg"
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5b.North.list" )
-   ARRAY=( "subArray.prod5-prod5b.North.list" )
-   ARRAY=( "subArray.prod5.North-D25.list" )
-   ARRAY=( "subArray.prod5.North-PB.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
@@ -215,7 +213,7 @@ then
        ARRAY=( "subArray.prod5.North-XST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20201203"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -240,6 +238,7 @@ then
    ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-BL.list" )
    if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod5.South-ax-sub.list" )
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
    fi
    if [[ $P2 == *"moon"* ]]; then
@@ -279,6 +278,7 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
+PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 
 #####################################
