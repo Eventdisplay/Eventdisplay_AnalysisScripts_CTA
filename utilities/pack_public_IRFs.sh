@@ -72,7 +72,7 @@ do
                else
                    DLNAM="DESY.*${M}*${A}.${T}.root"
                fi
-               tar -cvf ${TFIL} ${DLNAM} -C ${DLDIR}/
+               tar -uvf ${TFIL} ${DLNAM} -C ${DLDIR}/
            done
            # sub arrays
            for A in ${SLIST}
@@ -82,10 +82,10 @@ do
                else
                    DLNAM="DESY.*${MS}*${A}.${T}.root"
                fi
-               tar -cvf ${TFIL} ${DLNAM} -C ${DLDIR}/
+               tar -uvf ${TFIL} ${DLNAM} -C ${DLDIR}/
            done
            # cleanup
-           gzip -v ${TFIL}
+           gzip -f -v ${TFIL}
            cd ${CDIR}
         done
     done
