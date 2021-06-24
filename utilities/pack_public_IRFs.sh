@@ -11,6 +11,9 @@
 # - multiplicities for different observation times
 #
 #
+set -e
+
+
 EFFDATE="20210610"
 
 ##############################################
@@ -19,7 +22,8 @@ SITE="South"
 # output data directory
 ODIR=$(pwd)
 # array list
-ALIST=$(cat ../prod5/subArray.prod5.South-a{x,x-sub}.list)
+ALIST=$(cat ../prod5/subArray.prod5.South-ax.list)
+SLIST=$(cat ../prod5/subArray.prod5.South-ax-sub.list)
 
 for Z in 20deg 40deg 60deg
 do
@@ -28,9 +32,13 @@ do
     for O in 50h 5h 100s 30m
     do
         if [[ ${O} == "50h" ]] || [[ ${O} == "5h" ]] ; then
+            # full arrays
             M="NIM3LST3MST3SST4SCMST3"
+            # sub arrays
+            MS="NIM3LST3MST3SST3SCMST3"
         else
             M="NIM2LST2MST2SST2SCMST2"
+            MS="NIM2LST2MST2SST2SCMST2"
         fi
         CDIR=$(pwd)
         # DL3: phys files
@@ -56,6 +64,7 @@ do
            fi
            cd ${DLDIR}
            rm -f ${TFIL}
+           # full arrays
            for A in ${ALIST}
            do
                if [[ ${I} == "DL2" ]]; then
@@ -63,8 +72,19 @@ do
                else
                    DLNAM="DESY.*${M}*${A}.${T}.root"
                fi
-               tar -cvf ${TFIL} ${DLDIR}/${DLNAM} -C ${DLDIR}/
+               tar -cvf ${TFIL} ${DLNAM} -C ${DLDIR}/
            done
+           # sub arrays
+           for A in ${SLIST}
+           do
+               if [[ ${I} == "DL2" ]]; then
+                   DLNAM="*${A}*root"
+               else
+                   DLNAM="DESY.*${MS}*${A}.${T}.root"
+               fi
+               tar -cvf ${TFIL} ${DLNAM} -C ${DLDIR}/
+           done
+           # cleanup
            gzip -v ${TFIL}
            cd ${CDIR}
         done
