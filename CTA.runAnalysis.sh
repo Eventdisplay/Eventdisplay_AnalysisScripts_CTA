@@ -20,9 +20,8 @@ then
          prod4-S20deg-MST
     Prod5 analysis:
          prod5b-N
-         prod5-South
-         prod5-South-40deg
-         prod5-South-60deg
+         prod5-South-20deg  prod5-South-40deg  prod5-South-60deg
+         prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
          add 'moon' for NSB5x data sets
    
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
@@ -203,9 +202,26 @@ then
 # prod5b-N (including additional telescopes)
 elif [[ $P2 == "prod5b-N"* ]]
 then
-   SITE="prod5b-LaPalma-20deg"
+   if [[ $P2 == *"40deg"* ]]; then
+       SITE="prod5b-LaPalma-40deg"
+   elif [[ $P2 == *"60deg"* ]]; then
+       SITE="prod5b-LaPalma-60deg"
+   else
+       SITE="prod5b-LaPalma-20deg"
+   fi
+   if [[ $P2 == *"moon"* ]]; then
+       SITE="${SITE}-NSB5x"
+   fi
    EDM="-sq10-LL"
+   ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-SV3.list" )
+   ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod5.North-SV3-sub.list" )
+       ARRAY=( "subArray.prod5.North-BL-sub.list" )
+       ARRAY=( "subArray.prod5.North-D25-sub.list" )
+   fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
@@ -235,14 +251,11 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-BL.list" )
+   ARRAY=( "subArray.prod5.South-ax.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-ax-sub.list" )
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
-   fi
-   if [[ $P2 == *"moon"* ]]; then
-      ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
+       ARRAY=( "subArray.prod5.South-ax-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
