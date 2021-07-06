@@ -198,8 +198,8 @@ echo $MOPT
 # analyse MC file
 $EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root \
                                   -inputfilelist $TMPDIR/iList.list \
-                                  -pixellist \
                                   -outputfile $TMPDIR/$TFIL.root >& $ODIR/$TFIL.log
+#                                  -pixellist \
 #########################################
 
 #########################################
