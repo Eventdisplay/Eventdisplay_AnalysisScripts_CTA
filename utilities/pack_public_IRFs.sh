@@ -19,21 +19,36 @@ EFFDATE="20210610"
 ##############################################
 # CTA South
 SITE="South"
+SITE="North"
 # output data directory
 ODIR=$(pwd)
 # array list
-ALIST=$(cat ../prod5/subArray.prod5.South-ax.list)
-SLIST=$(cat ../prod5/subArray.prod5.South-ax-sub.list)
+if [[ ${SITE} == "SOUTH" ]]; then
+    ALIST=$(cat ../prod5/subArray.prod5.South-ax.list)
+    SLIST=$(cat ../prod5/subArray.prod5.South-ax-sub.list)
+else
+    ALIST=$(cat ../prod5/subArray.prod5.North-D25.list)
+    SLIST=$(cat ../prod5/subArray.prod5.North-D25-sub.list)
+fi
 
+#for Z in 20deg
 for Z in 20deg 40deg 60deg
 do
     # data directory
-    DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod5-Paranal-${Z}-sq10-LL/"
+    if [[ ${SITE} == "SOUTH" ]]; then
+        DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod5-Paranal-${Z}-sq10-LL/"
+    else
+        DDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/prod5b-LaPalma-${Z}-sq10-LL/"
+    fi
     for O in 50h 5h 100s 30m
     do
         if [[ ${O} == "50h" ]] || [[ ${O} == "5h" ]] ; then
-            # full arrays
-            M="NIM3LST3MST3SST4SCMST3"
+            # full arrays 
+            if [[ ${SITE} == "SOUTH" ]]; then
+                M="NIM3LST3MST3SST4SCMST3"
+            else
+                M="NIM3LST3MST3SST3SCMST3"
+            fi
             # sub arrays
             MS="NIM3LST3MST3SST3SCMST3"
         else
