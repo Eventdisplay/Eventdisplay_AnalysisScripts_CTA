@@ -213,10 +213,10 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.North-PB.list" )
    ARRAY=( "subArray.prod5.North-SV3.list" )
    ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
+   ARRAY=( "subArray.prod5.North-PB.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-SV3-sub.list" )
        ARRAY=( "subArray.prod5.North-BL-sub.list" )
@@ -257,7 +257,7 @@ then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
    fi
-   if [[ $P2 == *"Hyper"* ]]; then
+   if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
@@ -291,7 +291,6 @@ OFFAXIS="cone"
 
 #####################################
 # particle types
-PARTICLE=( "gamma_cone" )
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
 
 #####################################
@@ -307,6 +306,7 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "50h" "30m" )
+OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
