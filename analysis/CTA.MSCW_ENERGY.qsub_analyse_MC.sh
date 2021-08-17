@@ -70,6 +70,15 @@ do
    cp $F $DDIR/
 done
 find $DDIR/ -name "*.root" > $TMPDIR/iList.list
+####
+## temporary - check all files for consistency
+#LL=$(cat $TMPDIR/iList.list)
+#rm -f ${ODIR}/${TFIL}.testOutput.log
+#touch ${ODIR}/${TFIL}.testOutput.log
+#for L in ${LL}
+#do
+#    $EVNDISPSYS/bin/testEvndispOutput ${L} prod5-South >> ${ODIR}/${TFIL}.testOutput.log
+#done
 
 # check disk space on TMPDIR
 du -h -c $TMPDIR
