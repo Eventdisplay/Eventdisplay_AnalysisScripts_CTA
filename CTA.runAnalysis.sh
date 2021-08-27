@@ -136,6 +136,12 @@ then
    ARRAY="subArray.prod3b.South-SCT.list"
    ARRAYDIR="prod3b"
    EDM="-sq09-LL"
+elif [[ $P2 == "prod3b-S20deg-SCTAlpha" ]]
+then
+   SITE="prod3b-paranal20deg_SCT"
+   ARRAY="subArray.prod3b.South-SCTAlpha.list"
+   ARRAYDIR="prod3b"
+   EDM="-sq11-LL"
 elif [[ $P2 == "prod3b-S20deg-SCTlin" ]]
 then
    SITE="prod3b-paranal20deg_SCTlin"
@@ -253,9 +259,11 @@ then
    EDM="-sq10-LL"
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-ax.list" )
+   ARRAY=( "subArray.prod5.South-D1a.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
+       ARRAY=( "subArray.prod5.South-D1a-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
