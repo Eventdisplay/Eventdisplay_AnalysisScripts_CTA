@@ -12,6 +12,7 @@ if [ $# -lt 2 ]; then
     data sets:
         prod5-South-20deg prod5-South-40deg prod5-South-60deg
         prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
+        prod3b-S20deg-SCTAlpha
 
     run modes:
         MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
@@ -33,7 +34,7 @@ if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "AN
    ./CTA.runAnalysis.sh ${P2} ${RUN}
    ./CTA.runAnalysis.sh ${P2}-sub ${RUN}
 else
-    if [[ ${P2} == *"South"* ]]; then
+    if [[ ${P2} == *"South"* ]] || [[ ${P2} == *"SCTAlpha"* ]]; then
         for M in "${NMULT[@]}"
         do
            for S in "${NMULT[@]}"
@@ -51,7 +52,8 @@ else
         for M in "${NMULT[@]}"
         do
              ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $M $M $M $M
-             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
+#             ./CTA.runAnalysis.sh ${P2} ${RUN} 2 $M $M $M $M
+#             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
         done
     fi
 fi
