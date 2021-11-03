@@ -136,10 +136,13 @@ then
    ARRAY="subArray.prod3b.South-SCT.list"
    ARRAYDIR="prod3b"
    EDM="-sq09-LL"
-elif [[ $P2 == "prod3b-S20deg-SCTAlpha" ]]
+elif [[ $P2 == "prod3b-S20deg-SCTAlpha"* ]]
 then
    SITE="prod3b-paranal20deg_SCT"
    ARRAY="subArray.prod3b.South-SCTAlpha.list"
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod3b.South-SCTAlpha-sub.list" )
+   fi
    ARRAYDIR="prod3b"
    EDM="-sq11-LL"
 elif [[ $P2 == "prod3b-S20deg-SCTlin" ]]
@@ -258,12 +261,14 @@ then
    fi
    EDM="-sq10-LL"
    ARRAY=( "subArray.prod5.South-BL.list" )
-   ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-D1a.list" )
+   ARRAY=( "subArray.prod5.South-M1.list" )
+   ARRAY=( "subArray.prod5.South-ax.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
-       ARRAY=( "subArray.prod5.South-ax-sub.list" )
        ARRAY=( "subArray.prod5.South-D1a-sub.list" )
+       ARRAY=( "subArray.prod5.South-M1-sub.list" )
+       ARRAY=( "subArray.prod5.South-ax-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -286,6 +291,7 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
+   PHYSDATE="g20211004"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
