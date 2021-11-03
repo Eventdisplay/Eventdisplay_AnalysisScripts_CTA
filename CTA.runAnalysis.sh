@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# analysis submission for production 3b analysis 
+# analysis submission for production 3b/5 analysis 
 #
 # this script is optimized for the DESY analysis
 #
@@ -19,10 +19,9 @@ then
     Prod4 analysis:
          prod4-S20deg-MST
     Prod5 analysis:
-         prod5-N , prod5-N-s01-F, prod5-N-s01-N
-         prod5-South
-         prod5-South-40deg
-         prod5-South-60deg
+         prod5b-N
+         prod5-South-20deg  prod5-South-40deg  prod5-South-60deg
+         prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
          add 'moon' for NSB5x data sets
    
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
@@ -137,6 +136,15 @@ then
    ARRAY="subArray.prod3b.South-SCT.list"
    ARRAYDIR="prod3b"
    EDM="-sq09-LL"
+elif [[ $P2 == "prod3b-S20deg-SCTAlpha"* ]]
+then
+   SITE="prod3b-paranal20deg_SCT"
+   ARRAY="subArray.prod3b.South-SCTAlpha.list"
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod3b.South-SCTAlpha-sub.list" )
+   fi
+   ARRAYDIR="prod3b"
+   EDM="-sq11-LL"
 elif [[ $P2 == "prod3b-S20deg-SCTlin" ]]
 then
    SITE="prod3b-paranal20deg_SCTlin"
@@ -170,6 +178,7 @@ then
 ###############################################################
 ###############################################################
 # PROD5 Analysis
+# NOTE: for N, use prod5b analysis
 # prod5-N
 # prod5-N-moon (NSB5x)
 elif [[ $P2 == "prod5-N"* ]]
@@ -184,6 +193,7 @@ then
    ARRAY=( "subArray.prod5.North-XST.list" )
    # prod5-prod5b comparision
    ARRAY=( "subArray.prod5-prod5b.North.list" )
+   ARRAY=( "subArray.prod5.North-PB.list" )
    if [[ $P2 == *"Hyper"* ]]; then
        ARRAY=( "subArray.prod5.North-Hyper.list" )
    fi
@@ -191,19 +201,36 @@ then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20201021"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
+   PHYSDATE="${EFFDATE}"
 ####################################
 # PROD5 Analysis
 # prod5b-N (including additional telescopes)
 elif [[ $P2 == "prod5b-N"* ]]
 then
-   SITE="prod5b-LaPalma-20deg"
-   EDM="-sq08-LL"
-   ARRAY=( "subArray.prod5b.North.list" )
-   ARRAY=( "subArray.prod5-prod5b.North.list" )
+   if [[ $P2 == *"40deg"* ]]; then
+       SITE="prod5b-LaPalma-40deg"
+   elif [[ $P2 == *"60deg"* ]]; then
+       SITE="prod5b-LaPalma-60deg"
+   else
+       SITE="prod5b-LaPalma-20deg"
+   fi
+   if [[ $P2 == *"moon"* ]]; then
+       SITE="${SITE}-NSB5x"
+   fi
+   EDM="-sq10-LL"
+   ARRAY=( "subArray.prod5.North-SV3.list" )
+   ARRAY=( "subArray.prod5.North-BL.list" )
+   ARRAY=( "subArray.prod5.North-D25.list" )
+   ARRAY=( "subArray.prod5.North-PB.list" )
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod5.North-SV3-sub.list" )
+       ARRAY=( "subArray.prod5.North-BL-sub.list" )
+       ARRAY=( "subArray.prod5.North-D25-sub.list" )
+   fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
@@ -211,10 +238,11 @@ then
        ARRAY=( "subArray.prod5.North-XST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20201203"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+  PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -232,14 +260,17 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
-   ARRAY=( "subArray.prod5.South-Opt-13MSTsN0SSTs-MX.list" )
+   ARRAY=( "subArray.prod5.South-BL.list" )
+   ARRAY=( "subArray.prod5.South-D1a.list" )
+   ARRAY=( "subArray.prod5.South-M1.list" )
+   ARRAY=( "subArray.prod5.South-ax.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-Opt-SubArray.list" )
+       ARRAY=( "subArray.prod5.South-BL-sub.list" )
+       ARRAY=( "subArray.prod5.South-D1a-sub.list" )
+       ARRAY=( "subArray.prod5.South-M1-sub.list" )
+       ARRAY=( "subArray.prod5.South-ax-sub.list" )
    fi
-   if [[ $P2 == *"moon"* ]]; then
-      ARRAY=( "subArray.prod5.South-Opt-Top4.list" )
-   fi
-   if [[ $P2 == *"Hyper"* ]]; then
+   if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
@@ -252,18 +283,22 @@ then
        ARRAY=( "subArray.prod5.South-1ST.list" )
    fi
    if [[ $P2 == *"SV0"* ]]; then
-      EDM="-1MST-LL"
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210921"
+   TDATE="g20210610"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   PHYSDATE="${EFFDATE}"
+   PHYSDATE="g20211004"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
    exit
+fi
+if [[ -z ${PHYSDATE} ]]; then
+  PHYSDATE=${EFFDATE}
 fi
 # should be either onSource or cone (default is cone)
 OFFAXIS="cone"
@@ -284,8 +319,9 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # observing time [h]
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
-OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" "30m" )
+OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
+OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
 
@@ -400,11 +436,10 @@ do
                    OOTIME=${OBSTIME[$o]}
 
                    # Only the last two steps are run for all observation times
-                   if [[ ${RUN} != "CUTS" ]] && [[ ${OOTIME} != "50h" ]]; then
-                      continue
-                   fi
-                   if [[ ${RUN} != "PHYS" ]] && [[ ${OOTIME} != "50h" ]]; then
-                      continue
+                   if [[ ${OOTIME} != "50h" ]]; then
+                       if [[ ${RUN} != "CUTS" ]] && [[ ${RUN} != "PHYS" ]]; then
+                          continue
+                       fi
                    fi
 
 ##########################################
@@ -442,8 +477,8 @@ do
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     # echo "DL2FILLING DL2" >> "$PARA"
-                     echo "DL2FILLING FALSE" >> "$PARA"
+                     echo "DL2FILLING DL2" >> "$PARA"
+                     #echo "DL2FILLING FULLTREES" >> "$PARA"
                   else
                      echo "DL2FILLING FALSE" >> "$PARA"
                   fi
@@ -485,6 +520,13 @@ do
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
+                    #if [[ "${MST}" -ge "4" ]]
+                    #then
+                    #    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                    # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
+                    #else
+                    #    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                    #fi
                     if [[ "${MST}" -ge "4" ]]
                     then
                         ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
@@ -498,11 +540,28 @@ do
                   then
                      if [[ $OFFAXIS == "cone" ]]
                      then
-                        ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
-                        $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} 1 $ID ${SITE}${EDM} $BFINEBINNING $EFFDATE $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh \
+                                "$NFILARRAY "\
+                                ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                                $OOTIME \
+                                DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
+                                1 \
+                                $ID \
+                                ${SITE}${EDM} \
+                                $BFINEBINNING \
+                                $PHYSDATE \
+                                $QSUBOPT
                      else
-                        ./CTA.WPPhysWriter.sub.sh "$NFILARRAY" ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
-                        $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} 0 $ID ${SITE}${EDM} $BFINEBINNING $EFFDATE $QSUBOPT
+                        ./CTA.WPPhysWriter.sub.sh \
+                                "$NFILARRAY" \
+                                ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                                $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
+                                0 \
+                                $ID \
+                                ${SITE}${EDM} \
+                                $BFINEBINNING \
+                                $PHYSDATE \
+                                $QSUBOPT
                  fi
 # unknown run set
                  elif [[ $RUN != "EVNDISP" ]]

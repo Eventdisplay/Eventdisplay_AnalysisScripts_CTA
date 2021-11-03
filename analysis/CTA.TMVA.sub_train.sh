@@ -141,7 +141,7 @@ do
 ###############################################################
 # get number of telescopes depending of telescope types
 # (expect that this is the same for all off-axis bins
-   FFF=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/TMVA/MVA${MCAZ}-${OFFMEA[0]}.training.root
+   FFF=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/TMVA/MVA${MCAZ}-${RECID}-${OFFMEA[0]}.training.root
    if [ ! -e "${FFF}" ]
    then
        echo "No training file found - continuing"
@@ -188,7 +188,7 @@ do
       cp -f "$RPAR".runparameter "$ODIR"
 
 # file with pre-selected training events
-      PREEVENTLIST="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/MVA${MCAZ}-${OFFMEA[$W]}.training.root"
+      PREEVENTLIST="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/TMVA/MVA${MCAZ}-${RECID}-${OFFMEA[$W]}.training.root"
 
 ###############################################################
 # loop over all energy bins and prepare run parameter files

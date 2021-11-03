@@ -18,7 +18,10 @@ set -e
 DSET="$1"
 TDIR=$(pwd)
 
-VERSION="prod5-v10"
+VERSION="prod5-v11"
+if [[ $DSET = *"SCT-sq11-LL"* ]]; then
+   VERSION="prod3b-v11"
+fi
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
@@ -56,8 +59,13 @@ if [[ $DSET = *"prod3"* ]]
 then
     if [[ $DSET = *"SCT"* ]]
     then
-        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
-        EFLAGS="PROD3b_SCT"
+        if [[ $DSET = *"sq11"* ]]; then
+            export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=92"
+            EFLAGS="PROD3b_SCTALPHA"
+        else
+            export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+            EFLAGS="PROD3b_SCT"
+        fi
     elif [[ $DSET = *"paranal"* ]]
     then
         export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"

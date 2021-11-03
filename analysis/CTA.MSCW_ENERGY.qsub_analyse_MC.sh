@@ -70,6 +70,15 @@ do
    cp $F $DDIR/
 done
 find $DDIR/ -name "*.root" > $TMPDIR/iList.list
+####
+## temporary - check all files for consistency
+#LL=$(cat $TMPDIR/iList.list)
+#rm -f ${ODIR}/${TFIL}.testOutput.log
+#touch ${ODIR}/${TFIL}.testOutput.log
+#for L in ${LL}
+#do
+#    $EVNDISPSYS/bin/testEvndispOutput ${L} prod5-South >> ${ODIR}/${TFIL}.testOutput.log
+#done
 
 # check disk space on TMPDIR
 du -h -c $TMPDIR
@@ -108,7 +117,8 @@ fi
 
 #########################################
 # options for simple stereo reconstruction
-MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
+#MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
+MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=0.01"
 
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
@@ -126,7 +136,7 @@ MOPT="$MOPT -maxdistfraction=0.80"
 MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
-DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.T1"
+DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
@@ -143,11 +153,13 @@ do
            MLODIR="${TMPDIR}/${ML}/${MCAZ}/"
            mkdir -p ${MLODIR}
            $EVNDISPSYS/bin/logFile dispXML-${MVATYPE}-${TTYPE} ${MLFIL} > ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
-           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
-           then
-             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
-             exit
-           fi
+           echo "dispXML dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
+           ls -l ${MLODIR}
+#           if grep -q NOXML ${MLODIR}/${ML}_${MVATYPE}_${TTYPE}.weights.xml
+#           then
+#             echo "Error reading dispBDT xml files: dispXML-${MVATYPE}-${TTYPE} ${MLFIL}"
+#             exit
+#           fi
       fi
    done 
 done
@@ -193,7 +205,10 @@ echo $MOPT
 
 #########################################
 # analyse MC file
-$EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root -inputfilelist $TMPDIR/iList.list -outputfile $TMPDIR/$TFIL.root >& $ODIR/$TFIL.log
+$EVNDISPSYS/bin/mscw_energy $MOPT -tablefile $TMPDIR/$TABFIL-$ARRAY.root \
+                                  -inputfilelist $TMPDIR/iList.list \
+                                  -outputfile $TMPDIR/$TFIL.root >& $ODIR/$TFIL.log
+#                                  -pixellist \
 #########################################
 
 #########################################
