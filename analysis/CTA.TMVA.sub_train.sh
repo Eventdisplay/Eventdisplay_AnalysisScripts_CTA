@@ -104,7 +104,6 @@ else
 #   OFFMAX=( "1.e10" )
    OFFMEA=( 0.0 )
    DSUF="gamma_onSource"
-   GTYPE="baseline_evndisp"
    ASUF="gamma_cone"
    ATYPE="cone10_evndisp"
 fi
@@ -152,7 +151,6 @@ do
    echo ${FFF}
    NTELTYPESTRING=$($EVNDISPSYS/bin/printRunParameter ${FFF} -nteltypes)
    NTELTYPE=$(echo ${NTELTYPESTRING} | awk '{print $1}')
-   NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
    do 
@@ -174,6 +172,7 @@ do
    then
        TYPECUT="${TYPECUT})"
    fi
+   #NTYPECUT="NTtype==$NTELTYPE"
    #TYPECUT="$NTYPECUT\&\&$TYPECUT"
    TYPECUT="$TYPECUT"
    echo "Telescope type cut: $TYPECUT"
