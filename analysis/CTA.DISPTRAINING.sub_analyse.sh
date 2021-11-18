@@ -76,19 +76,16 @@ then
     echo "no EVNDISPSYS environmental variable defined"
     exit
 fi
-LOGF="DISPBDT"
 EVNDISP="EVNDISP"
 
 #########################################
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
 DATE=`date +"%y%m%d"`
-# QLOG=$CTA_USER_LOG_DIR/$DATE/${LOGF}/
 QLOG=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
 mkdir -p $QLOG
 
 # output directory for shell scripts
-# SHELLDIR=$CTA_USER_LOG_DIR/$DATE/${LOGF}/
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
 mkdir -p $SHELLDIR
 
