@@ -8,6 +8,8 @@
 
 # dataset used for layout optimisation
 DDAT="g20210409-20deg"
+#DDAT="g20210409-40deg"
+#DDAT="g20210409-60deg"
 PDAT="g20210921"
 FLIST="./prod5/subArray.prod5.South-sub.list"
 if [[ ! -e ${FLIST} ]]; then
