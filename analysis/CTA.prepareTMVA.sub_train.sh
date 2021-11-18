@@ -58,7 +58,6 @@ VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
-RXPAR=$(basename "$RPAR".runparameter runparameter)
 #####################################
 if [ -n "$6" ]
 then
@@ -74,12 +73,6 @@ QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-} 
 QSUBOPT=${QSUBOPT//\"/} 
 
-#####################################
-# energy bins
-# single energy bin!
-# default
-EMIN=(-5.00 5.00 )
-NENE=${#EMIN[@]}
 #####################################
 # offset bins
 if [ $CONE == "TRUE" ]
