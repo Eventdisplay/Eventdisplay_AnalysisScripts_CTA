@@ -21,9 +21,9 @@ TDIR=$(pwd)
 
 # main working directory (logs and code)
 DSET="${1}"
-WORKDIR="${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}"
+export WORKDIR="${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}"
 # main data results
-DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+export DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
 
 # ROOT installation expected
 if [[ -z ${ROOTSYS} ]]; then
