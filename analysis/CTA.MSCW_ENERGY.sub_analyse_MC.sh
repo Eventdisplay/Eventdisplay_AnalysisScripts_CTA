@@ -86,7 +86,7 @@ do
    echo "STARTING ARRAY $SUBAR"
 
 # output directory
-   ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$SUBAR"/"${ANADIR}
+   ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${SUBAR}/${ANADIR}"
    mkdir -p ${ODIR}
 
 #########################################
