@@ -16,7 +16,7 @@ if [[ ! -d "$1" ]]; then
   exit
 fi
 
-OPTION="-delete -print"
+#OPTION="-delete -print"
 
 # North LST arrays
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" -print -delete
