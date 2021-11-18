@@ -1,3 +1,4 @@
+#!/bin/sh
 # pack files for public IRFs
 #
 # includes:
