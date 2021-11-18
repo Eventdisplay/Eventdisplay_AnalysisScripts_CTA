@@ -29,7 +29,7 @@ source $EVNDISPSYS/setObservatory.sh CTA
 TFIL=${TFIL}-$l.mscw
 
 # output data and log files are written to this directory
-ODIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$ARRAY"/$ADIR/"
+ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/${ADIR}/"
 mkdir -p $ODIR
 
 # FILE LIST
@@ -44,7 +44,7 @@ rm -f $ODIR/$TFIL.log
 rm -f $ODIR/$TFIL.table.log
 
 # table directory
-TABDIR=$CTA_USER_DATA_DIR"/analysis/AnalysisData/"$DSET"/"$ARRAY"/Tables/"
+TABDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${ARRAY}/Tables/"
 
 #########################################
 # smooth / cp table file to temp disk
@@ -142,7 +142,7 @@ DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
 # types to tmpdir
 for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy
 do
-   MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/"$DSET"/${DISPSUBDIR}/${ML}/${MCAZ}/"
+   MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR}/${ML}/${MCAZ}/"
    echo "Unpacking ${ML} from ${MLDDIR}"
    FF=$(find ${MLDDIR} -name "$ML*disptmva.root")
    for F in ${FF}
