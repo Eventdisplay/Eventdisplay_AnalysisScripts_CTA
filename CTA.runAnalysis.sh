@@ -222,14 +222,17 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
+   if [[ $P2 == *"DL2plus"* ]]; then
+       EDM="-sq10-LL-DL2plus"
+   fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
    ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
-   ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-SV3-sub.list" )
-       ARRAY=( "subArray.prod5.North-BL-sub.list" )
        ARRAY=( "subArray.prod5.North-D25-sub.list" )
+       ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
@@ -273,6 +276,7 @@ then
        ARRAY=( "subArray.prod5.South-D1a-sub.list" )
        ARRAY=( "subArray.prod5.South-M1-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
