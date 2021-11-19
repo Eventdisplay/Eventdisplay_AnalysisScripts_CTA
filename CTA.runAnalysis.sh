@@ -49,7 +49,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
-QSUBOPT="_M_P_X_cta_high_X__M_js_X_212"
+QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
