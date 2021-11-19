@@ -40,7 +40,6 @@ mkdir -p $PDIR
 #####################################
 # analysis dates and table dates
 TDATE="d20141123"
-DATE="d20141123"
 
 
 # default MVA parameters

@@ -222,14 +222,17 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
+   if [[ $P2 == *"DL2plus"* ]]; then
+       EDM="-sq10-LL-DL2plus"
+   fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
    ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
-   ARRAY=( "subArray.prod5.North-PB.list" )
+   ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-SV3-sub.list" )
-       ARRAY=( "subArray.prod5.North-BL-sub.list" )
        ARRAY=( "subArray.prod5.North-D25-sub.list" )
+       ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
@@ -260,15 +263,20 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq10-LL"
+   if [[ $P2 == *"DL2plus"* ]]; then
+       EDM="-sq10-LL-DL2plus"
+   fi
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-D1a.list" )
    ARRAY=( "subArray.prod5.South-M1.list" )
    ARRAY=( "subArray.prod5.South-ax.list" )
+   ARRAY=( "subArray.prod5.South-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-D1a-sub.list" )
        ARRAY=( "subArray.prod5.South-M1-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -319,9 +327,9 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # observing time [h]
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
-OBSTIME=( "50h" "30m" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
 
@@ -477,8 +485,11 @@ do
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     echo "DL2FILLING DL2" >> "$PARA"
-                     #echo "DL2FILLING FULLTREES" >> "$PARA"
+                     if [[ $P2 == *"DL2plus"* ]]; then
+                         echo "DL2FILLING FULLTREES" >> "$PARA"
+                     else
+                         echo "DL2FILLING DL2" >> "$PARA"
+                     fi
                   else
                      echo "DL2FILLING FALSE" >> "$PARA"
                   fi

@@ -277,7 +277,7 @@ do
 	  touch $PARA
 	  echo "WRITING PARAMETERFILE $PARA"
 	  NTYPF=NIM$NIMAGESMIN
-	  EFFDIR="EffectiveArea-"$OOTIME"-Erec$EREC-ID$ID$AZ-$NTYPF-$EFFDATE"
+	  EFFDIR="EffectiveArea-${OOTIME}-Erec$EREC-ID$ID$AZ-$NTYPF-$EFFDATE"
           EFFFULLDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$S$M/$EFFDIR/"
 #	  EFFDIR="/lustre/fs9/group/cta/users/$USER/CTA/analysis/AnalysisData/$S$M/$EFFDIR/"
 	  echo "MSCWSUBDIRECTORY $MSCWSUBDIRECTORY" >> $PARA

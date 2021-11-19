@@ -23,7 +23,7 @@ TDIR=$(pwd)
 DSET="${1}"
 export WORKDIR="${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}"
 # main data results
-export DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+# export DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
 
 # ROOT installation expected
 if [[ -z ${ROOTSYS} ]]; then
