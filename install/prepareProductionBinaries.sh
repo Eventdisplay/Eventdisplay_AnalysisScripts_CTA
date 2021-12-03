@@ -18,7 +18,7 @@ set -e
 DSET="$1"
 TDIR=$(pwd)
 
-VERSION="prod5-v11"
+VERSION="prod5-sq20"
 if [[ $DSET = *"SCT-sq11-LL"* ]]; then
    VERSION="prod3b-v11"
 fi
@@ -29,7 +29,6 @@ mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-#git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
@@ -43,7 +42,6 @@ echo "Preparing binaries for $DSET"
 echo 
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
-#git clone -b ${VERSION} https://github.com/Eventdisplay/Eventdisplay.git .
 git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
 
 # HESSIOSYS
