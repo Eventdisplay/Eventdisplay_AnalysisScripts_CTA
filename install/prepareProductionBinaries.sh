@@ -59,7 +59,7 @@ then
     then
         if [[ $DSET = *"sq11"* ]]; then
             if [[ $DSET = *"156"* ]]; then
-                export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=156 -std=c99"
+                export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=156"
                 export MAXTEL=156
             else
                 export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=92"
@@ -88,7 +88,7 @@ then
    EFLAGS="PROD4b"
 elif [[ $DSET = *"prod5"* ]]
 then
-   export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG -std=c99"
+   export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
    EFLAGS="PROD5"
 else
    echo "unknown production"
