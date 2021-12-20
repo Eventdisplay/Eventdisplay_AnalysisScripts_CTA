@@ -194,7 +194,7 @@ MOPT="$MOPT -minImages=${MINIMAGE}"
 ################################
 # telescope type dependent weight
 # prod3b production
-if [[ $DSET == *"prod3b"* ]]
+if [[ $DSET == *"prod3b"* ]] && [[ $DSET != *"SCT"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.TelescopeWeights.dat"
 elif [[ $DSET == *"prod5"* ]]
