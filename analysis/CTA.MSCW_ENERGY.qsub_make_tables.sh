@@ -84,10 +84,6 @@ fi
 MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=${MINTEL} -write1DHistograms"
 # options for reweighting of telescopes
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
-# for 40 deg prod3b
-# MOPT="$MOPT -maxnevents=3500000"
-# for 20 deg prod3b (default)
-# (remove for small arrays)
 MOPT="$MOPT -maxnevents=3000000"
 # options for single telescope analysis
 if [ ${MINTEL} -eq 1 ]
@@ -98,7 +94,7 @@ fi
 ################################
 # telescope type dependent weight
 # prod3b production
-if [[ $DSET == *"prod3b"* ]]
+if [[ $DSET == *"prod3b"* ]] && [[ $DSET != *"SCT"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.TelescopeWeights.dat"
 fi   

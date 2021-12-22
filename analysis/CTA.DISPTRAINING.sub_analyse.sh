@@ -187,6 +187,9 @@ do
                 if [[ $DSET == *"LaPalma"* ]]
                 then
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
+                elif [[ $DSET == *"SCT"* ]]
+                then
+                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.30}')
                 else
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
                 fi

@@ -58,7 +58,13 @@ then
     if [[ $DSET = *"SCT"* ]]
     then
         if [[ $DSET = *"sq11"* ]]; then
-            export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=92"
+            if [[ $DSET = *"156"* ]]; then
+                export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=156"
+                export MAXTEL=156
+            else
+                export HESSIOCFLAGS="-DCTA_PROD4_SC -DMAXIMUM_TELESCOPES=92"
+                export MAXTEL=92
+            fi
             EFLAGS="PROD3b_SCTALPHA"
         else
             export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"

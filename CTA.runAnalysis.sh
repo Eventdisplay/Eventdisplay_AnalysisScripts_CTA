@@ -23,6 +23,7 @@ then
          prod5-South-20deg  prod5-South-40deg  prod5-South-60deg
          prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
          add 'moon' for NSB5x data sets
+         prod3b-S20-SCT156Tel
    
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
    
@@ -136,9 +137,10 @@ then
    ARRAY="subArray.prod3b.South-SCT.list"
    ARRAYDIR="prod3b"
    EDM="-sq09-LL"
-elif [[ $P2 == "prod3b-S20deg-SCTAlpha"* ]]
+elif [[ $P2 == "prod3b-S20deg-SCTAlpha"* ]] || [[ $P2 == "prod3b-S20-SCT156Tel"* ]]
 then
    SITE="prod3b-paranal20deg_SCT"
+   SITE="prod3b-paranal20deg_SCT156Tel"
    ARRAY="subArray.prod3b.South-SCTAlpha.list"
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod3b.South-SCTAlpha-sub.list" )
@@ -262,7 +264,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq10-LL"
+   EDM="-sq20-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -271,12 +273,14 @@ then
    ARRAY=( "subArray.prod5.South-M1.list" )
    ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
+   ARRAY=( "subArray.prod5.South-AlphaSSTs.list" );
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-D1a-sub.list" )
        ARRAY=( "subArray.prod5.South-M1-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
+       ARRAY=( "subArray.prod5.South-AlphaSSTs-sub.list" );
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -299,7 +303,7 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
-   PHYSDATE="g20211004"
+   PHYSDATE="g20211204"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -329,7 +333,7 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
-OBSTIME=( "50h" )
+OBSTIME=( "50h" "30m" )
 
 echo "$RUN" "$SITE"
 
@@ -346,7 +350,6 @@ then
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
           N=${PARTICLE[$i]}
-
           LIST=${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_${ARRAYDIR}/${SITE}/${N}.list
 
           echo "READING SIMTEL FILE LIST $LIST"
@@ -356,7 +359,15 @@ then
           fi
 
           cd ./analysis/
-          ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh ../${ARRAYDIR}/${ARRAY} ${LIST} $N ${SITE}${EDM} 0 $i $QSUBOPT $TRG
+          ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh \
+                  ../${ARRAYDIR}/${ARRAY} \
+                  ${LIST} \
+                  $N \
+                  ${SITE}${EDM} \
+                  0 \
+                  $i \
+                  $QSUBOPT \
+                  $TRG
           cd ../
    done
    continue
@@ -391,7 +402,15 @@ then
     for A in $NXARRAY
     do
         cd ./analysis/
-        ./CTA.DISPTRAINING.sub_analyse.sh ${SITE}${EDM} $DDIR/DISPBDT/${BDTDIR}${A} 0 $A $RUNPAR 99 $QCPAR $QSUBOPT
+        ./CTA.DISPTRAINING.sub_analyse.sh \
+              ${SITE}${EDM} \
+              $DDIR/DISPBDT/${BDTDIR}${A} \
+              0 \
+              $A \
+              $RUNPAR \
+              99 \
+              $QCPAR \
+              $QSUBOPT
         cd ../
     done
     exit
@@ -417,7 +436,15 @@ do
               then
                       echo "Filling table $TABLE with mintel option ${NIMAGESMIN}"
                       cd ./analysis/
-                      ./CTA.MSCW_ENERGY.sub_make_tables.sh $TABLE $ID "$NFILARRAY" $OFFAXIS ${SITE}${EDM} ${AZ} ${NIMAGESMIN} $QSUBOPT
+                      ./CTA.MSCW_ENERGY.sub_make_tables.sh \
+                            $TABLE \
+                            $ID \
+                            "$NFILARRAY" \
+                            $OFFAXIS \
+                            ${SITE}${EDM} \
+                            ${AZ} \
+                            ${NIMAGESMIN} \
+                            $QSUBOPT
                       cd ../
                       continue
 ##########################################
@@ -427,7 +454,16 @@ do
                       echo "Analysing files with mintel option ${NIMAGESMIN}"
                       echo "    using table $TABLE"
                       cd ./analysis/
-                      ./CTA.MSCW_ENERGY.sub_analyse_MC.sh $TABLE $ID "$NFILARRAY" ${SITE}${EDM} ${MSCWSUBDIRECTORY} $OFFAXIS ${AZ} ${NIMAGESMIN} $QSUBOPT
+                      ./CTA.MSCW_ENERGY.sub_analyse_MC.sh \
+                              $TABLE \
+                              $ID \
+                              "$NFILARRAY" \
+                              ${SITE}${EDM} \
+                              ${MSCWSUBDIRECTORY} \
+                              $OFFAXIS \
+                              ${AZ} \
+                              ${NIMAGESMIN} \
+                              $QSUBOPT
                       cd ../
                       continue
                 fi
@@ -501,7 +537,13 @@ do
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
-                         ./CTA.prepareTMVA.sub_train.sh "$NFILARRAY" $OFFAXIS ${SITE}${EDM} "$PARA" $QSUBOPT $AZ
+                         ./CTA.prepareTMVA.sub_train.sh \
+                         "$NFILARRAY" \
+                         $OFFAXIS \
+                         ${SITE}${EDM} \
+                         "$PARA" \
+                         $QSUBOPT \
+                         $AZ
                   fi
 ##########################################
 # train BDTs   
@@ -510,40 +552,71 @@ do
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
-                         ./CTA.TMVA.sub_train.sh "$NFILARRAY" $OFFAXIS ${SITE}${EDM} "$PARA" $QSUBOPT $AZ
+                         ./CTA.TMVA.sub_train.sh \
+                                "$NFILARRAY" \
+                                $OFFAXIS \
+                                ${SITE}${EDM} \
+                                "$PARA" \
+                                $QSUBOPT \
+                                $AZ
                   fi
 ##########################################
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]
                   then
                     if [[ ! -z ${AZ} ]]; then
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVAFixedSignal "$PARA" AngularResolution ${SITE}${EDM} 2 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh \
+                            "$NFILARRAY" \
+                            ANASUM.GammaHadron.TMVAFixedSignal \
+                            "$PARA" \
+                            AngularResolution \
+                            ${SITE}${EDM} \
+                            2 \
+                            $QSUBOPT \
+                            $AZ
                     fi
 ##########################################
 # IRFs: effective areas after quality cuts
                   elif [[ $RUN == "QC" ]]
                   then
                     if [[ ! -z ${AZ} ]]; then
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.QC "$PARA" QualityCuts001CU ${SITE}${EDM} 3 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh \
+                               "$NFILARRAY" \
+                               ANASUM.GammaHadron.QC \
+                               "$PARA" \
+                               QualityCuts001CU \
+                               ${SITE}${EDM} \
+                               3 \
+                               $QSUBOPT \
+                               $AZ
                      fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
                   elif [[ $RUN == "CUTS" ]]
                   then
                     # large multiplicity runs use 80% max signal efficiency (best resolution)
-                    #if [[ "${MST}" -ge "4" ]]
-                    #then
-                    #    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
-                    # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
-                    #else
-                    #    ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
-                    #fi
                     if [[ "${MST}" -ge "4" ]]
                     then
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh \
+                               "$NFILARRAY" \
+                               ANASUM.GammaHadron.TMVA \
+                               "$PARA" \
+                               BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                               ${SITE}${EDM} \
+                               0 \
+                               $QSUBOPT \
+                               $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
-                        ./CTA.EFFAREA.sub_analyse_list.sh "$NFILARRAY" ANASUM.GammaHadron95p.TMVA "$PARA" BDT."$OOTIME"-${EFFVERSION}.$EFFDATE ${SITE}${EDM} 0 $QSUBOPT $AZ
+                        ./CTA.EFFAREA.sub_analyse_list.sh \
+                               "$NFILARRAY" \
+                               ANASUM.GammaHadron95p.TMVA \
+                               "$PARA" \
+                               BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
+                               ${SITE}${EDM} \
+                               0 \
+                               $QSUBOPT \
+                               $AZ
                     fi
 ##########################################
 # CTA WP Phys files
