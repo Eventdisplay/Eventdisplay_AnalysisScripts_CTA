@@ -22,6 +22,7 @@ VERSION="prod5-sq20"
 if [[ $DSET = *"SCT-sq11-LL"* ]]; then
    VERSION="prod3b-v11"
 fi
+VERSION="dev-5.7.0"
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
@@ -29,7 +30,8 @@ mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+#git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
 
 # everything below is code
 export EVNDISPSYS="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/code/"
