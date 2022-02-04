@@ -9,7 +9,7 @@ Script to:
 Usage:
 
 ```
-./prepareProductionBinaries.sh <data set>
+./prepareProductionBinaries.sh <data set> <Eventdisplay version>
 ```
 
 This will install the required binaries and data files into 

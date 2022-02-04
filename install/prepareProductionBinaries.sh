@@ -5,24 +5,32 @@
 # requires access to hessioxx at MPIK
 #
 #
-if [ ! -n "$1" ]
-then
-    echo "./prepareProductionBinaries.sh <data set>"
-    echo
-    echo "   will install hessioxx, Eventdisplay analysis files and code"
-    echo
-    exit
+
+if [ $# -lt 1 ]; then
+    echo "
+./prepareProductionBinaries.sh <data set> <Eventdisplay version>
+
+   will install hessioxx, Eventdisplay analysis files and code
+
+   requires same branch names for all relevant Eventdisplay Repositories
+   (or main)
+
+   "
+   exit
 fi
 set -e
 
 DSET="$1"
+[[ "$2" ]] && VERSION=$2 || VERSION="main"
 TDIR=$(pwd)
 
-VERSION="prod5-sq20"
+echo "Installing $DSET for Eventdisplay version $VERSION"
+
+# remove later: forwas used for prod5
+# VERSION="prod5-sq20"
 if [[ $DSET = *"SCT-sq11-LL"* ]]; then
    VERSION="prod3b-v11"
 fi
-VERSION="dev-5.7.0"
 
 # parameter and configuration files
 AUXDIR="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/"
@@ -30,8 +38,11 @@ mkdir -p $AUXDIR
 cd $AUXDIR
 rm -rf Eventdisplay_AnalysisFiles_CTA
 echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-#git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
-git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+if [[ $VERSION == "main" ]]; then
+    git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+else
+    git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+fi
 
 # everything below is code
 export EVNDISPSYS="$CTA_USER_WORK_DIR/analysis/AnalysisData/${DSET}/code/"
@@ -44,7 +55,11 @@ echo "Preparing binaries for $DSET"
 echo 
 echo "Getting Eventdisplay..."
 cd $EVNDISPSYS
-git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
+if [[ $VERSION == "main" ]]; then
+    git clone git@github.com:Eventdisplay/Eventdisplay.git
+else
+    git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
+fi
 
 # HESSIOSYS
 HESSPACKAGE="hessioxxx.tar.gz"
