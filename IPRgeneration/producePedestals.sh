@@ -11,6 +11,7 @@
 #  PROD: production
 
 CDIR=$(pwd)
+SIM_TELARRAY_PATH=$SIM_TELARRAY_PATH # Change this if you have your own sim_telarray and do not use the setupPackage.sh script
 SCRATCH="USER_SET_YOUR_SCRATCH_AREA"
 
 ZENITH="20.0"
