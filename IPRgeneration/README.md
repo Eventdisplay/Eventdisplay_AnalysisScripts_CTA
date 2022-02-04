@@ -15,3 +15,7 @@ To produce IPR graphs for all telescopes, run the scripts in the following order
 4. mergeIPRGraphs.C - Merge all graphs calculated into root file
 
 5. saveLogFiles.sh - Save all log files into the prod5-IPR.root file.
+
+# DESY CVMFS setup
+
+use sim_telarray installation in e.g. 'source /cvmfs/cta.in2p3.fr/software/centos7/gcc83_noOpt/simulations/corsika_simtelarray/2020-06-29b/setupPackage.sh'
