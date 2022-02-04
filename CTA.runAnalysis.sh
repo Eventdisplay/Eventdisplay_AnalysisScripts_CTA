@@ -264,6 +264,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
+   EDM="-sq70-LL"
    EDM="-sq20-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
@@ -273,14 +274,19 @@ then
    ARRAY=( "subArray.prod5.South-M1.list" )
    ARRAY=( "subArray.prod5.South-ax.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
-   ARRAY=( "subArray.prod5.South-AlphaSSTs.list" );
+   ARRAY=( "subArray.prod5.South-AlphaLSTs.list" );
+   ARRAY=( "subArray.prod5.South-AlphaC8aj.list" );
+   ARRAY=( "subArray.prod5.South-BetaPlus.list" )
+   ARRAY=( "subArray.prod5.South-BetaPlus-redo.list")
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-D1a-sub.list" )
        ARRAY=( "subArray.prod5.South-M1-sub.list" )
        ARRAY=( "subArray.prod5.South-ax-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
-       ARRAY=( "subArray.prod5.South-AlphaSSTs-sub.list" );
+       ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" );
+       ARRAY=( "subArray.prod5.South-AlphaLSTs-sub.list" );
+       ARRAY=( "subArray.prod5.South-BetaPlus-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -300,10 +306,10 @@ then
    ARRAYDIR="prod5"
    TDATE="g20210610"
    ANADATE="${TDATE}"
+   ANADATE="g20220103"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
-   PHYSDATE="g20211204"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -521,7 +527,7 @@ do
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"
@@ -529,7 +535,6 @@ do
                   else
                      echo "DL2FILLING FALSE" >> "$PARA"
                   fi
-
                   cd ./analysis/
 ##########################################
 # prepare train BDTs   

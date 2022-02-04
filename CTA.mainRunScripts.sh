@@ -24,30 +24,54 @@ fi
 P2="$1"
 # run mode
 RUN="$2"
+# loop over LSTs
+[[ "$3" ]] && LST=$3 || LST="FALSE"
 
 NMULT=( 2 3 4 5 6 )
 if [[ ${P2} == *"North"* ]]; then
    NMULT=( 2 3 4 )
 fi
+LSTMULT=( 2 3 4 )
     
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN}
    ./CTA.runAnalysis.sh ${P2}-sub ${RUN}
 else
     if [[ ${P2} == *"South"* ]] || [[ ${P2} == *"SCTAlpha"* ]]; then
-        for M in "${NMULT[@]}"
-        do
-           for S in "${NMULT[@]}"
-           do
-             echo $M $S
-             # minimum between MSTs and SSTs
-             NIM=$(($M<$S ? $M : $S))
-            ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $NIM $M $S $NIM
-             if [[ "$S" == "$M" ]]; then
+        # no LST loop
+        if [[ $LST == "FALSE" ]]; then
+            for M in "${NMULT[@]}"
+            do
+               for S in "${NMULT[@]}"
+               do
+                 # minimum between MSTs and SSTs
+                 NIM=$(($M<$S ? $M : $S))
+                ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $NIM $M $S $NIM
+                 if [[ "$S" == "$M" ]]; then
                   ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $NIM $M $S $NIM
-             fi
-           done
-        done
+                 fi
+               done
+            done
+        # with LST loop
+        else
+            echo "LST loop $LST"
+            for M in "${NMULT[@]}"
+            do
+               for S in "${NMULT[@]}"
+               do
+                 for L in "${LSTMULT[@]}"
+                 do
+                     # minimum between MSTs and SSTs
+                     NIM=$(($M<$S ? $M : $S))
+                     echo "LST $L  MST $M  SST $S  SCT $NIM"
+                    ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $L $M $S $NIM
+                     if [[ "$S" == "$M" ]]; then
+                        ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $L $M $S $NIM
+                     fi
+                 done
+               done
+            done     
+       fi
     else
         for M in "${NMULT[@]}"
         do
@@ -57,5 +81,4 @@ else
         done
     fi
 fi
-
 
