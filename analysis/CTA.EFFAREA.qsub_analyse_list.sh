@@ -364,12 +364,11 @@ do
              echo "ANGRESDIR ${AXDIR}"
              echo "QCDIR ${QCDIR}"
              echo "PARTICLEFILEDIR ${CUTFILEDIRAZ}"
-             LLOG=${CUTFILEDIRAZ}/ParticleNumbers.$ARRAY.$RECID.log
+             LLOG=$ODIR/ParticleNumbers.$ARRAY.$RECID-$i-$j.log
              rm -f $LLOG
 
              # onSource
              if [[ $PART == *"onSource"* ]]; then
-                 echo "PPPP $ARRAY onSource $RECID $QCDIR $TMPDIR $AXDIR"
                  ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas $ARRAY onSource $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
              else
                  # cone
@@ -379,7 +378,6 @@ do
                      ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY coneFB $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
                  else
                  # off-axis std binning
-                     echo "PPP $ARRAY cone $RECID $QCDIR $TMPDIR $AXDIR"
                      ${EVNDISPSYS}/bin/writeParticleRateFilesFromEffectiveAreas  $ARRAY cone $RECID $QCDIR ${CUTFILEDIRAZ} $AXDIR > $LLOG
                  fi
              fi
@@ -615,7 +613,7 @@ do
       fi
 
       if [[ -e $TMPDIR/ParticleNumbers.$ARRAY.$RECID.log ]]; then
-         ${EVNDISPSYS}/bin/logFile writeRateLog $OFIX.root $TMPDIR/ParticleNumbers.$ARRAY.$RECID.log
+         ${EVNDISPSYS}/bin/logFile writeRateLog $OFIX.root $LLOG
       fi
       # final results file
       mv -v $OFIX.root ${ODIR}/
