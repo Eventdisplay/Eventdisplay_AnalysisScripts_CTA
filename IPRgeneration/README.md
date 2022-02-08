@@ -1,6 +1,6 @@
 # IPR generation
 
-Optimised next-neighbour cleaning (Shayduk et al 2013) requires charge spectra as input.
+Optimised next-neighbour cleaning ([Shayduk et al 2013](https://arxiv.org/abs/1307.4939)) requires charge spectra as input.
 This directory contains scripts to produce charge spectra for different telescope types
 using sim_telarray.
 
