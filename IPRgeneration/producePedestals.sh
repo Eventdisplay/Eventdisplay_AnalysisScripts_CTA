@@ -12,7 +12,7 @@
 
 CDIR=$(pwd)
 SIM_TELARRAY_PATH=$SIM_TELARRAY_PATH # Change this if you have your own sim_telarray and do not use the setupPackage.sh script
-SCRATCH="USER_SET_YOUR_SCRATCH_AREA"
+SCRATCH="$CTA_USER_DATA_DIR/tmp/"
 
 ZENITH="20.0"
 # ZENITH="60.0"
@@ -30,6 +30,12 @@ TELTYPES=( SST )
 PROD="PROD4"
 PROD="PROD5"
 
+# dedicated scratch directory
+SCRATCH=${SCRATCH}/${PROD}/ze-${ZE}${MOON}
+mkdir -p ${SCRATCH}
+echo "Writing all data products to ${SCRATCH}"
+echo "(use this directory as input for all following analysis steps)"
+
 for T in "${TELTYPES[@]}"
 do
     echo "Simulating $T"
@@ -46,6 +52,9 @@ do
        -DNSB_AUTOSCALE -C telescope_theta=${ZENITH} -C telescope_phi=180 \
        -C pedestal_events=1000 \
        -C output_file=$outputFile \
-       ${CDIR}/dummy1.corsika.gz >& sim_telarray${MOON}-${T}-ze-${ZE}.log
+       ${CDIR}/dummy1.corsika.gz >& ${SCRATCH}/sim_telarray${MOON}-${T}-ze-${ZE}.log
 
+    # minor cleanup
+    mv -f telarray_rand.conf.used ${SCRATCH}/
+    rm -f ctsim.hdata
 done
