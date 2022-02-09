@@ -41,11 +41,11 @@ cd Eventdisplay_AnalysisScripts_CTA
 git checkout prod5-v08
 ```
 
-Install and compile eventdisplay:
+Install and compile eventdisplay (expect all Eventdisplay repositories with same branch names):
 
 ```
 cd install
-./prepareProductionBinaries.sh <data set>
+./prepareProductionBinaries.sh <data set> prod5-v08
 ```
 
 This installs the following packages:
