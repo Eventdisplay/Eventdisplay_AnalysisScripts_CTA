@@ -9,8 +9,22 @@
  *. then the halfmoon pedestal files are merged.
  */
 
+vector< string > get_file_list( string iFileListName )
+{
+    vector< string > file_list;
+
+    ifstream is( iFileListName.c_str(), ifstream::in );
+    if( !is ) return file_list;
+    string is_line;
+    while( getline( is, is_line ) )
+    {
+        file_list.push_back( is_line );
+    }
+    return file_list;
+}
+
 void mergeIPRGraphs( string iMergedFile = "prod5-ze-20-IPR.root",
-                     string iUnMergedFileDirectory = "./" )
+                     string iFileListName = "filelist.txt" )
 {
      TFile *f = new TFile( iMergedFile.c_str(), "RECREATE" );
      if( f->IsZombie() )
@@ -18,31 +32,21 @@ void mergeIPRGraphs( string iMergedFile = "prod5-ze-20-IPR.root",
          cout << "Error creating new IPR graph file " << iMergedFile << endl;
          return;
      }
+     cout << "Merged IPRs graphs will be written to " << iMergedFile << endl;
 
-     vector< string > fTelTypes;
-     fTelTypes.push_back( "lst" );
-     fTelTypes.push_back( "mst-fc" );
-     fTelTypes.push_back( "mst-nc" );
-     fTelTypes.push_back( "sst" );
+     cout << "Reading list of files: " << iFileListName << endl;
+     vector< string > file_list = get_file_list( iFileListName );
+     cout << "Number of files to be merged: " << file_list.size() << endl;
+     if( file_list.size() == 0 ) return;
 
-     string moon = "";
-     if (iMergedFile.find("halfmoon") != std::string::npos) {
-         moon = "-halfmoon";
-     }
-     string ze = "20";
-     if (iMergedFile.find("60") != std::string::npos) {
-         ze = "60";
-     }
-
-     for( unsigned int i = 0; i < fTelTypes.size(); i++ )
+     for( unsigned int i = 0; i < file_list.size(); i++ )
      {
-          string iName = iUnMergedFileDirectory + "./pedestals-" + fTelTypes[i] + moon + "-ze-" + ze + ".root";
-          TFile *iF = new TFile( iName.c_str() );
+          TFile *iF = new TFile( file_list[i].c_str() );
           if( iF->IsZombie() )
           {
               continue;
           }
-          cout << "Reading " << iName << endl;
+          cout << "Reading " << file_list[i] << endl;
           TIter next(iF->GetListOfKeys());
           TKey *key = 0;
           while ((key = (TKey*)next()))
