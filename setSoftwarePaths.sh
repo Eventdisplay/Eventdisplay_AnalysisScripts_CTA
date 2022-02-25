@@ -37,10 +37,10 @@ ROOTCONF=`root-config --libdir`
 export LD_LIBRARY_PATH=${ROOTCONF}
 
 # EVNDISPSYS settings
-if [[ -d ${WORKDIR}/code ]]; then
+if [[ -d ${WORKDIR}/code/Eventdisplay/ ]]; then
+    export EVNDISPSYS="${WORKDIR}/code/Eventdisplay/"
+elif [[ -d ${WORKDIR}/code ]]; then
     export EVNDISPSYS="${WORKDIR}/code"
-elif [[ -d ${WORKDIR}/Eventdisplay/ ]]; then
-    export EVNDISPSYS="${WORKDIR}/Eventdisplay/"
 else
    echo "Error: directory with software not found"
    echo ${WORKDIR}
@@ -51,7 +51,7 @@ export LD_LIBRARY_PATH=${EVNDISPSYS}/obj:${LD_LIBRARY_PATH}
 if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then
     export HESSIOSYS=${EVNDISPSYS}/hessioxxx
 else
-    export HESSIOSYS=${WORKDIR}/hessioxxx
+    export HESSIOSYS=${WORKDIR}/code/hessioxxx
 fi
 export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
 
