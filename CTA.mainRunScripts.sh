@@ -77,7 +77,7 @@ else
         do
              ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $M $M $M $M
 #             ./CTA.runAnalysis.sh ${P2} ${RUN} 2 $M $M $M $M
-#             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
+             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
         done
     fi
 fi
