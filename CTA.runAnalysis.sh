@@ -247,7 +247,8 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-  PHYSDATE="${EFFDATE}"
+   PHYSDATE="g20220225"
+#  PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -314,6 +315,7 @@ fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
 fi
+PHYSDATE="g20220225"
 # should be either onSource or cone (default is cone)
 OFFAXIS="cone"
 
@@ -335,6 +337,7 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
+OBSTIME=( "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
@@ -629,7 +632,7 @@ do
                                 "$NFILARRAY "\
                                 ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                                 $OOTIME \
-                                DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
+                                DESY.$PHYSDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
                                 1 \
                                 $ID \
                                 ${SITE}${EDM} \
@@ -640,7 +643,8 @@ do
                         ./CTA.WPPhysWriter.sub.sh \
                                 "$NFILARRAY" \
                                 ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
-                                $OOTIME DESY.$EFFDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
+                                $OOTIME \
+                                DESY.$PHYSDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \
                                 0 \
                                 $ID \
                                 ${SITE}${EDM} \
