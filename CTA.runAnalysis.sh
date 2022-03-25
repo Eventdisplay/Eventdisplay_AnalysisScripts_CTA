@@ -247,7 +247,6 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   PHYSDATE="g20220225"
 #  PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -315,7 +314,6 @@ fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
 fi
-PHYSDATE="g20220225"
 # should be either onSource or cone (default is cone)
 OFFAXIS="cone"
 
