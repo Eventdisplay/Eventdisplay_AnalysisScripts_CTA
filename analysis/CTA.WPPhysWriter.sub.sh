@@ -8,7 +8,7 @@
 if [ $# -lt 7 ]
 then
    echo 
-   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [qsub options] [name]"
+   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [name] [qsub options]"
    echo
    echo "  <sub array list>          text file with list of subarray IDs"
    echo ""

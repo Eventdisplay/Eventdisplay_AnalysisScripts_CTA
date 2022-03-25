@@ -186,7 +186,7 @@ do
                 k=`expr 0.2*$NFIL | bc`
                 if [[ $DSET == *"LaPalma"* ]]
                 then
-                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
+                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.25}')
                 elif [[ $DSET == *"SCT"* ]]
                 then
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.30}')
