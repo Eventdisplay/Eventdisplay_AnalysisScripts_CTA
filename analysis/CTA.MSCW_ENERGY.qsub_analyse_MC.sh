@@ -117,16 +117,15 @@ fi
 
 #########################################
 # options for simple stereo reconstruction
-#MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
-MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=0.01"
-
+MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE"
+if [[ $DSET == *"LaPalma"* ]]; then
+    MOPT="$MOPT -minangle_stereo_reconstruction=15."
+else
+    MOPT="$MOPT -minangle_stereo_reconstruction=0.01"
+fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
-if [[ $DSET == *"LaPalma"* ]]; then
-    MOPT="$MOPT -maxdistfraction=0.70"
-else
-    MOPT="$MOPT -maxdistfraction=0.80"
-fi
+MOPT="$MOPT -maxdistfraction=0.80"
 
 #########################################
 # disp reconstruction
