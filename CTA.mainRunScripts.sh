@@ -75,9 +75,11 @@ else
     else
         for M in "${NMULT[@]}"
         do
-             ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $M $M $M $M
-#             ./CTA.runAnalysis.sh ${P2} ${RUN} 2 $M $M $M $M
-             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
+            for L in "${LSTMULT[@]}"
+            do
+                 ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $L $M $M $M
+            done
+            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
         done
     fi
 fi
