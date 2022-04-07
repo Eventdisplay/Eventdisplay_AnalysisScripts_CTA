@@ -224,16 +224,20 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq20-LL"
+   EDM="-sq30-LL"
+   EDM="-lin30-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
    ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
+   ARRAY=( "subArray.prod5.North-Alpha-MSTF.list" )
    ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-SV3-sub.list" )
        ARRAY=( "subArray.prod5.North-D25-sub.list" )
+       ARRAY=( "subArray.prod5.North-Alpha-MSTF-sub.list" )
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
@@ -245,6 +249,7 @@ then
    ARRAYDIR="prod5"
    TDATE="g20210610"
    ANADATE="${TDATE}"
+   ANADATE="g20220408"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
 #  PHYSDATE="${EFFDATE}"
@@ -335,7 +340,8 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
-OBSTIME=( "5h" )
+OBSTIME=( "50h" )
+OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
