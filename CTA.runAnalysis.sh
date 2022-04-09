@@ -225,8 +225,9 @@ then
    fi
    EDM="-sq20-LL"
    EDM="-sq30-LL"
-   EDM="-lin30-LL"
+   EDM="-lin40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
+   EDM="-lin30-LL"
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
@@ -340,7 +341,6 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
-OBSTIME=( "50h" )
 OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 
@@ -528,6 +528,15 @@ do
                   echo "NSCMST ${SCMST}" >> "$PARA"
                   echo "OBSERVINGTIME_H $OOTIME" >> "$PARA"
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
+                  if [[ ${SITE} == *"paranal"* ]]; then
+                      echo "THETA2MINENEERGY 1." >> "$PARA"
+                  else
+                      if [[ ${OOTIME} != "50h" ]]; then
+                          echo "THETA2MINENEERGY 0.35" >> "$PARA"
+                      else
+                          echo "THETA2MINENEERGY 1." >> "$PARA"
+                      fi
+                  fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
                      if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
