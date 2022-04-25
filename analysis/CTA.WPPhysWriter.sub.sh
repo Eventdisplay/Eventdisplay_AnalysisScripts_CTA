@@ -79,7 +79,7 @@ do
    OXUTNAME=${ODIR}/${OUTNAME}
    echo "WP Phys file written to $OXUTNAME"
 
-   FNAM=${FDIR}/$FSCRIPT-$ARRAY-$DSET-$OBSTIME.sh
+   FNAM=${FDIR}/$FSCRIPT-$ARRAY-$DSET-$OBSTIME-$(basename $OXUTNAME).sh
    cp -f $FSCRIPT.sh $FNAM
 
    echo "run script $FNAM"
