@@ -91,6 +91,7 @@ else
   echo "Problem / error? ${TELLIST} teltype file not found"
   exit
 fi
+THETA2MINENEERGY=`grep THETA2MINENEERGY $ANAPAR | awk {'print $2'}`
 
 for T in LST MST SST SCMST 
 do
@@ -444,11 +445,13 @@ do
                  -e "s|TELTYPESSCMST|$TELTYPESSCMST|" \
                  -e "s|MCAZIMUTH|${VMCAZ}|" \
                  -e "s|ANGRESFILE|$ANGRESFILE|" \
+                 -e "s|THETA2ENERGYMIN|${THETA2MINENEERGY}|" \
                  -e "s|PARTICLENUMBERFILE|$PNF|" \
                  -e "s|MAXCOREDISTANCE|$MAXCDISTANCE|" \
                  -e "s|OBSERVINGTIME_H|$OBSTIME|" $iCFIL
 
           echo  "CUTFIL $iCFIL"
+          cat $iCFIL
           CUTFILIST[$ii]=$iCFIL
 ###############################################################################
 # unpack XML files from TMVA

@@ -11,7 +11,9 @@ if [ $# -lt 2 ]; then
     
     data sets:
         prod5-South-20deg prod5-South-40deg prod5-South-60deg
+        prod5-South-20deg-moon prod5-South-40deg-moon prod5-South-60deg-moon
         prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
+        prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
         prod3b-S20deg-SCTAlpha
 
     run modes:
@@ -75,9 +77,11 @@ else
     else
         for M in "${NMULT[@]}"
         do
-             ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $M $M $M $M
-#             ./CTA.runAnalysis.sh ${P2} ${RUN} 2 $M $M $M $M
-             ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
+            for L in "${LSTMULT[@]}"
+            do
+                 ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $L $M $M $M
+            done
+            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $M $M $M $M
         done
     fi
 fi

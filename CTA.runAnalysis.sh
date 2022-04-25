@@ -223,17 +223,20 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq20-LL"
+   EDM="-lin40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
+   EDM="-lin30-LL"
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
    ARRAY=( "subArray.prod5.North-BL.list" )
    ARRAY=( "subArray.prod5.North-D25.list" )
+   ARRAY=( "subArray.prod5.North-Alpha-MSTF.list" )
    ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-SV3-sub.list" )
        ARRAY=( "subArray.prod5.North-D25-sub.list" )
+       ARRAY=( "subArray.prod5.North-Alpha-MSTF-sub.list" )
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
@@ -245,6 +248,7 @@ then
    ARRAYDIR="prod5"
    TDATE="g20210610"
    ANADATE="${TDATE}"
+   ANADATE="g20220408"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
 #  PHYSDATE="${EFFDATE}"
@@ -264,8 +268,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq70-LL"
-   EDM="-sq20-LL"
+   EDM="-sq40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -274,7 +277,6 @@ then
    ARRAY=( "subArray.prod5.South-AlphaLSTs.list" )
    ##
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-BetaPlus.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
@@ -300,9 +302,9 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210610"
+   TDATE="g20220408"
    ANADATE="${TDATE}"
-   ANADATE="g20220103"
+   ANADATE="g20220408"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -335,7 +337,7 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
-OBSTIME=( "5h" )
+OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 
 echo "$RUN" "$SITE"
@@ -522,6 +524,15 @@ do
                   echo "NSCMST ${SCMST}" >> "$PARA"
                   echo "OBSERVINGTIME_H $OOTIME" >> "$PARA"
                   echo "GETXOFFYOFFAFTERCUTS yes" >> "$PARA"
+                  if [[ ${SITE} == *"paranal"* ]]; then
+                      echo "THETA2MINENEERGY 1." >> "$PARA"
+                  else
+                      if [[ ${OOTIME} != "50h" ]]; then
+                          echo "THETA2MINENEERGY 0.35" >> "$PARA"
+                      else
+                          echo "THETA2MINENEERGY 1." >> "$PARA"
+                      fi
+                  fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
                      if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
