@@ -223,8 +223,6 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq20-LL"
-   EDM="-sq30-LL"
    EDM="-lin40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
    EDM="-lin30-LL"
@@ -270,8 +268,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq70-LL"
-   EDM="-sq20-LL"
+   EDM="-sq40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -280,7 +277,6 @@ then
    ARRAY=( "subArray.prod5.South-AlphaLSTs.list" )
    ##
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-BetaPlus.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
@@ -306,7 +302,7 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210610"
+   TDATE="g20220408"
    ANADATE="${TDATE}"
    ANADATE="g20220408"
    TMVADATE="${ANADATE}"
