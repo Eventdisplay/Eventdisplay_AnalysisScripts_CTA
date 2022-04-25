@@ -11,7 +11,9 @@ if [ $# -lt 2 ]; then
     
     data sets:
         prod5-South-20deg prod5-South-40deg prod5-South-60deg
+        prod5-South-20deg-moon prod5-South-40deg-moon prod5-South-60deg-moon
         prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
+        prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
         prod3b-S20deg-SCTAlpha
 
     run modes:
