@@ -48,7 +48,7 @@ else
                do
                  # minimum between MSTs and SSTs
                  NIM=$(($M<$S ? $M : $S))
-                ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $NIM $M $S $NIM
+                 ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $NIM $M $S $NIM
                  if [[ "$S" == "$M" ]]; then
                   ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $NIM $M $S $NIM
                  fi
@@ -66,7 +66,7 @@ else
                      # minimum between MSTs and SSTs
                      NIM=$(($M<$S ? $M : $S))
                      echo "LST $L  MST $M  SST $S  SCT $NIM"
-                    ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $L $M $S $NIM
+                     ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $L $M $S $NIM
                      if [[ "$S" == "$M" ]]; then
                         ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $L $M $S $NIM
                      fi
