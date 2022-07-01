@@ -280,6 +280,7 @@ then
    ##
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus.list" )
+   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
@@ -287,6 +288,7 @@ then
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" );
        ARRAY=( "subArray.prod5.South-BetaPlus-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus-sub.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
