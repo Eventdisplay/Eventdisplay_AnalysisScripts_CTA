@@ -127,6 +127,14 @@ then
         echo "Error: Prod5 teltype file not found"
         exit
     fi
+elif [[ $DSET == *"prod6"* ]]
+then
+    if [[ -e ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6.teltypes.dat ]]; then
+        TELTYPELIST=$(grep "*" ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6.teltypes.dat | grep XST | awk '{ $1=""; $2=""; print}')
+    else
+        echo "Error: Prod6 teltype file not found"
+        exit
+    fi
 else
     echo "unknown data set $DSET"
     exit

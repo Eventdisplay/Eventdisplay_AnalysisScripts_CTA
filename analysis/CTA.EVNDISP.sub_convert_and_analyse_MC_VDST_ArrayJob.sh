@@ -109,6 +109,16 @@ then
     else
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
     fi
+elif [[ $DSET == *"prod6"* ]]
+then
+    ARRAYCUTS="EVNDISP.prod6.reconstruction.runparameter"
+    if [[ $DSET == *"fullmoon"* ]]; then
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-fullmoon-IPR.root"
+    elif [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-halfmoon-IPR.root"
+    else
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-IPR.root"
+    fi
 else
     echo "error: unknown production in $DSET" 
     exit
