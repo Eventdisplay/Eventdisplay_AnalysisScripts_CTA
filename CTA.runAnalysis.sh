@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# analysis submission for production 3b/5 analysis 
+# analysis submission for production 3b/4/5/6 analysis 
 #
 # this script is optimized for the DESY analysis
 #
@@ -24,6 +24,8 @@ then
          prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
          add 'moon' for NSB5x data sets
          prod3b-S20-SCT156Tel
+    Prod6 analysis:
+        prod6-South-20deg
    
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
    
@@ -312,6 +314,37 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
+####################################
+# prod5 - Paranal
+elif [[ $P2 == "prod6-S"* ]]
+then
+   if [[ $P2 == *"40deg"* ]]; then
+       SITE="prod6-Paranal-40deg"
+   elif [[ $P2 == *"60deg"* ]]; then
+       SITE="prod6-Paranal-60deg"
+   else
+       SITE="prod6-Paranal-20deg"
+   fi
+   if [[ $P2 == *"moon"* ]]; then
+       SITE="${SITE}-NSB5x"
+   fi
+   EDM="-sq10-LL"
+   if [[ $P2 == *"DL2plus"* ]]; then
+       EDM="-sq10-LL-DL2plus"
+   fi
+   ARRAY=( "subArray.prod6.South-Alpha.list" )
+   if [[ $P2 == *"sub"* ]]; then
+       ARRAY=( "subArray.prod6.South-Alpha-sub.list" )
+   fi
+   ARRAYDIR="prod6"
+   TDATE="g20220901"
+   ANADATE="${TDATE}"
+   TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
+   PHYSDATE="${EFFDATE}"
+fi
+if [[ -z ${PHYSDATE} ]]; then
+  PHYSDATE=${EFFDATE}
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -341,8 +374,8 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
-OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
 
