@@ -26,14 +26,16 @@ MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
 [ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
 
 PROD="PROD4"
-PROD="PROD6"
 PROD="PROD5"
+PROD="PROD6"
 
 if [[ $PROD == "PROD5" ]]; then
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST )
 else
-    TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC)
-    SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )
+    # TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
+    # SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )
+    TELTYPES=( MAGIC )
+    SITE=( CTA_NORTH )
 fi
 
 # dedicated scratch directory
@@ -50,7 +52,17 @@ do
     outputFile="${SCRATCH}/pedestals-${T}${MOON}-ze-${ZE}-1k.simtel.gz"
     rm -f $outputFile
 
-    CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-${PROD}-${T}.cfg"
+    if [[ $PROD == "PROD5" ]] && [[ $T == "SST" ]]; then
+        CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-${PROD}-${T}.cfg"
+    else
+        CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-PROD4-${T}.cfg"
+    fi
+
+    INCLUDEOPT=""
+    if [[ $T == "MAGIC" ]]; then
+        CFG="${SIM_TELARRAY_PATH}/cfg/MAGIC/MAGIC1.cfg"
+        INCLUDEOPT="-I${SIM_TELARRAY_PATH}/cfg/MAGIC"
+    fi
 
     if [[ $PROD == "PROD5" ]]; then
         SITEOPT=""
@@ -60,7 +72,7 @@ do
 
     ${SIM_TELARRAY_PATH}/bin/sim_telarray -c ${CFG} \
        -I${SIM_TELARRAY_PATH}/cfg/CTA -I${SIM_TELARRAY_PATH}/cfg/common \
-       -I${SIM_TELARRAY_PATH}/cfg/hess ${SITEOPT} -C Altitude=2150 -C iobuf_maximum=1000000000 \
+       -I${SIM_TELARRAY_PATH}/cfg/hess ${INCLUDEOPT} ${SITEOPT} -C Altitude=2150 -C iobuf_maximum=1000000000 \
        ${MOONOPT} -DNUM_TELESCOPES=1 -C maximum_telescopes=1 \
        -C atmospheric_transmission=atm_trans_2150_1_10_0_0_2150.dat \
        -DNSB_AUTOSCALE -C telescope_theta=${ZENITH} -C telescope_phi=180 \
