@@ -31,6 +31,7 @@ PROD="PROD6"
 
 if [[ $PROD == "PROD5" ]]; then
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST )
+    TELTYPES=( SST )
 else
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
     SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )
@@ -52,8 +53,10 @@ do
 
     if [[ $PROD == "PROD5" ]] && [[ $T == "SST" ]]; then
         CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-${PROD}-${T}.cfg"
-    else
+    elif [[ $PROD == "PROD5" ]]; then
         CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-PROD4-${T}.cfg"
+    else
+        CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-${PROD}-${T}.cfg"
     fi
 
     INCLUDEOPT=""
