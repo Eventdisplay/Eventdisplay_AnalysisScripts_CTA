@@ -32,10 +32,8 @@ PROD="PROD6"
 if [[ $PROD == "PROD5" ]]; then
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST )
 else
-    # TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
-    # SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )
-    TELTYPES=( MAGIC )
-    SITE=( CTA_NORTH )
+    TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
+    SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )
 fi
 
 # dedicated scratch directory
