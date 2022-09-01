@@ -231,18 +231,9 @@ then
    EDM="-lin30-LL"
        EDM="-sq10-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod5.North-SV3.list" )
-   ARRAY=( "subArray.prod5.North-BL.list" )
-   ARRAY=( "subArray.prod5.North-D25.list" )
-   ARRAY=( "subArray.prod5.North-Alpha-MSTF.list" )
    ARRAY=( "subArray.prod5.North-Alpha.list" )
-   ARRAY=( "subArray.prod5.North-D27.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.North-SV3-sub.list" )
-       ARRAY=( "subArray.prod5.North-D25-sub.list" )
-       ARRAY=( "subArray.prod5.North-Alpha-MSTF-sub.list" )
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
-       ARRAY=( "subArray.prod5.North-D27-sub.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
@@ -279,18 +270,8 @@ then
    fi
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
-   ##
-   ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus.list" )
-   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-BL-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
-       ## 
-       ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" );
-       ARRAY=( "subArray.prod5.South-BetaPlus-sub.list" )
-       ARRAY=( "subArray.prod5.South-AlphaC8aj-BetaPlus-sub.list" )
-       ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -328,10 +309,14 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
+   if [[ $P2 == *"SCT"* ]]; then
+       SITE="${SITE}_SCT"
+   fi
    EDM="-sq10-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
+   ARRAY=( "subArray.prod6.SouthHyper.list" )
    ARRAY=( "subArray.prod6.South-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.South-Alpha-sub.list" )
@@ -342,9 +327,6 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
-fi
-if [[ -z ${PHYSDATE} ]]; then
-  PHYSDATE=${EFFDATE}
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
    echo "$P2"
@@ -399,6 +381,8 @@ then
              echo "error, file list not found: ${LIST}"
              exit
           fi
+
+          continue
 
           cd ./analysis/
           ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh \
