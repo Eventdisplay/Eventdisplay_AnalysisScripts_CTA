@@ -226,7 +226,6 @@ then
    EDM="-sq40-LL"
    EDM="-lin40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
-   EDM="-lin30-LL"
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-SV3.list" )
