@@ -10,24 +10,34 @@
 #  TELTYPES: list of telescope types
 #  PROD: production
 
+if [ $# -lt 1 ]; then
+     echo "
+./producePedestals.sh <production (e.g. PROD6)> <zenith angle (e.g. 20.0)> <moon opt (e.g., dark, half, full)>
+    "
+    exit
+fi
+
+PROD=${1}
+[[ "$2" ]] && ZENITH=$2 || ZENITH="20.0"
+ZE=${ZENITH%.*} # For the file names
+echo "Zenith angle set to ${ZENITH}"
+[[ "$3" ]] && MOONSET=$3 || MOONSET="dark"
+if [[ ${MOONSET} == "dark" ]]; then
+    MOONOPT=""
+elif [[ ${MOONSET} == "full" ]]; then
+    MOONOPT="-DFULLMOON"
+elif [[ ${MOONSET} == "half" ]]; then
+    MOONOPT="-DHALFMOON"
+else
+    echo "unknown moon option (use dark, half, full)"
+    exit
+fi
+MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
+[ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
+
 CDIR=$(pwd)
 SIM_TELARRAY_PATH=$SIM_TELARRAY_PATH # Change this if you have your own sim_telarray and do not use the setupPackage.sh script
 SCRATCH="."
-
-ZENITH="20.0"
-# ZENITH="60.0"
-ZE=${ZENITH%.*} # For the file names
-
-echo "Zenith angle set to ${ZENITH}"
-
-MOONOPT="" # Set to -DHALFMOON for half moon, -DFULLMOON for full moon or leave empty or dark conditions (i.e., MOONOPT="")
-MOON=`echo "${MOONOPT#*-D}" | tr "[:upper:]" "[:lower:]"`
-
-[ -z "$MOON" ] && echo "Running dark conditions" || MOON="-${MOON}"
-
-PROD="PROD4"
-PROD="PROD5"
-PROD="PROD6"
 
 if [[ $PROD == "PROD5" ]]; then
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST )
@@ -38,7 +48,7 @@ else
 fi
 
 # dedicated scratch directory
-SCRATCH=${SCRATCH}/${PROD}/ze-${ZE}${MOON}
+SCRATCH=${SCRATCH}/${PROD}/ze${ZE}deg-${MOONSET}
 mkdir -p ${SCRATCH}
 echo "Writing all data products to ${SCRATCH}"
 echo "(use this directory as input for all following analysis steps)"
