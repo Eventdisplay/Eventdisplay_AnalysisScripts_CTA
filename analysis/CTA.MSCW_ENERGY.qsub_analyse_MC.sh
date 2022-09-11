@@ -121,7 +121,7 @@ MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFIL
 if [[ $DSET == *"LaPalma"* ]]; then
     MOPT="$MOPT -minangle_stereo_reconstruction=15."
 else
-    MOPT="$MOPT -minangle_stereo_reconstruction=0.01"
+    MOPT="$MOPT -minangle_stereo_reconstruction=10."
 fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 MOPT="$MOPT -maxloss=0.2 -minfui=0."
