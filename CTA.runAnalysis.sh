@@ -305,9 +305,8 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20220408"
+   TDATE="g20220902"
    ANADATE="${TDATE}"
-   ANADATE="g20220609"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -339,9 +338,9 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
-OBSTIME=( "50h" "30m" )
 OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "50h" "30m" )
 
 echo "$RUN" "$SITE"
 
