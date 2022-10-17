@@ -25,6 +25,7 @@ then
          add 'moon' for NSB5x data sets
          prod3b-S20-SCT156Tel
     Prod6 analysis:
+        prod6-North-20deg
         prod6-South-20deg
    
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
@@ -296,19 +297,26 @@ then
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
 ####################################
-# prod5 - Paranal
-elif [[ $P2 == "prod6-S"* ]]
+# prod6 - Paranal and LaPalma
+elif [[ $P2 == "prod6"* ]]
 then
+   if [[ P2 == *"South"* ]]; then
+       NS="South"
+       PLACE="Paranal"
+   else
+       NS="North"
+       PLACE="LaPalma"
+   fi
    SCT=""
    if [[ $P2 == *"SCT"* ]]; then
        SCT="SCT"
    fi
    if [[ $P2 == *"40deg"* ]]; then
-       SITE="prod6-Paranal${SCT}-40deg"
+       SITE="prod6-${PLACE}${SCT}-40deg"
    elif [[ $P2 == *"60deg"* ]]; then
-       SITE="prod6-Paranal${SCT}-60deg"
+       SITE="prod6-${PLACE}${SCT}-60deg"
    else
-       SITE="prod6-Paranal${SCT}-20deg"
+       SITE="prod6-${PLACE}${SCT}-20deg"
    fi
    if [[ $P2 == *"fullmoon"* ]]; then
        SITE="${SITE}-fullmoon"
@@ -321,10 +329,9 @@ then
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod6.South-Alpha.list" )
-   ARRAY=( "subArray.prod6.SouthHyper${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Hyper${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod6.South-Alpha-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}-Alpha-sub.list" )
    fi
    ARRAYDIR="prod6"
    TDATE="g20220901"
