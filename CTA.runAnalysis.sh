@@ -329,9 +329,10 @@ then
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod6.${NS}Hyper${SCT}.list" )
+#   ARRAY=( "subArray.prod6.${NS}Hyper${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod6.${NS}-Alpha-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    ARRAYDIR="prod6"
    TDATE="g20220901"
