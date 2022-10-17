@@ -299,25 +299,30 @@ then
 # prod5 - Paranal
 elif [[ $P2 == "prod6-S"* ]]
 then
-   if [[ $P2 == *"40deg"* ]]; then
-       SITE="prod6-Paranal-40deg"
-   elif [[ $P2 == *"60deg"* ]]; then
-       SITE="prod6-Paranal-60deg"
-   else
-       SITE="prod6-Paranal-20deg"
-   fi
-   if [[ $P2 == *"moon"* ]]; then
-       SITE="${SITE}-NSB5x"
-   fi
+   SCT=""
    if [[ $P2 == *"SCT"* ]]; then
-       SITE="${SITE}_SCT"
+       SCT="SCT"
+   fi
+   if [[ $P2 == *"40deg"* ]]; then
+       SITE="prod6-Paranal${SCT}-40deg"
+   elif [[ $P2 == *"60deg"* ]]; then
+       SITE="prod6-Paranal${SCT}-60deg"
+   else
+       SITE="prod6-Paranal${SCT}-20deg"
+   fi
+   if [[ $P2 == *"fullmoon"* ]]; then
+       SITE="${SITE}-fullmoon"
+   elif [[ $P2 == *"moon"* ]]; then
+       SITE="${SITE}-moon"
+   else
+       SITE="${SITE}-dark"
    fi
    EDM="-sq10-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod6.SouthHyper.list" )
    ARRAY=( "subArray.prod6.South-Alpha.list" )
+   ARRAY=( "subArray.prod6.SouthHyper${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.South-Alpha-sub.list" )
    fi
@@ -370,7 +375,8 @@ echo "RUN: $RUN"
 # run eventdisplay
 if [[ $RUN == "EVNDISP" ]]
 then
-# loop over all particle types
+  # Keep DST files on disk (require a lot of disk space
+  KEEPDST="0"
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
           N=${PARTICLE[$i]}
@@ -382,15 +388,13 @@ then
              exit
           fi
 
-          continue
-
           cd ./analysis/
           ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh \
                   ../${ARRAYDIR}/${ARRAY} \
                   ${LIST} \
                   $N \
                   ${SITE}${EDM} \
-                  0 \
+                  ${KEEPDST} \
                   $i \
                   $QSUBOPT \
                   $TRG
