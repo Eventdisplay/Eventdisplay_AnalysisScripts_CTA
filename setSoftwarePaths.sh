@@ -19,8 +19,6 @@ fi
 
 TDIR=$(pwd)
 
-export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root-6.20.04_build/
-
 # main working directory (logs and code)
 DSET="${1}"
 export WORKDIR="${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}"
