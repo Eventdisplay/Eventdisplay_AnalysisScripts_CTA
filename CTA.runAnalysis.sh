@@ -300,7 +300,7 @@ then
 # prod6 - Paranal and LaPalma
 elif [[ $P2 == "prod6"* ]]
 then
-   if [[ P2 == *"South"* ]]; then
+   if [[ $P2 == *"South"* ]]; then
        NS="South"
        PLACE="Paranal"
    else
