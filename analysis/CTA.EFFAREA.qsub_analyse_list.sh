@@ -75,7 +75,9 @@ NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
 NCUTSST=`grep NSST $ANAPAR | awk {'print $2'}`
 NCUTSCMST=`grep NSCMST $ANAPAR | awk {'print $2'}`
-if [[ $DSET == *"prod5"* ]]; then
+if [[ $DSET == *"prod6"* ]]; then
+   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6.teltypes.dat
+elif [[ $DSET == *"prod5"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat
 elif [[ $DSET == *"prod4"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat

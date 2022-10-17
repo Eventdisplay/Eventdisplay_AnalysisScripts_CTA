@@ -93,6 +93,9 @@ DARR=${ARRAY}
 if  [[ $DSET == *"prod4"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
+elif [[ $DSET == *"prod6"* ]]
+then
+    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod6${DARR}.lis
 elif [[ $DSET == *"prod5"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${DARR}.lis
@@ -197,6 +200,9 @@ then
 elif [[ $DSET == *"prod5"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5.TelescopeWeights.dat"
+elif [[ $DSET == *"prod6"* ]]
+then
+       MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod6.TelescopeWeights.dat"
 fi
 echo $MOPT
 

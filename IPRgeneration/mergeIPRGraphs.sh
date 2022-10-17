@@ -8,7 +8,7 @@
 
 if [ $# -lt 2 ]; then
     echo "
-    ./produceIPRGraphs.sh <directory with data products (pedestal files)> <IPR file>
+    ./mergeIPRGraphs.sh <directory with data products (pedestal files)> <IPR file>
     "
     exit
 fi

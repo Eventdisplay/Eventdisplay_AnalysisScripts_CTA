@@ -137,6 +137,9 @@ do
    elif [[ $DSET == *"prod5"* ]] 
    then
        DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5${N}.lis
+   elif [[ $DSET == *"prod6"* ]] 
+   then
+       DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6${N}.lis
    fi
    ls -lh $DETGEO
    ls -lh $SIMFIL
