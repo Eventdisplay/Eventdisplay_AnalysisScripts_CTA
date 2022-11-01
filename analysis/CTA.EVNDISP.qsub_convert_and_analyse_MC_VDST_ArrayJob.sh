@@ -18,6 +18,9 @@ STEPSIZE=STST
 ILINE=${1}
 if [[ -v ${SGE_TASK_ID} ]] && [[ ! -z ${SGE_TASK_ID} ]]; then
     ILINE=$SGE_TASK_ID
+else
+    # HTCondor ProcIDs start at 0
+    let "ILINE = $ILINE + 1"
 fi
 
 # set array
