@@ -172,6 +172,7 @@ do
              for PARTICLEID in 1 2
              do
                  sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
+                 chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
              done
              rm -f "$QSHELLDIR/$FNAM.sh"
