@@ -8,7 +8,7 @@
 
 SUBC="condor"
 h_cpu="47:29:00"
-h_vmem="6000M"
+h_vmem="4000M"
 tmpdir_size="1G"
 
 
