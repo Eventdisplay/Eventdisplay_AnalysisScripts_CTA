@@ -17,11 +17,15 @@
 #
 # Removed BDTDispCore (could be simply added)
 #
+SUBC="condor"
+h_cpu="47:29:00"
+h_vmem="12000M"
+tmpdir_size="1G"
 
 if [ $# -lt 5 ]
 then
    echo
-   echo "CTA.DISPTRAINING_sub_analyse.sh <data set> <output directory> <recid> <array layout (e.g. S.3HB1)> <TMVA parameters> [scaling] [qsub options (optional)]"
+   echo "CTA.DISPTRAINING_sub_analyse.sh <data set> <output directory> <recid> <array layout (e.g. S.3HB1)> <TMVA parameters> [scaling] [qsub options (optional)] [job_dir]"
    echo ""
    echo "  <data set>         e.g. cta-ultra3, ISDC3700m, ...  "
    echo "  <output directory> training results will be written to this directory (full path)"
@@ -83,10 +87,12 @@ EVNDISP="EVNDISP"
 # in case you submit a lot of scripts: QLOG=/dev/null
 DATE=`date +"%y%m%d"`
 QLOG=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
-mkdir -p $QLOG
-
-# output directory for shell scripts
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
+if [ -n ${9} ]; then
+    QLOG=${9}
+    SHELLDIR=${QLOG}
+fi
+mkdir -p $QLOG
 mkdir -p $SHELLDIR
 
 # skeleton script
@@ -234,7 +240,11 @@ do
                   echo "shell script " $FNAM.sh
 
                   # submit the job
-                  qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=12000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+                  if [[ $SUBC == *qsub* ]]; then
+                      qsub $QSUBOPT -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+                  elif [[ $SUBC == *condor* ]]; then
+                      ./condorSubmission.sh "${FNAM}.sh" $h_vmem $tmpdir_size
+                  fi
                done
              done
          done
