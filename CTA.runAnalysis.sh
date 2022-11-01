@@ -293,12 +293,12 @@ then
    fi
    ARRAYDIR="prod5"
    TDATE="g20220902"
+   TDATE="g20221101"
    ANADATE="${TDATE}"
-   ANADATE="g20220609"
+   ANADATE="g20221101"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
-   PHYSDATE="g20221031"
 ####################################
 # prod6 - Paranal and LaPalma
 elif [[ $P2 == "prod6"* ]]
@@ -407,8 +407,7 @@ then
                   ${SITE}${EDM} \
                   ${KEEPDST} \
                   $i \
-                  $QSUBOPT \
-                  $TRG
+                  $QSUBOPT
           cd ../
    done
    continue
@@ -451,7 +450,8 @@ then
               $RUNPAR \
               99 \
               $QCPAR \
-              $QSUBOPT
+              $QSUBOPT \
+              ${PDIR}
         cd ../
     done
     exit
@@ -485,7 +485,8 @@ do
                             ${SITE}${EDM} \
                             ${AZ} \
                             ${NIMAGESMIN} \
-                            $QSUBOPT
+                            $QSUBOPT \
+                            ${PDIR}
                       cd ../
                       continue
 ##########################################
@@ -504,7 +505,8 @@ do
                               $OFFAXIS \
                               ${AZ} \
                               ${NIMAGESMIN} \
-                              $QSUBOPT
+                              $QSUBOPT \
+                              ${PDIR}
                       cd ../
                       continue
                 fi
@@ -592,7 +594,8 @@ do
                          ${SITE}${EDM} \
                          "$PARA" \
                          $QSUBOPT \
-                         $AZ
+                         $AZ \
+                         ${PDIR}
                   fi
 ##########################################
 # train BDTs   
@@ -607,7 +610,8 @@ do
                                 ${SITE}${EDM} \
                                 "$PARA" \
                                 $QSUBOPT \
-                                $AZ
+                                $AZ \
+                                ${PDIR}
                   fi
 ##########################################
 # IRFs: angular resolution
@@ -622,7 +626,8 @@ do
                             ${SITE}${EDM} \
                             2 \
                             $QSUBOPT \
-                            $AZ
+                            $AZ \
+                            ${PDIR}
                     fi
 ##########################################
 # IRFs: effective areas after quality cuts
@@ -637,7 +642,8 @@ do
                                ${SITE}${EDM} \
                                3 \
                                $QSUBOPT \
-                               $AZ
+                               $AZ \
+                               ${PDIR}
                      fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
@@ -654,7 +660,8 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               $AZ
+                               $AZ \
+                               ${PDIR}
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
                         ./CTA.EFFAREA.sub_analyse_list.sh \
@@ -665,7 +672,8 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               $AZ
+                               $AZ \
+                               ${PDIR}
                     fi
 ##########################################
 # CTA WP Phys files
