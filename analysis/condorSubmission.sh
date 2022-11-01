@@ -14,6 +14,9 @@ SUBFIL=${1}.condor
 rm -f ${SUBFIL}
 echo "JobBatchName = ${1}" > ${SUBFIL}
 echo "Executable = ${1}" > ${SUBFIL}
+if [ ! -z "$4" ]; then
+    echo "Arguments = \$(ProcID)" >> ${SUBFIL}
+fi
 echo "Log = ${1}.\$(Cluster)_\$(Process).log" >> ${SUBFIL}
 echo "Output = ${1}.\$(Cluster)_\$(Process).output" >> ${SUBFIL}
 echo "Error = ${1}.\$(Cluster)_\$(Process).error" >> ${SUBFIL}
