@@ -25,10 +25,14 @@ ODIR=PPPODIR
 GFILLING=PPPGMOD
 DSET=PPPDSET
 MCAZ="PPPMCAZ"
+PARTID="PARTIDNOTSET"
 ######################################################################
 
-# Choose PARTICLE type from job id
-let "PARTID = $SGE_TASK_ID - 1"
+# Choose PARTICLE type from job id for SGE qsub system
+re='^[0-9]+$'
+if ! [[ $PARTID =~ $re ]] ; then
+    let "PARTID = $SGE_TASK_ID - 1"
+fi
 declare -a PTYPELIST=("gamma_onSource" "electron_onSource" "proton_onSource" "gamma_cone" "electron" "proton")
 if [ $PTYPE = "GAMMA" ]
 then

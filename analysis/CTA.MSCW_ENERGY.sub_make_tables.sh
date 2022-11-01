@@ -6,10 +6,16 @@
 #
 #
 
+SUBC="condor"
+h_cpu="47:29:00"
+h_vmem="6000M"
+tmpdir_size="1G"
+
+
 if [ $# -lt 6 ]
 then
    echo
-   echo "CTA.MSCW_ENERGY.sub_make_tables.sh <table file name> <recid> <subarray list> <onSource/cone> <data set> <azimuth bin> [min tel] [qsub options]"
+   echo "CTA.MSCW_ENERGY.sub_make_tables.sh <table file name> <recid> <subarray list> <onSource/cone> <data set> <azimuth bin> [min tel] [qsub options] [job_dir]"
    echo ""
    echo "  <table file name>  name of the table file (to be written; without .root)"
    echo "  <recid>            reconstruction ID according to EVNDISP.reconstruction.parameter"
@@ -72,10 +78,12 @@ fi
 # output directory for error/output from batch system
 # in case you submit a lot of scripts: QLOG=/dev/null
 QLOG=$CTA_USER_LOG_DIR/$DATE/MAKETABLES/
-mkdir -p $QLOG
-
-# output directory for shell scripts
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/MAKETABLES/
+if [ -n ${9} ]; then
+    QLOG=${9}
+    SHELLDIR=${QLOG}
+fi
+mkdir -p $QLOG
 mkdir -p $SHELLDIR
 
 # skeleton script
@@ -108,7 +116,11 @@ do
   echo "shell script " $FNAM.sh
 
 # submit the job
-  qsub $QSUBOPT -l h_cpu=47:45:00 -l h_rss=6000M -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+  if [[ $SUBC == *qsub* ]]; then
+       qsub $QSUBOPT -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -V -o $QLOG/ -e $QLOG/ "$FNAM.sh"
+  elif [[ $SUBC == *condor* ]]; then
+       ./condorSubmission.sh "${FNAM}.sh" $h_vmem $tmpdir_size
+  fi
 done
 
 echo "shell scripts are written to $SHELLDIR"

@@ -7,10 +7,15 @@
 #
 set -e
 
+SUBC="condor"
+h_cpu="11:29:00"
+h_vmem="40000M"
+tmpdir_size="15G"
+
 if [ $# -lt 6 ] 
 then
    echo ""
-   echo "./CTA.EFFAREA.sub_analyse_list.sh <subarray list> <cutfile template> <analysis parameter file> <output subdirectory> <data set> [filling mode] [qsub options] [direction (e.g. _180deg)]"
+   echo "./CTA.EFFAREA.sub_analyse_list.sh <subarray list> <cutfile template> <analysis parameter file> <output subdirectory> <data set> [filling mode] [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo
    echo "<subarray list>"
    echo "     text file with list of subarray IDs"
@@ -90,14 +95,16 @@ VARRAY=`awk '{printf "%s ",$0} END {print ""}' $SUBAR`
 #################################################
 # directories
 DATE=`date +"%y%m%d"`
-echo "directory for qsub shell scripts"
 QSHELLDIR=$CTA_USER_DATA_DIR"/queueShellDir"
-echo $QSHELLDIR
-mkdir -p $QSHELLDIR
 QDIR=$CTA_USER_LOG_DIR"/$DATE/EFFAREA/$4/"
+if [ -n $9 ]; then
+    QSHELLDIR="${9}"
+    QDIR="${9}"
+fi
+mkdir -p $QSHELLDIR
 mkdir -p $QDIR
-# QDIR="/dev/null"
-echo "qsub error log $QDIR"
+echo "job submission directory: ${QSHELLDIR}"
+echo "job error log directory: ${QDIR}"
 
 #################################################
 # set particle types 
@@ -159,14 +166,29 @@ do
 # submit the job script
      if [ $4 = "AngularResolution" ]
      then
-         qsub $QSUBOPT -l h_cpu=11:29:00 -t 1-2:1 -l h_rss=3000M -l tmpdir_size=15G  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+         if [[ $SUBC == *qsub* ]]; then
+             qsub $QSUBOPT -l h_cpu=${h_cpu} -t 1-2:1 -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size}  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+         elif [[ $SUBC == *condor* ]]; then
+             for PARTICLEID in 1 2
+             do
+                 sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
+                 ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
+             done
+             rm -f "$QSHELLDIR/$FNAM.sh"
+         fi
      else
-         if [ $DSET = *"LaPalma"* ]
-         then
-             qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=15G  -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
-         else
-             #qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=15G  -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
-             qsub $QSUBOPT -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=45G  -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+         if [[ $DSET == *"Paranal"* ]]; then
+             tmpdir_size="45G"
+         fi
+         if [[ $SUBC == *qsub* ]]; then
+             qsub $QSUBOPT -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
+         elif [[ $SUBC == *condor* ]]; then
+             for PARTICLEID in {1..6}; do
+                 sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
+                 chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
+                 ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
+             done
+             rm -f "$QSHELLDIR/$FNAM.sh"
          fi
      fi
 done
