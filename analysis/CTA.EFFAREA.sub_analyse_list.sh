@@ -169,7 +169,7 @@ do
          if [[ $SUBC == *qsub* ]]; then
              qsub $QSUBOPT -l h_cpu=${h_cpu} -t 1-2:1 -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size}  -V -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
          elif [[ $SUBC == *condor* ]]; then
-             for PARTICLEID in 1 2
+             for PARTICLEID in 0 1
              do
                  sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
@@ -184,7 +184,7 @@ do
          if [[ $SUBC == *qsub* ]]; then
              qsub $QSUBOPT -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -t 1-6:1 -o $QDIR -e $QDIR "$QSHELLDIR/$FNAM.sh"
          elif [[ $SUBC == *condor* ]]; then
-             for PARTICLEID in {1..6}; do
+             for PARTICLEID in {0..5}; do
                  sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
