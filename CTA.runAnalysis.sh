@@ -626,8 +626,8 @@ do
                             ${SITE}${EDM} \
                             2 \
                             $QSUBOPT \
-                            $AZ \
-                            ${PDIR}
+                            ${PDIR} \
+                            $AZ
                     fi
 ##########################################
 # IRFs: effective areas after quality cuts
@@ -642,8 +642,8 @@ do
                                ${SITE}${EDM} \
                                3 \
                                $QSUBOPT \
-                               $AZ \
-                               ${PDIR}
+                               ${PDIR} \
+                               $AZ
                      fi
 ##########################################
 # IRFs: effective areas after gamma/hadron cuts
@@ -660,8 +660,8 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               $AZ \
-                               ${PDIR}
+                               ${PDIR} \
+                               $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
                         ./CTA.EFFAREA.sub_analyse_list.sh \
@@ -672,8 +672,8 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               $AZ \
-                               ${PDIR}
+                               ${PDIR} \
+                               $AZ
                     fi
 ##########################################
 # CTA WP Phys files

@@ -15,7 +15,7 @@ tmpdir_size="15G"
 if [ $# -lt 6 ] 
 then
    echo ""
-   echo "./CTA.EFFAREA.sub_analyse_list.sh <subarray list> <cutfile template> <analysis parameter file> <output subdirectory> <data set> [filling mode] [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "./CTA.EFFAREA.sub_analyse_list.sh <subarray list> <cutfile template> <analysis parameter file> <output subdirectory> <data set> [filling mode] [qsub options] [job_dir] [direction (e.g. _180deg)]"
    echo
    echo "<subarray list>"
    echo "     text file with list of subarray IDs"
@@ -55,9 +55,9 @@ then
   GMOD=$6
 fi
 MCAZ=""
-if [ -n "$8" ]
+if [ -n "$9" ]
 then
-  MCAZ=$8
+  MCAZ=$9
 fi
 QSUBOPT=""
 if [ -n $7 ]
@@ -88,7 +88,6 @@ mkdir -v -p $ODIR
 RECID=`grep RECID $ANAPAR | awk {'print $2'}`
 # observation time
 OBSTIME=`grep OBSERVINGTIME_H $ANAPAR | awk {'print $2'}`
-
 #arrays
 VARRAY=`awk '{printf "%s ",$0} END {print ""}' $SUBAR`
 
@@ -97,14 +96,14 @@ VARRAY=`awk '{printf "%s ",$0} END {print ""}' $SUBAR`
 DATE=`date +"%y%m%d"`
 QSHELLDIR=$CTA_USER_DATA_DIR"/queueShellDir"
 QDIR=$CTA_USER_LOG_DIR"/$DATE/EFFAREA/$4/"
-if [ -n $9 ]; then
-    QSHELLDIR="${9}"
-    QDIR="${9}"
+if [ -n $8 ]; then
+    QSHELLDIR="${8}"
+    QDIR="${8}"
 fi
-mkdir -p $QSHELLDIR
-mkdir -p $QDIR
 echo "job submission directory: ${QSHELLDIR}"
 echo "job error log directory: ${QDIR}"
+mkdir -p $QSHELLDIR
+mkdir -p $QDIR
 
 #################################################
 # set particle types 
@@ -146,7 +145,7 @@ do
       FSCRIPT="CTA.EFFAREA.qsub_analyse_list"
 
 # create run script
-      FNAM="CTAeffArea-$DSET-$VPART-${ARRAY}${MCAZ}-ID${RECID}-${OBSTIME}"
+      FNAM="CTAeffArea-$DSET-$VPART-${ARRAY}-${EFFAREADIR}"
 
       sed -e "s|PPPANAPAR|$ANAPAR|" \
           -e "s|PPPARRAY|$ARRAY|" \
