@@ -55,6 +55,7 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 #####################################
 # qsub options (priorities)
 #   _M_ = -; _X_ = " "
+# even without using gridengine: do not remove this
 QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
@@ -272,7 +273,6 @@ then
    fi
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
-   ARRAY=( "subArray.prod5.South-Alpha-Test.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
    fi
