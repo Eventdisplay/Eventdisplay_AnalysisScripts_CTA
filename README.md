@@ -94,19 +94,28 @@ e.g.,
 
 ## Running the analysis
 
-Central execution script is [CTA.runAnalysis.sh](CTA.runAnalysis.sh). In the best case, no changes are required to this script.
+Central execution scripts are [CTA.mainRunScriptsReduced.sh](CTA.mainRunScriptsReduced.sh) and  [CTA.runAnalysis.sh](CTA.runAnalysis.sh). 
+In the best case, no changes are required to this script.
 
 e.g., to run the first step of the analysis with evndisp, do
 ```
-./CTA.runAnalysis.sh prod3b-S20deg-SCT EVNDISP 0 2 2 2 2
+./CTA.mainRunScriptsReduced.sh prod6-Paranal-20deg-dark-sq10-LL EVNDISP
 ```
-(or set any other data set, as outlined in ./CTA.runAnalysis.sh)
+(or set any other data set, as outlined in ./CTA.mainRunScriptsReduced.sh)
 
-The script does the following:
+To submit script, check the log file directory printed to the screen (the directory with the UUID) and then run:
+```
+./utilities/submit_scripts_to_htcondor.sh <log file directory> submit
+```
+Try this first without the submit argument and check the `submit.txt` file. 
+This assumes the HTCondor job submission system. Gridengine will work after changing the variable `SUBC` from `condor` to `qsub` in the scripts `analysis/*sub*`.
+
+The script `./CTA.mainRunScriptsReduced.sh` does the following:
 
 - read a list of arrays from a subdirectory specificed for your data set in ./CTA.runAnalysis.sh (e.g., prod3b/subArray.prod3b.South-SCT.list)
 - execute scripts to submit jobs from the ./analysis directory
 - all output products are written to *${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}*
+- for all telescope multiplicity dependent analysis, this is done for the multiplicities defined in `NIM-South.txt` and `NIM-South-sub.txt`.
 
 On the list of arrays:
 - arrays are defined by the telescope numbering as defined during the simulations.
@@ -117,11 +126,12 @@ For a complete analysis, one needs to cycle through all reconstruction steps in 
 1. EVNDISP - calibration and image analysis
 2. MAKETABLES and DISPBDT - lookup table filling and disp BDT training (can be done in parallel)
 3. ANATABLES - stereo analysis using lookup tables and disp BDTs
-4. TRAIN - train BDTs for gamma/hadron separation
-5. ANGRES - determine angular resolution for 40% signal efficiency
-6. QC - determine data rates after quality cuts (used for cut optimisation)
-7. CUTS - optimise gamma/hadron cuts and calculate instrument response functions
-8. PHYS - fill instrument response functions
+4. PREPARETMVA - write data products needed for BDT training
+5. TRAIN - train BDTs for gamma/hadron separation
+6. ANGRES - determine angular resolution for 40% signal efficiency
+7. QC - determine data rates after quality cuts (used for cut optimisation)
+8. CUTS - optimise gamma/hadron cuts and calculate instrument response functions
+9. PHYS - fill instrument response functions
 
 ## Testing
 
