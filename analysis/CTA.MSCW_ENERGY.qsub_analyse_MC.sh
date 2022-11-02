@@ -14,13 +14,20 @@ MCAZ=AZIMUTH
 FILEN=FILELENGTH
 TFILE=FILELIST
 MINIMAGE=NNNIMAGE
+PID="PIDNOTSET"
+
+# gridengine compatibility
+re='^[0-9]+$'
+if ! [[ $PID =~ $re ]] ; then
+    PID=$SGE_TASK_ID
+fi
 
 # counter
-l=$((SGE_TASK_ID * FILEN))
+l=$((PID * FILEN))
 l=$((l - FILEN))
 l=$((l + 1))
 let "k = $l + $FILEN - 1"
-echo "COUNTER $SGE_TASK_ID $l $k"
+echo "COUNTER $PID $l $k"
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA

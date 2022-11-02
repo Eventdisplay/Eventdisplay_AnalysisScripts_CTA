@@ -5,6 +5,11 @@
 #
 #######################################################################
 
+SUBC="condor"
+h_cpu="11:29:00"
+h_vmem="4G"
+tmpdir_size="40G"
+
 if [ ! -n "$1" ] && [ ! -n "$2" ] && [ ! -n "$3" ]
 then
    echo
@@ -58,22 +63,15 @@ if [ ! -e "${ARRAY}" ]; then
     exit
 fi
 
-#########################################
-# output directory for error/output from batch system
-# in case you submit a lot of scripts: QLOG=/dev/null
-
-# output directory for shell scripts and run lists
-SHELLDIR=$CTA_USER_LOG_DIR"/queueShellDir/"
-mkdir -p "$SHELLDIR"
-
 # skeleton script
 FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
+# output directory for shell scripts and run lists
 # log files
-DATE=$(date +"%y%m%d")
-QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP-$PART-$DSET/
+QLOG=$CTA_USER_LOG_DIR/jobs/$(uuidgen)
+SHELLDIR=${QLOG}
 mkdir -p $QLOG
-#QLOG="/dev/null"
+mkdir -p "$SHELLDIR"
 
 ########################
 # production depedendent parameters
@@ -205,12 +203,15 @@ do
 
     if [[ $NRUN -ne 0 ]]
     then
+        # SCT prod3 files need more memory:
         if [[ $DSET == "SCT" ]]
         then
-            # SCT prod3 files need more memory:
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=8G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
-        else
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=11:29:00 -l tmpdir_size=40G -l h_rss=4G -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
+            h_vmem="8G"
+        fi
+        if [[ $SUBC == *qsub* ]]; then
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=${h_cpu} -l tmpdir_size=${tmpdir_size} -l h_rss=${h_vmem} -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
+        elif [[ $SUBC == *condor* ]]; then
+            ./condorSubmission.sh "${FNAM}.sh" $h_vmem $tmpdir_size $NSTEP
         fi
     echo "submit"
     fi
