@@ -10,11 +10,17 @@ if [ $# -lt 2 ]; then
 ./CTA.mainRunScripts.sh <data set> <run mode>
     
     data sets:
-        prod5-South-20deg prod5-South-40deg prod5-South-60deg
-        prod5-South-20deg-moon prod5-South-40deg-moon prod5-South-60deg-moon
-        prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
-        prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
-        prod3b-S20deg-SCTAlpha
+
+       Prod3b analysis:
+            prod3b-S20deg-SCTAlpha
+       Prod5 analysis:
+            prod5-South-20deg prod5-South-40deg prod5-South-60deg
+            prod5-South-20deg-moon prod5-South-40deg-moon prod5-South-60deg-moon
+            prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
+            prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
+       Prod6 analysis:
+            prod6-North-20deg
+            prod6-South-20deg
 
     run modes:
         MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
