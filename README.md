@@ -95,7 +95,7 @@ e.g.,
 ## Running the analysis
 
 Central execution scripts are [CTA.mainRunScriptsReduced.sh](CTA.mainRunScriptsReduced.sh) and  [CTA.runAnalysis.sh](CTA.runAnalysis.sh). 
-In the best case, no changes are required to this script.
+In the best case, no changes are required to these scripts.
 
 e.g., to run the first step of the analysis with evndisp, do
 ```
