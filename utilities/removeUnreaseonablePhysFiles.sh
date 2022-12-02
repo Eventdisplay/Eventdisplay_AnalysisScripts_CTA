@@ -36,6 +36,9 @@ find "$1" -name "*NIM4LST4*2LSTs00MSTs00SSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST3*S.BL-2LSTs[A-Z]*" ${OPTION}
 find "$1" -name "*NIM4LST4*S.BL-2LSTs[A-Z]*" ${OPTION}
+find "$1" -name "*NIM[3-9]LST*S-*2LSTs*" ${OPTION}
+find "$1" -name "*NIM[4-9]LST*S-*3LSTs*" ${OPTION}
+find "$1" -name "*NIM[5-9]LST*S-*4LSTs*" ${OPTION}
 # 2LST 3 MSTs
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" ${OPTION}
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" ${OPTION}

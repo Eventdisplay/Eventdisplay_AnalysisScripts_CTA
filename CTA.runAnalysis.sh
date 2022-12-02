@@ -233,7 +233,6 @@ then
    EDM="-sq40-LL"
    EDM="-lin40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
-   EDM="-lin30-LL"
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-Alpha.list" )
@@ -294,9 +293,7 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20220902"
-   TDATE="g20221101"
-   ANADATE="${TDATE}"
+   TDATE="g20221202"
    ANADATE="g20221101"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
