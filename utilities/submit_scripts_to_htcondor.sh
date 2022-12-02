@@ -32,7 +32,7 @@ echo "error = \$(file).error" >>  ${SUBMITF}
 echo "$(grep -h request_memory ${JDIR}/*.condor | sort -u)"  >>  ${SUBMITF}
 echo "$(grep -h request_disk ${JDIR}/*.condor | sort -u)" >>  ${SUBMITF}
 echo "getenv = True" >>  ${SUBMITF}
-echo "max_materialize = 50" >>  ${SUBMITF}
+echo "max_materialize = 5000" >>  ${SUBMITF}
 echo "queue file matching files *.sh" >> ${SUBMITF}
 
 PDIR=$(pwd)
