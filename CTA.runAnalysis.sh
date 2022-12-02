@@ -73,6 +73,8 @@ TDATE="g20200817"
 ANADATE="${TDATE}"
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
+EFFDATE="g20221102"
+PHYSDATE="g20221112"
 
 # off-axis binnning (default=FALSE)
 BFINEBINNING="FALSE"
@@ -373,6 +375,7 @@ OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
