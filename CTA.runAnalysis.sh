@@ -268,14 +268,17 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq40-LL"
+   EDM="-sq50-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
+   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
+   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list")
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -294,7 +297,7 @@ then
    fi
    ARRAYDIR="prod5"
    TDATE="g20221202"
-   ANADATE="g20221101"
+   ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
