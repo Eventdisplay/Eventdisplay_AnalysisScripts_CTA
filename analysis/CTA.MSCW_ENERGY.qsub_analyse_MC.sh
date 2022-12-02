@@ -14,13 +14,20 @@ MCAZ=AZIMUTH
 FILEN=FILELENGTH
 TFILE=FILELIST
 MINIMAGE=NNNIMAGE
+PID="PIDNOTSET"
+
+# gridengine compatibility
+re='^[0-9]+$'
+if ! [[ $PID =~ $re ]] ; then
+    PID=$SGE_TASK_ID
+fi
 
 # counter
-l=$((SGE_TASK_ID * FILEN))
+l=$((PID * FILEN))
 l=$((l - FILEN))
 l=$((l + 1))
 let "k = $l + $FILEN - 1"
-echo "COUNTER $SGE_TASK_ID $l $k"
+echo "COUNTER $PID $l $k"
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -93,6 +100,9 @@ DARR=${ARRAY}
 if  [[ $DSET == *"prod4"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod4${DARR}.lis
+elif [[ $DSET == *"prod6"* ]]
+then
+    LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod6${DARR}.lis
 elif [[ $DSET == *"prod5"* ]]
 then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5${DARR}.lis
@@ -197,6 +207,9 @@ then
 elif [[ $DSET == *"prod5"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod5.TelescopeWeights.dat"
+elif [[ $DSET == *"prod6"* ]]
+then
+       MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod6.TelescopeWeights.dat"
 fi
 echo $MOPT
 

@@ -9,12 +9,20 @@
 
 if [ $# -lt 1 ]; then
     echo "
-./produceIPRGraphs.sh <directory with simtel files>
+./produceIPRGraphs.sh <directory with simtel files> [production (default=PROD6; optional PROD5)
     "
     exit
 fi
 SCRATCH=${1}
+[[ "$2" ]] && PROD=$2 || PROD="PROD6"
 CDIR=$(pwd)
+
+if [[ $PROD == "PROD5" ]]; then
+    RUNPARA="EVNDISP.prod5.reconstruction.runparameter"
+else
+    RUNPARA="EVNDISP.prod6.reconstruction.runparameter"
+fi
+echo "Using ${RUNPARA} for Production ${PROD}"
 
 FLIST=$(find $SCRATCH -name "*.simtel.gz")
 
@@ -38,7 +46,7 @@ do
                             -runmode=1 -singlepedestalrootfile=1  \
                             -donotusepeds -usePedestalsInTimeSlices=0 \
                             -calibrationsumwindow=10 -calibrationsumfirst=0 \
-                            -reconstructionparameter EVNDISP.prod5.reconstruction.runparameter \
+                            -reconstructionparameter ${RUNPARA} \
                             -nopedestalsintimeslices  -combine_pedestal_channels ${ADC} \
                             >& ${SCRATCH}/${FILEN}.pedestal.log
 

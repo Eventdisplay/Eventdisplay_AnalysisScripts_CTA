@@ -3,12 +3,15 @@
 # script to analyse CTA MC files with lookup tables
 #
 #
-
+SUBC="condor"
+h_cpu="11:29:00"
+h_vmem="4000M"
+tmpdir_size="12G"
 
 if [ $# -lt 7 ]
 then
    echo
-   echo "CTA.MSCW_ENERGY.sub_analyse_MC.sh <tablefile> <recid> <subarray list> <data set> <output directory> <onSource/cone> <azimuth bin> <minimage> [qsub options]"
+   echo "CTA.MSCW_ENERGY.sub_analyse_MC.sh <tablefile> <recid> <subarray list> <data set> <output directory> <onSource/cone> <azimuth bin> <minimage> [qsub options] [job_dir]"
    echo
    echo "  <tablefile>     table file name (without .root)"
    echo "                  expected file name: xxxxxx-SUBARRAY.root; SUBARRAY is added by this script"
@@ -62,11 +65,12 @@ fi
 # in case you submit a lot of scripts: QLOG=/dev/null
 DATE=`date +"%y%m%d"`
 QLOG=$CTA_USER_LOG_DIR/$DATE/ANALYSETABLES/
-mkdir -p $QLOG
-# QLOG=/dev/null
-
-# output directory for shell scripts
 SHELLDIR="$QLOG/$ANADIR/"
+if [ -n ${10} ]; then
+    QLOG=${10}
+    SHELLDIR=${QLOG}
+fi
+mkdir -p $QLOG
 mkdir -p $SHELLDIR
 
 ###########################
@@ -124,7 +128,7 @@ do
         FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
 
 # name of script actually submitted to the queue
-        FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-array$SUBAR-$6"
+        FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-${MCAZ}-array$SUBAR-$6"
 
         sed -e "s|TABLEFILE|$TABLE|" \
             -e "s|TTTTFIL|$TFIL|" \
@@ -142,7 +146,16 @@ do
         echo "queue log and error files written to $QLOG"
 
 # submit the job
-        qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=11:29:00 -l h_rss=4000M -l tmpdir_size=12G -V -o $QLOG -e $QLOG "$FNAM.sh" 
+        if [[ $SUBC == *qsub* ]]; then
+            qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -o $QLOG -e $QLOG "$FNAM.sh" 
+        elif [[ $SUBC == *condor* ]]; then
+            for (( i=1 ; i<=$NJOBTOT ; i++ )); do
+                sed -e "s|PIDNOTSET|$i|" "${FNAM}.sh" > "${FNAM}-${i}.sh"
+                chmod u+x "${FNAM}-${i}.sh"
+                ./condorSubmission.sh ${FNAM}-${i}.sh $h_vmem $tmpdir_size
+            done
+            rm -f $FNAM.sh
+        fi
    done
 done
 
