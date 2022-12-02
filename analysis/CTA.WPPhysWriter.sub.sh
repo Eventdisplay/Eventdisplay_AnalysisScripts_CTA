@@ -2,13 +2,16 @@
 #
 # script to write CTA WP Phys Files
 #
-#
 #######################################################################
+SUBC="condor"
+h_cpu="6:29:00"
+h_vmem="10000M"
+tmpdir_size="1G"
 
 if [ $# -lt 7 ]
 then
    echo 
-   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [name] [qsub options]"
+   echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [name] [job_dir] [qsub options]"
    echo
    echo "  <sub array list>          text file with list of subarray IDs"
    echo ""
@@ -35,9 +38,18 @@ if [ -n $9 ]; then
    PNAME="$9"
 fi
 
-QSUBOPT=""
+# log files
+DATE=`date +"%y%m%d"`
+FDIR=${CTA_USER_LOG_DIR}/$DATE/WPPHYSWRITER/
 if [ -n ${10} ]; then
-   QSUBOPT="${10}"
+    FDIR="${10}"
+fi
+mkdir -p ${FDIR}
+echo "log directory: " ${FDIR}
+
+QSUBOPT=""
+if [ -n ${11} ]; then
+   QSUBOPT="${11}"
 fi
 QSUBOPT=${QSUBOPT//_X_/ } 
 QSUBOPT=${QSUBOPT//_M_/-} 
@@ -51,12 +63,6 @@ then
     echo "no EVNDISPSYS env variable defined"
     exit
 fi
-
-# log files
-DATE=`date +"%y%m%d"`
-FDIR=${CTA_USER_LOG_DIR}/$DATE/WPPHYSWRITER/
-mkdir -p ${FDIR}
-echo "log directory: " ${FDIR}
 
 # script name template
 FSCRIPT="CTA.WPPhysWriter.qsub"
@@ -93,8 +99,11 @@ do
        -e "s|OFAXISFB|$BFINEBINNING|" \
        -e "s|RRRR|$RECID|" $FNAM
 
-   qsub $QSUBOPT -V -l h_cpu=6:29:00 -l h_rss=10000M -l tmpdir_size=1G -o $FDIR -e $FDIR "$FNAM"
-
+   if [[ $SUBC == *qsub* ]]; then
+       qsub $QSUBOPT -V \
+           -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} \
+           -o $FDIR -e $FDIR "$FNAM"
+   elif [[ $SUBC == *condor* ]]; then
+       ./condorSubmission.sh ${FNAM} $h_vmem $tmpdir_size
+   fi
 done
-
-exit

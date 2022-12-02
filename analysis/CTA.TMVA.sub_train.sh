@@ -5,10 +5,15 @@
 #
 #
 
+SUBC="condor"
+h_cpu="11:29:00"
+h_vmem="4000M"
+tmpdir_size="1G"
+
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.TMVA.sub_train.sh <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)]"
+   echo "CTA.TMVA.sub_train.sh <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
@@ -115,6 +120,9 @@ fi
 # log files
 DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
+if [ -n ${7} ]; then
+    LDIR=${7}
+fi
 QLOG=$LDIR
 mkdir -p "$LDIR"
 echo "Log directory: " "$LDIR"
@@ -205,18 +213,20 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      done
      rm -f -v ${ODIR}/TMVA.BDT.runparameter
 
-     FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}
+     FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}LST${NCUTLST}MST${NCUTMST}SST${NCUTSST}SCT${NCUTMSCT}
      RRFIL=$ODIR/$RXPAR$ARRAY
      sed -e "s|RUNPARA|$RRFIL|" \
          -e "s|NBINSNBINS|$NENE|" $FSCRIPT.sh > $FNAM.sh
      chmod u+x $FNAM.sh
      echo "SCRIPT $FNAM.sh"
 
-     #MEM=8000M
-     MEM=4000M
      #################################
      # submit job to queue (for all energy bins)
-     qsub $QSUBOPT -V -l h_cpu=11:29:00 -l h_rss=${MEM} -l tmpdir_size=1G -o $QLOG -e $QLOG "$FNAM.sh"
+     if [[ $SUBC == *qsub* ]]; then
+         qsub $QSUBOPT -V -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -o $QLOG -e $QLOG "$FNAM.sh"
+     elif [[ $SUBC == *condor* ]]; then
+         ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size
+     fi
   done
 done
 

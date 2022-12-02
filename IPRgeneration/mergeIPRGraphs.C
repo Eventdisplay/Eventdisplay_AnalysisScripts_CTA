@@ -23,7 +23,7 @@ vector< string > get_file_list( string iFileListName )
     return file_list;
 }
 
-void mergeIPRGraphs( string iMergedFile = "prod5-ze-20-IPR.root",
+void mergeIPRGraphs( string iMergedFile = "prod6-ze-20-IPR.root",
                      string iFileListName = "filelist.txt" )
 {
      TFile *f = new TFile( iMergedFile.c_str(), "RECREATE" );

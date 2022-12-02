@@ -7,8 +7,8 @@ source /cvmfs/cta.in2p3.fr/software/centos7/gcc48_default/tools/gsl/v1.15/setupP
 
 # Main directory
 # USER: Change this path to the grid package you want to use! # TODO
-export CTA_PROD5_PATH="/cvmfs/cta.in2p3.fr/software/centos7/gcc83_noOpt/simulations/corsika_simtelarray/2020-06-29b/"
-export CTA_PATH=${CTA_PROD5_PATH}
+export CTA_PROD6_PATH="/cvmfs/cta.in2p3.fr/software/centos7/gcc83_noOpt/simulations/corsika_simtelarray/2022-08-03-sc/"
+export CTA_PATH=${CTA_PROD6_PATH}
 
 # CORSIKA and SIMTEL
 export CORSIKA_PATH=${CTA_PATH}/corsika-run

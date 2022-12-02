@@ -7,7 +7,6 @@
 
 RPARA=RUNPARA
 NENE=NBINSNBINS
-#let "EBIN = $SGE_TASK_ID - 1"
 
 ulimit -n 2056
 

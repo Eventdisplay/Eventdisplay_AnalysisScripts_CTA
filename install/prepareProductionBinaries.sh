@@ -79,13 +79,13 @@ install_hessio()
             export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
             EFLAGS="PROD3b_South"
         elif [[ $DSET = *"LaPalma"* ]]
-    then
-        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
-        EFLAGS="PROD3b_North"
-    else
-        echo "unknown data"
-        exit
-    fi
+        then
+            export HESSIOCFLAGS="-DCTA -DCTA_PROD3_DEMO"
+            EFLAGS="PROD3b_North"
+        else
+            echo "unknown data"
+            exit
+        fi
     elif [[ $DSET = *"prod4"* ]]
     then
        export HESSIOCFLAGS="-DCTA -DCTA_PROD3_MERGE"
@@ -94,6 +94,10 @@ install_hessio()
     then
        export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
        EFLAGS="PROD5"
+    elif [[ $DSET = *"prod6"* ]]
+    then
+       export HESSIOCFLAGS="-DCTA_PROD6_SC -DMAXIMUM_TELESCOPES=120 -DWITH_GSL_RNG"
+       EFLAGS="PROD6"
     else
        echo "unknown production"
        exit
@@ -119,7 +123,7 @@ cd $CODEDIR
 if [[ $VERSION == "main" ]]; then
     git clone git@github.com:Eventdisplay/Eventdisplay.git
 else
-    git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git .
+    git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay.git
 fi
 
 install_hessio
