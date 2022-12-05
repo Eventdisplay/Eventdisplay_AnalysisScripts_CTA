@@ -125,7 +125,7 @@ echo "Log directory: " "$LDIR"
 
 ######################################
 # script name template
-FSCRIPT="CTA.prepareTMVA.qsub_preparetrain"
+FSCRIPT="CTA.prepareTMVA.qsub_train"
 
 ###############################################################
 # loop over all arrays
