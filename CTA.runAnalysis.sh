@@ -231,7 +231,8 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq40-LL"
-   EDM="-lin40-LL"
+   # lin is default reconstruction for North
+   EDM="-lin50-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -246,12 +247,12 @@ then
        ARRAY=( "subArray.prod5.North-XST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20210610"
+   TDATE="g20221204"
    ANADATE="${TDATE}"
-   ANADATE="g20220408"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-#  PHYSDATE="${EFFDATE}"
+   EFFDATE="g20230206"
+   PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
 # prod5-S
@@ -275,7 +276,7 @@ then
    ARRAY=( "subArray.prod5.South-BL.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
-   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list")
+   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
@@ -298,9 +299,12 @@ then
    ARRAYDIR="prod5"
    TDATE="g20221202"
    ANADATE="${TDATE}"
+   ANADATE="g20221204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20230206"
    PHYSDATE="${EFFDATE}"
+   PHYSDATE="g20230206"
 ####################################
 # prod6 - Paranal and LaPalma
 elif [[ $P2 == "prod6"* ]]
@@ -374,8 +378,9 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
 OBSTIME=( "50h" "30m" )
-OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "50h" "5h" )
+OBSTIME=( "50h" "5h" "30m" "100s" )
+OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
