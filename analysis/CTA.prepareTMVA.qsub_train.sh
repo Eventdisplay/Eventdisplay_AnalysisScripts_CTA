@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# script to prepare trianing events
+# script to prepare training events
 #
 #
 #

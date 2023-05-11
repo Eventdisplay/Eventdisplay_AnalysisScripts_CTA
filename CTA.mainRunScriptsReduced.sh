@@ -32,14 +32,6 @@ fi
 P2="$1"
 # run mode
 RUN="$2"
-# loop over LSTs
-[[ "$3" ]] && LST=$3 || LST="FALSE"
-
-NMULT=( 2 3 4 5 6 )
-if [[ ${P2} == *"North"* ]]; then
-   NMULT=( 2 3 4 )
-fi
-LSTMULT=( 2 3 4 )
 
 # run scripts are collected here
 RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
