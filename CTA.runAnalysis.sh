@@ -335,7 +335,7 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq10-LL"
+   EDM="-sq20-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -364,7 +364,6 @@ OFFAXIS="cone"
 #####################################
 # particle types
 PARTICLE=( "gamma_cone" "electron" "proton" "gamma_onSource" )
-PARTICLE=( "gamma_cone" )
 
 #####################################
 # cut on number of images
