@@ -4,6 +4,8 @@
 #
 # 1. submits all *.sh files in the given directory
 # 2. searches for *.condor files for job submission details
+# 
+# note: uses largest request for job resources
 #
 set -e
 
@@ -29,10 +31,13 @@ echo "log = \$(file).log" >>  ${SUBMITF}
 echo "output = \$(file).output" >>  ${SUBMITF}
 echo "error = \$(file).error" >>  ${SUBMITF}
 
-echo "$(grep -h request_memory ${JDIR}/*.condor | sort -u)"  >>  ${SUBMITF}
-echo "$(grep -h request_disk ${JDIR}/*.condor | sort -u)" >>  ${SUBMITF}
+# assume that all condor files have similar requests
+CONDORFILE=$(find ${JDIR} -name "*.condor" | head -n 1)
+echo "$(grep -h request_memory $CONDORFILE)"  >>  ${SUBMITF}
+echo "$(grep -h request_disk $CONDORFILE)"  >>  ${SUBMITF}
 echo "getenv = True" >>  ${SUBMITF}
-echo "max_materialize = 5000" >>  ${SUBMITF}
+echo "max_materialize = 500" >>  ${SUBMITF}
+# echo "priority = 50" >> ${SUBMITF}
 echo "queue file matching files *.sh" >> ${SUBMITF}
 
 PDIR=$(pwd)
