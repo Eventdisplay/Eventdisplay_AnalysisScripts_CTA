@@ -87,37 +87,37 @@ MCAZ=${MCAZ/_/}
 #########################################
 for SUBAR in $VARRAY
 do
-   echo "STARTING ARRAY $SUBAR"
+    echo "STARTING ARRAY $SUBAR"
 
 # output directory
-   ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${SUBAR}/${ANADIR}"
-   mkdir -p ${ODIR}
+    ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${SUBAR}/${ANADIR}"
+    mkdir -p ${ODIR}
 
 #########################################
 # loop over all particle types
-   for ((m = 0; m < $NPART; m++ ))
-   do
-         PART=${VPART[$m]}
+    for ((m = 0; m < $NPART; m++ ))
+    do
+        PART=${VPART[$m]}
 
 # delete all old files (data and log files) for the particle type and azimuth angle
          rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
 
 # take $FILEN files and combine them into one mscw file
-	 FILEN=125
-	 if [ $PART = "proton" ]
-	 then
-	    FILEN=500
-	 fi
+         FILEN=125
+         if [ $PART = "proton" ]
+         then
+            FILEN=500
+         fi
 
 #########################################
 # input files lists
 
          TMPLIST=${ODIR}/$PART$NC"."$SUBAR"_ID"${RECID}${MCAZ}"-"$DSET".list"
-	 rm -f $TMPLIST
-	 echo $TMPLIST ${MCAZ}
-	 find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
-	 NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
-	 echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
+         rm -f $TMPLIST
+         echo $TMPLIST ${MCAZ}
+         find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
+         NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
+         echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
          NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
          echo "total number of jobs: $NJOBTOT"
 
@@ -156,8 +156,7 @@ do
             done
             rm -f $FNAM.sh
         fi
-   done
+    done
 done
 
 exit
-
