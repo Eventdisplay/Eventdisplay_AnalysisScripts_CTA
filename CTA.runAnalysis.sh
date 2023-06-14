@@ -427,7 +427,7 @@ then
               99 \
               $QCPAR \
               $QSUBOPT \
-              ${PDIR}
+              ${PDIR}/${RUN}
         cd ../
     done
     exit
@@ -462,7 +462,7 @@ do
                             ${AZ} \
                             ${NIMAGESMIN} \
                             $QSUBOPT \
-                            ${PDIR}
+                            ${PDIR}/${RUN}
                       cd ../
                       continue
 ##########################################
@@ -482,7 +482,7 @@ do
                               ${AZ} \
                               ${NIMAGESMIN} \
                               $QSUBOPT \
-                              ${PDIR}
+                              ${PDIR}/${RUN}
                       cd ../
                       continue
                 fi
@@ -571,7 +571,7 @@ do
                          "$PARA" \
                          $QSUBOPT \
                          $AZ \
-                         ${PDIR}
+                         ${PDIR}/${RUN}
                   fi
 ##########################################
 # train BDTs   
@@ -587,7 +587,7 @@ do
                                 "$PARA" \
                                 $QSUBOPT \
                                 $AZ \
-                                ${PDIR}
+                                ${PDIR}/${RUN}
                   fi
 ##########################################
 # IRFs: angular resolution
@@ -602,7 +602,7 @@ do
                             ${SITE}${EDM} \
                             2 \
                             $QSUBOPT \
-                            ${PDIR} \
+                            ${PDIR}/${RUN} \
                             $AZ
                     fi
 ##########################################
@@ -618,7 +618,7 @@ do
                                ${SITE}${EDM} \
                                3 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                      fi
 ##########################################
@@ -636,7 +636,7 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
@@ -648,7 +648,7 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                     fi
 ##########################################
@@ -667,7 +667,7 @@ do
                                 ${SITE}${EDM} \
                                 $BFINEBINNING \
                                 $PHYSDATE \
-                                ${PDIR} \
+                                ${PDIR}/${RUN} \
                                 $QSUBOPT
                      else
                         ./CTA.WPPhysWriter.sub.sh \
@@ -680,7 +680,7 @@ do
                                 ${SITE}${EDM} \
                                 $BFINEBINNING \
                                 $PHYSDATE \
-                                ${PDIR} \
+                                ${PDIR}/${RUN} \
                                 $QSUBOPT
                  fi
 # unknown run set
