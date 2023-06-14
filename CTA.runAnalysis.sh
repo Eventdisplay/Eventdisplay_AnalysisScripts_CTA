@@ -49,7 +49,7 @@ RUN="$2"
 [[ "$5" ]] && MST=$5 || MST="2"
 [[ "$6" ]] && SST=$6 || SST="2"
 [[ "$7" ]] && SCMST=$7 || SCMST="2"
-[[ "$8" ]] && PDIR=${8} || PDIR="$CTA_USER_LOG_DIR/"
+[[ "$8" ]] && PDIR=${8} || PDIR="${CTA_USER_LOG_DIR%/}/"
 echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 
 #####################################
@@ -60,7 +60,7 @@ QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
 #####################################
 # output directory for script parameter files
-mkdir -p "$PDIR/tempRunParameterDir/"
+mkdir -p "${PDIR%/}/tempRunParameterDir/"
 
 #####################################
 # analysis dates and table dates
@@ -270,6 +270,7 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq50-LL"
+   EDM="-sq60-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -334,7 +335,7 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq10-LL"
+   EDM="-sq20-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -399,7 +400,7 @@ then
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
           N=${PARTICLE[$i]}
-          LIST=${CTA_USER_DATA_DIR}/analysis/AnalysisData/FileList_${ARRAYDIR}/${SITE}/${N}.list
+          LIST=${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/FileList_${ARRAYDIR}/${SITE}/${N}.list
 
           echo "READING SIMTEL FILE LIST $LIST"
           if [[ ! -e ${LIST} ]]; then
@@ -427,7 +428,7 @@ if [[ ! -e ${ARRAYDIR}/$ARRAY ]]; then
    exit
 fi
 NXARRAY=$(cat ${ARRAYDIR}/$ARRAY)
-NFILARRAY=$PDIR/tempRunParameterDir/temp.$ARRAY.list
+NFILARRAY=${PDIR%/}/tempRunParameterDir/temp.$ARRAY.list
 rm -f "$NFILARRAY"
 touch "$NFILARRAY"
 for A in $NXARRAY
@@ -551,7 +552,7 @@ do
                   then
                       TMVATYPF=NIM${NIMAGESMIN}LST${LST}MST${MST}SST${SST}
                   fi
-                  PARA="$PDIR/tempRunParameterDir/scriptsInput.${ID}${ETYPF}${AZ}.${SITE}${AZ}${OOTIME}.runparameter"
+                  PARA="${PDIR%/}/tempRunParameterDir/scriptsInput.${ID}${ETYPF}${AZ}.${SITE}${AZ}${OOTIME}.runparameter"
                   rm -f "$PARA"
                   touch "$PARA"
                   echo "WRITING PARAMETERFILE $PARA"

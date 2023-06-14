@@ -68,7 +68,7 @@ FSCRIPT="CTA.EVNDISP.qsub_convert_and_analyse_MC_VDST_ArrayJob"
 
 # output directory for shell scripts and run lists
 # log files
-QLOG=$CTA_USER_LOG_DIR/jobs/$(uuidgen)
+QLOG="${CTA_USER_LOG_DIR%/}/jobs/$(uuidgen)"
 SHELLDIR=${QLOG}
 mkdir -p $QLOG
 mkdir -p "$SHELLDIR"

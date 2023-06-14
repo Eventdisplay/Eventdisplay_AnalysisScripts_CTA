@@ -40,11 +40,12 @@ install_analysis_files()
     cd $AUXDIR
     rm -rf Eventdisplay_AnalysisFiles_CTA
     echo "Analysis file installation into $AUXDIR/Eventdisplay_AnalysisFiles_CTA/"
-    if [[ $VERSION == "main" ]]; then
-        git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
-    else
-        git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
-    fi
+    git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+    #if [[ $VERSION == "main" ]]; then
+    #    git clone git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+    #else
+    #    git clone -b ${VERSION} git@github.com:Eventdisplay/Eventdisplay_AnalysisFiles_CTA.git
+    #fi
 }
 
 install_hessio()
