@@ -10,7 +10,7 @@
 if [ $# -lt 2 ] 
 then
    echo "
-   ./CTA.runbAnalysis.sh <S/S40deg> <run mode> [recid] \\\\
+   ./CTA.runAnalysis.sh <production> <run mode> [recid] \\\\
                 [min number of LSTs] [min number of MSTs] [min number of SSTs] [min number of SCMSTs] [job_dir]
    
     Prod3b analysis:
@@ -185,37 +185,6 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
 ###############################################################
-###############################################################
-# PROD5 Analysis
-# NOTE: for N, use prod5b analysis
-# prod5-N
-# prod5-N-moon (NSB5x)
-elif [[ $P2 == "prod5-N"* ]]
-then
-   if [[ $P2 == *"moon"* ]]; then
-       SITE="prod5-LaPalma-20deg-NSB5x"
-   else
-       SITE="prod5-LaPalma-20deg"
-   fi
-   EDM="-sq08-LL"
-   ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-   ARRAY=( "subArray.prod5.North-XST.list" )
-   # prod5-prod5b comparision
-   ARRAY=( "subArray.prod5-prod5b.North.list" )
-   ARRAY=( "subArray.prod5.North-PB.list" )
-   if [[ $P2 == *"Hyper"* ]]; then
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-   fi
-   if [[ $P2 == *"LST"* ]]; then
-       ARRAY=( "subArray.prod5.North-LST.list" )
-   fi
-   ARRAYDIR="prod5"
-   TDATE="g20210610"
-   ANADATE="${TDATE}"
-   TMVADATE="${ANADATE}"
-   EFFDATE="${TMVADATE}"
-   PHYSDATE="${EFFDATE}"
-####################################
 # PROD5 Analysis
 # prod5b-N (including additional telescopes)
 elif [[ $P2 == "prod5b-N"* ]]
@@ -230,7 +199,6 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq40-LL"
    # lin is default reconstruction for North
    EDM="-lin50-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
@@ -239,19 +207,18 @@ then
    ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
-   fi
-   if [[ $P2 == *"LST"* ]]; then
+   elif [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
-   fi
-   if [[ $P2 == *"XST"* ]]; then
+   elif [[ $P2 == *"XST"* ]]; then
        ARRAY=( "subArray.prod5.North-XST.list" )
+   elif [[ $P2 == *"SV"* ]]; then
+       ARRAY=( "subArray.prod5.North-SV-test.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20221204"
+   TDATE="g20230614"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20230206"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
