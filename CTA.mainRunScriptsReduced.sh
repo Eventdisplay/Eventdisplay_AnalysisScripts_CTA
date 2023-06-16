@@ -46,6 +46,10 @@ if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "AN
    ./CTA.runAnalysis.sh ${P2} ${RUN} 0 2 2 2 2 ${RUNSCRIPTDIR}
    if [[ $SITE == "South" ]]; then
        ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 2 2 2 2 ${RUNSCRIPTDIR}
+   elif [[ $SITE == "North" ]]; then
+       if [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
+           ./CTA.runAnalysis.sh ${P2}-LST ${RUN} 1 2 2 2 2 ${RUNSCRIPTDIR}
+       fi
    fi
 else
    while IFS= read -r mult
@@ -57,6 +61,8 @@ else
        do
            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $mult ${RUNSCRIPTDIR}
        done < NIM-South-sub.dat
+   elif [[ $SITE == "North" ]]; then
+       ./CTA.runAnalysis.sh ${P2}-LST ${RUN} 1 2 2 2 2 ${RUNSCRIPTDIR}
    fi
 fi
 
