@@ -129,7 +129,7 @@ fi
 # options for simple stereo reconstruction
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE"
 if [[ $DSET == *"LaPalma"* ]]; then
-    MOPT="$MOPT -minangle_stereo_reconstruction=10."
+    MOPT="$MOPT -minangle_stereo_reconstruction=15."
 else
     MOPT="$MOPT -minangle_stereo_reconstruction=10."
 fi
@@ -144,6 +144,11 @@ MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
+if [[ -d ${DISPSUBDIR/${ARRAY}}/HYPERARRAY/} ]]; then
+    DISPSUBDIR="${DISPSUBDIR/${ARRAY}}/HYPERARRAY"
+    echo "Choosing Hyperarray DispDir"
+fi
+echo "DISPDIR $DISPSUBDIR"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
