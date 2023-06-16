@@ -207,16 +207,21 @@ then
    ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
-   elif [[ $P2 == *"LST"* ]]; then
-       ARRAY=( "subArray.prod5.North-LST.list" )
    elif [[ $P2 == *"XST"* ]]; then
        ARRAY=( "subArray.prod5.North-XST.list" )
    elif [[ $P2 == *"SV"* ]]; then
+       ARRAY=( "subArray.prod5.North-SV.list" )
        ARRAY=( "subArray.prod5.North-SV-test.list" )
+       if  [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-SV-LST.list" )
+        fi
+   elif [[ $P2 == *"LST"* ]]; then
+       ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    ARRAYDIR="prod5"
    TDATE="g20230614"
    ANADATE="${TDATE}"
+   ANADATE="g20230616"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -549,7 +554,7 @@ do
                   fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]] || [[ $EDM == *"line50"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"
