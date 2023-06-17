@@ -134,8 +134,13 @@ else
     MOPT="$MOPT -minangle_stereo_reconstruction=10."
 fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
-MOPT="$MOPT -maxloss=0.2 -minfui=0."
-MOPT="$MOPT -maxdistfraction=0.80"
+if [[ $RECID == "1" ]]; then
+    MOPT="$MOPT -maxloss=0.1 -minfui=0."
+    MOPT="$MOPT -maxdistfraction=0.70"
+else
+    MOPT="$MOPT -maxloss=0.2 -minfui=0."
+    MOPT="$MOPT -maxdistfraction=0.80"
+fi
 
 #########################################
 # disp reconstruction

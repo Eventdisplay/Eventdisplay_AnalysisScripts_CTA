@@ -554,7 +554,7 @@ do
                   fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]] || [[ $EDM == *"line50"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"

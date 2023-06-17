@@ -158,11 +158,6 @@ mkdir -p $ODIR
 ######################################################################
 # maximum core distance to a telescope
 ######################################################################
-MAXCDISTANCE="500."
-if [ $RECID = "1" ]
-then
-    MAXCDISTANCE="200."
-fi
 MAXCDISTANCE="600."
 if [ $RECID = "1" ]
 then
