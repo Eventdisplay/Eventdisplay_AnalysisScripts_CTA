@@ -149,9 +149,13 @@ MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
-if [[ -d ${DISPSUBDIR/${ARRAY}}/HYPERARRAY/} ]]; then
-    DISPSUBDIR="${DISPSUBDIR/${ARRAY}}/HYPERARRAY"
+echo "CHECKING ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
+if [[ -d ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY} ]]; then
+    DISPSUBDIR="${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
     echo "Choosing Hyperarray DispDir"
+else
+    echo "FAILED ${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
+    exit
 fi
 echo "DISPDIR $DISPSUBDIR"
 #########################################
@@ -194,10 +198,10 @@ MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperro
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
-if [[ $ARRAY == *"SV1"* ]]; then
-    MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
-fi
+# DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
+# if [[ $ARRAY == *"SV1"* ]]; then
+#     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+# fi
 
 ##########################################################################################################
 # options for DISP method (energy)
