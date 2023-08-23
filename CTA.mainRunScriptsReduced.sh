@@ -38,31 +38,34 @@ if [[ $P2 == *"North"* ]]; then
     SITE="North"
 fi
 
+RECID="0"
+
+
 # run scripts are collected here
 RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
 mkdir -p ${RUNSCRIPTDIR}
     
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
-   ./CTA.runAnalysis.sh ${P2} ${RUN} 0 2 2 2 2 ${RUNSCRIPTDIR}
+   ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    if [[ $SITE == "South" ]]; then
-       ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 2 2 2 2 ${RUNSCRIPTDIR}
-   elif [[ $SITE == "North" ]]; then
-       if [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
-           ./CTA.runAnalysis.sh ${P2}-LST ${RUN} 1 2 2 2 2 ${RUNSCRIPTDIR}
-       fi
+       ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+#   elif [[ $SITE == "North" ]]; then
+#       if [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
+#           ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+#       fi
    fi
 else
    while IFS= read -r mult
    do
-       ./CTA.runAnalysis.sh ${P2} ${RUN} 0 $mult ${RUNSCRIPTDIR}
+       ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
    done < NIM-${SITE}.dat
    if [[ $SITE == "South" ]]; then
        while IFS= read -r mult
        do
-           ./CTA.runAnalysis.sh ${P2}-sub ${RUN} 0 $mult ${RUNSCRIPTDIR}
+           ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
        done < NIM-South-sub.dat
-   elif [[ $SITE == "North" ]]; then
-       ./CTA.runAnalysis.sh ${P2}-LST ${RUN} 1 2 2 2 2 ${RUNSCRIPTDIR}
+#   elif [[ $SITE == "North" ]]; then
+#       ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi
 fi
 
