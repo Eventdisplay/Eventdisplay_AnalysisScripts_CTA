@@ -83,6 +83,7 @@ if [[ $DSET == *"prod6"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6.teltypes.dat
 elif [[ $DSET == *"prod5"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat
+#   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5SV.teltypes.dat
 elif [[ $DSET == *"prod4"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat
 elif [[ $DSET == *"prod3"* ]]; then
