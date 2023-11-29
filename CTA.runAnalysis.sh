@@ -213,7 +213,13 @@ then
        ARRAY=( "subArray.prod5.North-SV.list" )
        if  [[ $P2 == *"LST"* ]]; then
            ARRAY=( "subArray.prod5.North-SV-LST.list" )
-        fi
+           ARRAY=( "subArray.prod5.North-SV-LST34.list" )
+# combined lst mst multiplicity
+#           ARRAY=( "subArray.prod5.North-SV-MSTLST.list" )
+       fi
+       if  [[ $P2 == *"MST"* ]]; then
+           ARRAY=( "subArray.prod5.North-SV-MST.list" )
+       fi
    elif [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
@@ -223,6 +229,8 @@ then
    ANADATE="g20230617"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+# combined lst mst multiplicity
+#   EFFDATE="g20230621"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -241,17 +249,16 @@ then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq50-LL"
-   EDM="-sq60-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.South-BL.list" )
-   ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
+   ARRAY=( "subArray.prod5.South-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
+       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -269,14 +276,11 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20221202"
+   TDATE="g20230823"
    ANADATE="${TDATE}"
-   ANADATE="g20221204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20230206"
    PHYSDATE="${EFFDATE}"
-   PHYSDATE="g20230206"
 ####################################
 # prod6 - Paranal and LaPalma
 elif [[ $P2 == "prod6"* ]]
