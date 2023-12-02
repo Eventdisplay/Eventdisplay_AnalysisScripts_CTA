@@ -200,7 +200,7 @@ then
        SITE="${SITE}-NSB5x"
    fi
    # lin is default reconstruction for North
-   EDM="-lin50-LL"
+   EDM="-lin51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -248,7 +248,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq50-LL"
+   EDM="-sq51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -557,7 +557,7 @@ do
                   fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]] || [[ $EDM == *"lin50"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq51"* ]] || [[ $EDM == *"lin51"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"
