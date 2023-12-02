@@ -148,17 +148,15 @@ fi
 #########################################
 # disp reconstruction
 # 
-MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
 echo "CHECKING ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
 if [[ -d ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY} ]]; then
     DISPSUBDIR="${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
-    echo "Choosing Hyperarray DispDir"
+    echo "Choosing hyperarray DispDir"
 else
-    echo "FAILED ${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
-    exit
+    echo "Did not find hyperarray DispDir ${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
 fi
 echo "DISPDIR $DISPSUBDIR"
 #########################################
