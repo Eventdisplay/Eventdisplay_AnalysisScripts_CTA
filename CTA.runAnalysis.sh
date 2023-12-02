@@ -224,13 +224,11 @@ then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20230614"
+   TDATE="g20231202"
    ANADATE="${TDATE}"
-   ANADATE="g20230617"
+   ANADATE="g20231202"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-# combined lst mst multiplicity
-#   EFFDATE="g20230621"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
