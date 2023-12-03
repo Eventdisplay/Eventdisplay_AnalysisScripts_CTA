@@ -224,9 +224,9 @@ then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20231202"
+   TDATE="g20230614"
    ANADATE="${TDATE}"
-   ANADATE="g20231202"
+   ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
