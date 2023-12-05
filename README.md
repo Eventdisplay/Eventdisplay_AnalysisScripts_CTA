@@ -115,7 +115,7 @@ The script `./CTA.mainRunScriptsReduced.sh` does the following:
 - read a list of arrays from a subdirectory specificed for your data set in ./CTA.runAnalysis.sh (e.g., prod3b/subArray.prod3b.South-SCT.list)
 - execute scripts to submit jobs from the ./analysis directory
 - all output products are written to *${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}*
-- for all telescope multiplicity dependent analysis, this is done for the multiplicities defined in `NIM-South.txt` and `NIM-South-sub.txt`.
+- for all telescope multiplicity dependent analysis, this is done for the multiplicities defined in `NIM-South.dat` and `NIM-South-sub.dat`.
 
 On the list of arrays:
 - arrays are defined by the telescope numbering as defined during the simulations.
