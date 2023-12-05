@@ -83,6 +83,7 @@ if [[ $DSET == *"prod6"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6.teltypes.dat
 elif [[ $DSET == *"prod5"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5.teltypes.dat
+#   TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5SV.teltypes.dat
 elif [[ $DSET == *"prod4"* ]]; then
    TELLIST=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4.teltypes.dat
 elif [[ $DSET == *"prod3"* ]]; then
@@ -158,11 +159,6 @@ mkdir -p $ODIR
 ######################################################################
 # maximum core distance to a telescope
 ######################################################################
-MAXCDISTANCE="500."
-if [ $RECID = "1" ]
-then
-    MAXCDISTANCE="200."
-fi
 MAXCDISTANCE="600."
 if [ $RECID = "1" ]
 then

@@ -134,16 +134,31 @@ else
     MOPT="$MOPT -minangle_stereo_reconstruction=10."
 fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
-MOPT="$MOPT -maxloss=0.2 -minfui=0."
-MOPT="$MOPT -maxdistfraction=0.80"
+if [[ $RECID == "1" ]]; then
+    MOPT="$MOPT -maxloss=0.1 -minfui=0."
+    MOPT="$MOPT -maxdistfraction=0.70"
+elif [[ $RECID == "2" ]]; then
+    MOPT="$MOPT -maxloss=0.2 -minfui=0."
+    MOPT="$MOPT -maxdistfraction=0.75"
+else
+    MOPT="$MOPT -maxloss=0.2 -minfui=0."
+    MOPT="$MOPT -maxdistfraction=0.80"
+fi
 
 #########################################
 # disp reconstruction
 # 
-MVATYPE="MLP"
 MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
+echo "CHECKING ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
+if [[ -d ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY} ]]; then
+    DISPSUBDIR="${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
+    echo "Choosing hyperarray DispDir"
+else
+    echo "Did not find hyperarray DispDir ${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
+fi
+echo "DISPDIR $DISPSUBDIR"
 #########################################
 # unpack disp XML files for all telescope 
 # types to tmpdir
@@ -184,10 +199,10 @@ MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperro
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
-if [[ $ARRAY == *"SV1"* ]]; then
-    MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
-fi
+# DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
+# if [[ $ARRAY == *"SV1"* ]]; then
+#     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+# fi
 
 ##########################################################################################################
 # options for DISP method (energy)

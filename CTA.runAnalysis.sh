@@ -10,7 +10,7 @@
 if [ $# -lt 2 ] 
 then
    echo "
-   ./CTA.runbAnalysis.sh <S/S40deg> <run mode> [recid] \\\\
+   ./CTA.runAnalysis.sh <production> <run mode> [recid] \\\\
                 [min number of LSTs] [min number of MSTs] [min number of SSTs] [min number of SCMSTs] [job_dir]
    
     Prod3b analysis:
@@ -185,37 +185,6 @@ then
    TMVADATE="${ANADATE}"
    EFFDATE="${TMVADATE}"
 ###############################################################
-###############################################################
-# PROD5 Analysis
-# NOTE: for N, use prod5b analysis
-# prod5-N
-# prod5-N-moon (NSB5x)
-elif [[ $P2 == "prod5-N"* ]]
-then
-   if [[ $P2 == *"moon"* ]]; then
-       SITE="prod5-LaPalma-20deg-NSB5x"
-   else
-       SITE="prod5-LaPalma-20deg"
-   fi
-   EDM="-sq08-LL"
-   ARRAY=( "subArray.prod5.North-MSTF-Arrays.list" )
-   ARRAY=( "subArray.prod5.North-XST.list" )
-   # prod5-prod5b comparision
-   ARRAY=( "subArray.prod5-prod5b.North.list" )
-   ARRAY=( "subArray.prod5.North-PB.list" )
-   if [[ $P2 == *"Hyper"* ]]; then
-       ARRAY=( "subArray.prod5.North-Hyper.list" )
-   fi
-   if [[ $P2 == *"LST"* ]]; then
-       ARRAY=( "subArray.prod5.North-LST.list" )
-   fi
-   ARRAYDIR="prod5"
-   TDATE="g20210610"
-   ANADATE="${TDATE}"
-   TMVADATE="${ANADATE}"
-   EFFDATE="${TMVADATE}"
-   PHYSDATE="${EFFDATE}"
-####################################
 # PROD5 Analysis
 # prod5b-N (including additional telescopes)
 elif [[ $P2 == "prod5b-N"* ]]
@@ -230,28 +199,36 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq40-LL"
    # lin is default reconstruction for North
-   EDM="-lin50-LL"
+   EDM="-lin51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.North-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.North-Alpha-sub.list" )
-   fi
-   if [[ $P2 == *"LST"* ]]; then
+   elif [[ $P2 == *"XST"* ]]; then
+       ARRAY=( "subArray.prod5.North-XST.list" )
+   elif [[ $P2 == *"SV"* ]]; then
+       ARRAY=( "subArray.prod5.North-SV.list" )
+       if  [[ $P2 == *"LST"* ]]; then
+           ARRAY=( "subArray.prod5.North-SV-LST.list" )
+           ARRAY=( "subArray.prod5.North-SV-LST34.list" )
+# combined lst mst multiplicity
+#           ARRAY=( "subArray.prod5.North-SV-MSTLST.list" )
+       fi
+       if  [[ $P2 == *"MST"* ]]; then
+           ARRAY=( "subArray.prod5.North-SV-MST.list" )
+       fi
+   elif [[ $P2 == *"LST"* ]]; then
        ARRAY=( "subArray.prod5.North-LST.list" )
    fi
-   if [[ $P2 == *"XST"* ]]; then
-       ARRAY=( "subArray.prod5.North-XST.list" )
-   fi
    ARRAYDIR="prod5"
-   TDATE="g20221204"
+   TDATE="g20230614"
    ANADATE="${TDATE}"
+   ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20230206"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -269,18 +246,17 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq50-LL"
-   EDM="-sq60-LL"
+   EDM="-sq51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod5.South-BL.list" )
-   ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
+   ARRAY=( "subArray.prod5.South-Alpha.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
+       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -298,14 +274,11 @@ then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20221202"
+   TDATE="g20230823"
    ANADATE="${TDATE}"
-   ANADATE="g20221204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20230206"
    PHYSDATE="${EFFDATE}"
-   PHYSDATE="g20230206"
 ####################################
 # prod6 - Paranal and LaPalma
 elif [[ $P2 == "prod6"* ]]
@@ -460,7 +433,7 @@ then
               99 \
               $QCPAR \
               $QSUBOPT \
-              ${PDIR}
+              ${PDIR}/${RUN}
         cd ../
     done
     exit
@@ -495,7 +468,7 @@ do
                             ${AZ} \
                             ${NIMAGESMIN} \
                             $QSUBOPT \
-                            ${PDIR}
+                            ${PDIR}/${RUN}
                       cd ../
                       continue
 ##########################################
@@ -515,7 +488,7 @@ do
                               ${AZ} \
                               ${NIMAGESMIN} \
                               $QSUBOPT \
-                              ${PDIR}
+                              ${PDIR}/${RUN}
                       cd ../
                       continue
                 fi
@@ -582,7 +555,7 @@ do
                   fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq70"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq51"* ]] || [[ $EDM == *"lin51"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"
@@ -604,7 +577,7 @@ do
                          "$PARA" \
                          $QSUBOPT \
                          $AZ \
-                         ${PDIR}
+                         ${PDIR}/${RUN}
                   fi
 ##########################################
 # train BDTs   
@@ -620,7 +593,7 @@ do
                                 "$PARA" \
                                 $QSUBOPT \
                                 $AZ \
-                                ${PDIR}
+                                ${PDIR}/${RUN}
                   fi
 ##########################################
 # IRFs: angular resolution
@@ -635,7 +608,7 @@ do
                             ${SITE}${EDM} \
                             2 \
                             $QSUBOPT \
-                            ${PDIR} \
+                            ${PDIR}/${RUN} \
                             $AZ
                     fi
 ##########################################
@@ -651,7 +624,7 @@ do
                                ${SITE}${EDM} \
                                3 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                      fi
 ##########################################
@@ -669,7 +642,7 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                     # low multiplicity runs use 95% max signal efficiency (lower requirements on resolution)
                     else
@@ -681,7 +654,7 @@ do
                                ${SITE}${EDM} \
                                0 \
                                $QSUBOPT \
-                               ${PDIR} \
+                               ${PDIR}/${RUN} \
                                $AZ
                     fi
 ##########################################
@@ -700,7 +673,7 @@ do
                                 ${SITE}${EDM} \
                                 $BFINEBINNING \
                                 $PHYSDATE \
-                                ${PDIR} \
+                                ${PDIR}/${RUN} \
                                 $QSUBOPT
                      else
                         ./CTA.WPPhysWriter.sub.sh \
@@ -713,7 +686,7 @@ do
                                 ${SITE}${EDM} \
                                 $BFINEBINNING \
                                 $PHYSDATE \
-                                ${PDIR} \
+                                ${PDIR}/${RUN} \
                                 $QSUBOPT
                  fi
 # unknown run set

@@ -86,7 +86,7 @@ fi
 
 MOPT="$SETOFF -pe -filltables=1 -ze=20. -noise=250 -woff=0.0 -minImages=${MINTEL} -write1DHistograms"
 # options for reweighting of telescopes
-MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=15"
+MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE -minangle_stereo_reconstruction=10"
 MOPT="$MOPT -maxnevents=3000000"
 # options for single telescope analysis
 if [ ${MINTEL} -eq 1 ]

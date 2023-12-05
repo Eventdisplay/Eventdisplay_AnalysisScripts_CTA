@@ -15,8 +15,8 @@ see analysis/CTA.EFFAREA.qsub_analyse_list.sh
 
 ```
 conda activate EDconvert
-./convert_to_DL2.sh <directory with effective area files> <cut level> <paranal/lapalma>
+./convert_to_DL2.sh <directory with effective area files> <paranal/lapalma>
 ```
 
 - converts files for all three cut types
-- outputfile name is same as input file name + cut level + fits.gz
+- outputfile name is same as input file name + cut level (0/1/2) + fits.gz
