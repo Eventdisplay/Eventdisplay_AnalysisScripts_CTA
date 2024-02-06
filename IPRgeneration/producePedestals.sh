@@ -89,9 +89,10 @@ do
        -DNSB_AUTOSCALE -C telescope_theta=${ZENITH} -C telescope_phi=180 \
        -C pedestal_events=1000 \
        -C output_file=$outputFile \
-       ${CDIR}/dummy1.corsika.gz >& ${SCRATCH}/sim_telarray${MOON}-${T}-ze-${ZE}.log
+       ${CDIR}/dummy1.corsika.gz >& ${SCRATCH}/sim_telarray${MOON}-${T}-ze-${ZE}.log &
 
-    # minor cleanup
-    mv -f telarray_rand.conf.used ${SCRATCH}/
-    rm -f ctsim.hdata
 done
+
+# minor cleanup
+mv -f telarray_rand.conf.used ${SCRATCH}/
+rm -f ctsim.hdata

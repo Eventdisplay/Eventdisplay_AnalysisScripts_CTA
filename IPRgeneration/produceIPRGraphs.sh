@@ -29,18 +29,11 @@ FLIST=$(find $SCRATCH -name "*.simtel.gz")
 for F in $FLIST
 do
     FILEN=$(basename $F .simtel.gz)
-    echo "Converting $F to DST"
-
-    # convert to DST
-    $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${CDIR}/geometry-1-telescope.lis \
-                                               -f 2 \
-                                               -o ${SCRATCH}/${FILEN}.dst.root \
-                                               $F \
-                                               >& ${SCRATCH}/${FILEN}.dst.log
-
-    echo "DST file written to ${SCRATCH}/${FILEN}.dst.root"
+    # make a temporary directory so that the dst file written will not be overwritten by a different process running
+    mkdir -p ${SCRATCH}/temp_${FILEN}
+    cd ${SCRATCH}/temp_${FILEN}
     # calculate pedestals
-    echo "Calculate IPR graphs"
+    echo "Calculate IPR graphs from ${SCRATCH}/${FILEN}.dst.root"
     $EVNDISPSYS/bin/evndisp -nevents=1000 \
                             -sourcefile ${SCRATCH}/${FILEN}.dst.root \
                             -runmode=1 -singlepedestalrootfile=1  \
@@ -51,5 +44,7 @@ do
                             >& ${SCRATCH}/${FILEN}.pedestal.log
 
     mv -f dst.root ${SCRATCH}/${FILEN}.pedestal.root
+    cd ${CDIR}
+    rm -rf ${SCRATCH}/temp_${FILEN}
     echo "Pedestal file written to ${SCRATCH}/${FILEN}.pedestal.root"
 done
