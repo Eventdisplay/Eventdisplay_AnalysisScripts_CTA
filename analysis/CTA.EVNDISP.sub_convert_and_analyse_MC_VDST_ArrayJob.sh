@@ -14,24 +14,24 @@ if [ ! -n "$1" ] && [ ! -n "$2" ] && [ ! -n "$3" ]
 then
    echo
    echo "
-    ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh 
+    ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.sh
                   <sub array list> <list of sim_telarray files> <particle> <data set>
                   [keep simtel.root files (default off=0)] [log file directory counter] [qsub options]
-   
+
    CTA ANALYSIS
-   
+
      <sub array list>          text file with list of subarray IDs
-   
+
      <particle>                gamma_onSource , gamma_cone, proton , electron (helium, ...)
-   
+
      <data set>                e.g. prod5-LaPalma-20deg-sq2-LL, ...
-   
+
    NOTE: HARDWIRED FILE NAMES IN QSUB SCRIPTS !!
-   
+
      [keep DST.root files]  keep and copy converted simtel files (DST files) to output directory (default off=0)
-   
+
     output will be written to: CTA_USER_DATA_DIR/analysis/<subarray>/EVNDISP/<particle>/
-  
+
    "
    exit
 fi
@@ -43,11 +43,11 @@ DSET=$4
 [[ "$5" ]] && KEEP=$5 || KEEP="0"
 [[ "$6" ]] && FLL=$6 || FLL="0"
 [[ "$7" ]] && QSUBOPT=$7 || QSUBOPT=""
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 # software paths
-echo "$DSET"
+echo "CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob $DSET"
 source ../setSoftwarePaths.sh "$DSET"
 
 # checking the path for binaries
@@ -119,7 +119,7 @@ then
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-dark-ze${ZE}-IPR.root"
     fi
 else
-    echo "error: unknown production in $DSET" 
+    echo "error: unknown production in $DSET"
     exit
 fi
 
@@ -174,6 +174,10 @@ do
     RUNFROMTO="1-$NSTEP"
 
     echo "submitting $NRUN jobs ($NSTEP steps of size $STEPSIZE, $RUNFROMTO)"
+    if [ "$NRUN" -eq 0 ]; then
+        echo "No jobs for $D"
+        continue
+    fi
 
     FNAM="$SHELLDIR/$DSET-$PART-$FLL-$D"
 
@@ -209,7 +213,7 @@ do
             h_vmem="8G"
         fi
         if [[ $SUBC == *qsub* ]]; then
-            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=${h_cpu} -l tmpdir_size=${tmpdir_size} -l h_rss=${h_vmem} -V -o "$QLOG" -e "$QLOG" "$FNAM.sh" 
+            qsub $QSUBOPT -t $RUNFROMTO:1 $DCACHEOPT -l h_cpu=${h_cpu} -l tmpdir_size=${tmpdir_size} -l h_rss=${h_vmem} -V -o "$QLOG" -e "$QLOG" "$FNAM.sh"
         elif [[ $SUBC == *condor* ]]; then
             ./condorSubmission.sh "${FNAM}.sh" $h_vmem $tmpdir_size $NSTEP
         fi

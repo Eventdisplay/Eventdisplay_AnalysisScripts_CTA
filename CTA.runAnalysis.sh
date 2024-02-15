@@ -1,18 +1,18 @@
 #!/bin/sh
 #
-# analysis submission for production 3b/4/5/6 analysis 
+# analysis submission for production 3b/4/5/6 analysis
 #
 # this script is optimized for the DESY analysis
 #
 ##############################################
 
 
-if [ $# -lt 2 ] 
+if [ $# -lt 2 ]
 then
    echo "
    ./CTA.runAnalysis.sh <production> <run mode> [recid] \\\\
                 [min number of LSTs] [min number of MSTs] [min number of SSTs] [min number of SCMSTs] [job_dir]
-   
+
     Prod3b analysis:
          prod3b-S20deg / prod3b-S40deg / prod3b-S60deg
          prod3b-N20deg / prod3b-N40deg / prod3b-N60deg
@@ -27,14 +27,14 @@ then
     Prod6 analysis:
         prod6-North-20deg
         prod6-South-20deg
-   
-    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
-   
+
+    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
+
     [recids]: 0 = all telescopes (default), 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
 
     [job_dir]: run scripts and job files are written to this directory
    "
-   
+
    exit
 fi
 
@@ -296,6 +296,8 @@ then
    fi
    if [[ $P2 == *"40deg"* ]]; then
        SITE="prod6-${PLACE}${SCT}-40deg"
+   elif [[ $P2 == *"52deg"* ]]; then
+       SITE="prod6-${PLACE}${SCT}-52deg"
    elif [[ $P2 == *"60deg"* ]]; then
        SITE="prod6-${PLACE}${SCT}-60deg"
    else
@@ -439,18 +441,18 @@ then
     exit
 fi
 ##########################################
-# loop over all reconstruction IDs 
+# loop over all reconstruction IDs
 # (telescope type dependent subarrays)
 for ID in $RECID
 do
    # directory where all mscw output files are written to
    MSCWSUBDIRECTORY="Analysis-ID$ID-${ANADATE}"
-# loop over all shower directions 
+# loop over all shower directions
 # (i.e. North and South)
     for ((a = 0; a < ${#MCAZ[@]}; a++ ))
     do
           AZ=${MCAZ[$a]}
-          if [ "$AZ" ] 
+          if [ "$AZ" ]
           then
 ##########################################
 # make (fill) tables
@@ -512,7 +514,7 @@ do
                    fi
 
 ##########################################
-# loop over all shower directions 
+# loop over all shower directions
 # (i.e. North and South)
             for ((a = 0; a < ${#MCAZ[@]}; a++ ))
             do
@@ -565,8 +567,8 @@ do
                   fi
                   cd ./analysis/
 ##########################################
-# prepare train BDTs   
-                  if [[ $RUN == "PREPARETMVA" ]] 
+# prepare train BDTs
+                  if [[ $RUN == "PREPARETMVA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
@@ -580,7 +582,7 @@ do
                          ${PDIR}/${RUN}
                   fi
 ##########################################
-# train BDTs   
+# train BDTs
 # (note: BDT training does not need to be done for all observing periods)
                   elif [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
                   then
@@ -699,5 +701,5 @@ do
          done
      done
    done
-   echo 
+   echo
    echo "(end of script)"
