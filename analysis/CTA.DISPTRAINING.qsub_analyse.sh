@@ -2,9 +2,6 @@
 #
 # train disp for CTA
 #
-# called from CTA.DISPTRAINING_sub_analyse.sh
-#
-#
 
 ODIR=OFILE
 RECID=RECONSTRUCTIONID
@@ -18,7 +15,7 @@ QC="QQQQ"
 
 # set the right observatory (environmental variables)
 if [ ! -n "$EVNDISP_APPTAINER" ]; then
-    source $EVNDISPSYS/setObservatory.sh CTA
+    source "${EVNDISPSYS}"/setObservatory.sh CTA
 fi
 
 # output data files are written to this directory
@@ -93,4 +90,3 @@ fi
 if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]] && [[ -e $ODIR/${BDT}-${TTYPE}.disptmva.root ]]; then
     $EVNDISPSYS/bin/logFile dispLog-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}-${TTYPE}.training.log
 fi
-

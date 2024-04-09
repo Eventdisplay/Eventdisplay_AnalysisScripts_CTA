@@ -2,15 +2,15 @@
 #
 # script to prepare training events
 #
-#
-#
 
 PFIL=RUNPARA
 OFIL=OOOFILE
 ulimit -n 2056
 
 # set the right observatory (environmental variables)
-source "${EVNDISPSYS}"/setObservatory.sh CTA
+if [ ! -n "$EVNDISP_APPTAINER" ]; then
+    source "${EVNDISPSYS}"/setObservatory.sh CTA
+fi
 
 echo ${PFIL}.runparameter
 rm -f $PFIL.log
@@ -28,5 +28,3 @@ then
     ${EVNDISPSYS}/bin/logFile tmvaPrepareRunparameter ${OFIL}.root ${PFIL}.runparameter
     rm -f ${PFIL}.runparameter
 fi
-
-exit

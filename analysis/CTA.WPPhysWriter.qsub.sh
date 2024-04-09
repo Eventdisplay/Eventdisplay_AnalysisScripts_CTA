@@ -2,9 +2,6 @@
 #
 # script to write CTA WP Phys Files
 #
-#
-#
-#######################################################################
 
 AXRRAY=ARRAY
 DXDIR=DDIR
@@ -22,7 +19,9 @@ fi
 echo "OFFAXIS FINE BINNING $OBBIN"
 
 # set the right observatory (environmental variables)
-source $EVNDISPSYS/setObservatory.sh CTA
+if [ ! -n "$EVNDISP_APPTAINER" ]; then
+    source "${EVNDISPSYS}"/setObservatory.sh CTA
+fi
 
 rm -f $OXUTNAME.$AXRRAY.$OXBSTIME.log
 
@@ -32,7 +31,7 @@ $EVNDISPSYS/bin/writeCTAWPPhysSensitivityFiles $AXRRAY $OXBSTIME $DXDIR $OXUTNAM
 ############################################################################
 
 if [ -e $OXUTNAME.$AXRRAY.$OXBSTIME.log ]
-then 
+then
    DE=$(grep "error filling" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    DF=$(grep "error, cannot find effective area tree" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    if [[ -z ${DE} ]] && [[ -z ${DF} ]]; then
@@ -44,5 +43,3 @@ then
        fi
    fi
 fi
-
-exit
