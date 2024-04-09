@@ -1,5 +1,5 @@
 #!/bin/sh
-# 
+#
 # convert Eventdisplay event lists to FITS
 #
 
@@ -12,21 +12,22 @@ fi
 
 # check if converter script exists
 if [[ ! -e ${EVNDISPSYS}/../Converters/DL2/generate_DL2_file.py ]]; then
-   echo "Converter script not found" 
+   echo "Converter script not found"
    echo "   expected in ${EVNDISPSYS}/../Converters/DL2/generate_DL2_file.py"
    exit
 fi
 
 # list of arrays
-ARRAYS=$(cat $3)
+ARRAYS=$(cat $2)
 
 for A in $ARRAYS
 do
+    echo "Starting for array ${A} in ${1}"
     # list of effective area files
     FLIST=$(find ${1} -path "*BDT*" -name "*${A}*.root")
 
     # Loop over all cut levels and convert the files
-    for C in 0 1 2 
+    for C in 0 1 2
     do
        for F in $FLIST
        do
