@@ -229,6 +229,7 @@ then
    ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -246,7 +247,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq51-LL"
+   EDM="-sq52-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -272,12 +273,18 @@ then
    fi
    if [[ $P2 == *"SV0"* ]]; then
       ARRAY=( "subArray.prod5.South-SV0.list" )
+   elif [[ $P2 == *"SV"* ]]; then
+       ARRAY=( "subArray.prod5.South-Alpha-SV.list" )
+       if [[ $P2 == *"sub"* ]]; then
+           ARRAY=( "subArray.prod5.South-Alpha-SV-sub.list" )
+       fi
    fi
    ARRAYDIR="prod5"
    TDATE="g20230823"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod6 - Paranal and LaPalma
@@ -357,6 +364,7 @@ OBSTIME=( "50h" "30m" )
 OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
+OBSTIME=( "500h" "250h" "100h" "50h" "20h" "10h" "5h" "1h" "5m" "30m" "100s" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
