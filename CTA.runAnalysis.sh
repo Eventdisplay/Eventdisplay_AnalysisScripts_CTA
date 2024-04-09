@@ -1,18 +1,18 @@
 #!/bin/sh
 #
-# analysis submission for production 3b/4/5/6 analysis 
+# analysis submission for production 3b/4/5/6 analysis
 #
 # this script is optimized for the DESY analysis
 #
 ##############################################
 
 
-if [ $# -lt 2 ] 
+if [ $# -lt 2 ]
 then
    echo "
    ./CTA.runAnalysis.sh <production> <run mode> [recid] \\\\
                 [min number of LSTs] [min number of MSTs] [min number of SSTs] [min number of SCMSTs] [job_dir]
-   
+
     Prod3b analysis:
          prod3b-S20deg / prod3b-S40deg / prod3b-S60deg
          prod3b-N20deg / prod3b-N40deg / prod3b-N60deg
@@ -27,14 +27,14 @@ then
     Prod6 analysis:
         prod6-North-20deg
         prod6-South-20deg
-   
-    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS 
-   
+
+    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
+
     [recids]: 0 = all telescopes (default), 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
 
     [job_dir]: run scripts and job files are written to this directory
    "
-   
+
    exit
 fi
 
@@ -229,6 +229,7 @@ then
    ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -246,7 +247,7 @@ then
    if [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq51-LL"
+   EDM="-sq52-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -272,12 +273,18 @@ then
    fi
    if [[ $P2 == *"SV0"* ]]; then
       ARRAY=( "subArray.prod5.South-SV0.list" )
+   elif [[ $P2 == *"SV"* ]]; then
+       ARRAY=( "subArray.prod5.South-Alpha-SV.list" )
+       if [[ $P2 == *"sub"* ]]; then
+           ARRAY=( "subArray.prod5.South-Alpha-SV-sub.list" )
+       fi
    fi
    ARRAYDIR="prod5"
    TDATE="g20230823"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod6 - Paranal and LaPalma
@@ -296,6 +303,8 @@ then
    fi
    if [[ $P2 == *"40deg"* ]]; then
        SITE="prod6-${PLACE}${SCT}-40deg"
+   elif [[ $P2 == *"52deg"* ]]; then
+       SITE="prod6-${PLACE}${SCT}-52deg"
    elif [[ $P2 == *"60deg"* ]]; then
        SITE="prod6-${PLACE}${SCT}-60deg"
    else
@@ -355,6 +364,7 @@ OBSTIME=( "50h" "30m" )
 OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
+OBSTIME=( "500h" "250h" "100h" "50h" "20h" "10h" "5h" "1h" "5m" "30m" "100s" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
@@ -439,18 +449,18 @@ then
     exit
 fi
 ##########################################
-# loop over all reconstruction IDs 
+# loop over all reconstruction IDs
 # (telescope type dependent subarrays)
 for ID in $RECID
 do
    # directory where all mscw output files are written to
    MSCWSUBDIRECTORY="Analysis-ID$ID-${ANADATE}"
-# loop over all shower directions 
+# loop over all shower directions
 # (i.e. North and South)
     for ((a = 0; a < ${#MCAZ[@]}; a++ ))
     do
           AZ=${MCAZ[$a]}
-          if [ "$AZ" ] 
+          if [ "$AZ" ]
           then
 ##########################################
 # make (fill) tables
@@ -512,7 +522,7 @@ do
                    fi
 
 ##########################################
-# loop over all shower directions 
+# loop over all shower directions
 # (i.e. North and South)
             for ((a = 0; a < ${#MCAZ[@]}; a++ ))
             do
@@ -565,8 +575,8 @@ do
                   fi
                   cd ./analysis/
 ##########################################
-# prepare train BDTs   
-                  if [[ $RUN == "PREPARETMVA" ]] 
+# prepare train BDTs
+                  if [[ $RUN == "PREPARETMVA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
@@ -580,7 +590,7 @@ do
                          ${PDIR}/${RUN}
                   fi
 ##########################################
-# train BDTs   
+# train BDTs
 # (note: BDT training does not need to be done for all observing periods)
                   elif [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
                   then
@@ -699,5 +709,5 @@ do
          done
      done
    done
-   echo 
+   echo
    echo "(end of script)"
