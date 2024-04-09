@@ -17,7 +17,9 @@ ARRAY=AAA
 QC="QQQQ"
 
 # set the right observatory (environmental variables)
-source $EVNDISPSYS/setObservatory.sh CTA
+if [ ! -n "$EVNDISP_APPTAINER" ]; then
+    source $EVNDISPSYS/setObservatory.sh CTA
+fi
 
 # output data files are written to this directory
 mkdir -p $ODIR
@@ -56,7 +58,6 @@ else
     exit
 fi
 
-#########################################
 # train TMVA
 $EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST \
                                                   $ODIR \
@@ -69,9 +70,8 @@ $EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST \
                                                   "" \
                                                   ${QC} \
                                                   0 > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
-#########################################
 
-##############
+
 # cleanup
 # remove everything if telescope type is not found
 if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
@@ -79,8 +79,6 @@ if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
     then
          echo "No telescopes found of type ${TTYPE}"
          head -n 10 ${TLIST}
-    #     rm -f -v $ODIR/${BDT}"_"${TTYPE}.root
-    #     rm -f $ODIR/${BDT}-${TTYPE}.training.log
     fi
 fi
 # move everything into root files
@@ -92,12 +90,7 @@ if [[ -e $ODIR/${BDT}_MLP_${TTYPE}.weights.xml ]]; then
     $EVNDISPSYS/bin/logFile dispXML-MLP-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}_MLP_${TTYPE}.weights.xml
     rm -f $ODIR/${BDT}_MLP_${TTYPE}.weights.xml
 fi
-if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]]; then
+if [[ -e $ODIR/${BDT}-${TTYPE}.training.log ]] && [[ -e $ODIR/${BDT}-${TTYPE}.disptmva.root ]]; then
     $EVNDISPSYS/bin/logFile dispLog-${TTYPE} $ODIR/${BDT}-${TTYPE}.disptmva.root $ODIR/${BDT}-${TTYPE}.training.log
-#    rm -f $ODIR/${BDT}-${TTYPE}.training.log
 fi
 
-#rm -f $ODIR/${BDT}_${TTYPE}.root
-#rm -f $ODIR/${BDT}_${TTYPE}.tmva.root
-
-exit
