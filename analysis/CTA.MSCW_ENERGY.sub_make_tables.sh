@@ -8,7 +8,7 @@
 
 SUBC="condor"
 h_cpu="47:29:00"
-h_vmem="4000M"
+h_vmem="8000M"
 tmpdir_size="1G"
 
 
@@ -50,8 +50,8 @@ if [ -n $8 ]
 then
    QSUBOPT="$8"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 #########################################
 # software paths
@@ -69,7 +69,7 @@ DATE=`date +"%y%m%d"`
 if [ -e $TFIL.root ]
 then
    mv -f $TFIL.root ${TFIL}.${DATE}.root
-   echo "archived existing table file to ${TFIL}.${DATE}.root" 
+   echo "archived existing table file to ${TFIL}.${DATE}.root"
 fi
 
 # adjust table name for on-axis tables
