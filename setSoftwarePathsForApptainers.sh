@@ -26,7 +26,7 @@ export WORKDIR="${CTA_USER_WORK_DIR%/}/analysis/AnalysisData/${DSET}"
 
 # Eventdisplay settings
 export EVNDISP_APPTAINER="${CTA_USER_WORK_DIR%/}/analysis/AnalysisData/APPTAINERS/eventdisplay_20240409-144727-cta-prod5.sif"
-export EVNDISPSYS="apptainer exec --cleanenv ${EVNDISP_APPTAINER} /eventdisplay_workdir/Eventdisplay/"
+export EVNDISPSYS="apptainer exec --no-mount bind-paths --cleanenv ${EVNDISP_APPTAINER} /eventdisplay_workdir/Eventdisplay/"
 
 export CTA_EVNDISP_AUX_DIR=${WORKDIR}/Eventdisplay_AnalysisFiles_CTA/
 export OBS_EVNDISP_AUX_DIR=${CTA_EVNDISP_AUX_DIR}

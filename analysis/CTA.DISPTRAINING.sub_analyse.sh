@@ -34,7 +34,7 @@ then
    echo "  <TMVA parameters>  file name of list of TMVA parameter file"
    echo "  <scaling>          layout scaling (e.g. 5); give 99 to ignore scaling"
    echo
-   echo "  (note 1: hardwired telescope types in this script)" 
+   echo "  (note 1: hardwired telescope types in this script)"
    echo "  (note 2: disp core training switched off)"
    echo
    exit
@@ -62,8 +62,8 @@ if [ -n $8 ]
 then
    QSUBOPT="$8"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 #########################################
 # TMVA options
@@ -153,7 +153,7 @@ else
 fi
 
 #########################################
-# 
+#
 #########################################
 for MLP in "${MLPLIST[@]}"
 do
@@ -190,7 +190,8 @@ do
                 ####################
                 # input file list
                 rm -f $SHELLDIR/tempList.list
-                find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${EVNDISP}/gamma_cone/ -name "*[_,.]${MCAZ}*.root" > $SHELLDIR/tempList.list
+                DATADIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${EVNDISP}/gamma_cone/"
+                find ${DATADIR} -name "*[_,.]${MCAZ}*.root"  -printf "%f\n" > $SHELLDIR/tempList.list
                 NFIL=`wc -l $SHELLDIR/tempList.list | awk '{print $1}'`
                 echo "Total number of files available: $NFIL"
                 # only use NN% of all evndisp files for training
@@ -226,7 +227,8 @@ do
                 FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
                 cp $FSCRIPT.sh $FNAM.sh
 
-                  sed -i -e "s|OFILE|$TDIR|" \
+                  sed -i -e "s|OODIR|$TDIR|" \
+                         -e "s|DDDIR|$DATADIR|" \
                          -e "s|TELTYPE|$TELTYPE|" \
                          -e "s|MLPTYPE|$MLP|" \
                          -e "s|RECONSTRUCTIONID|$RECID|" \
