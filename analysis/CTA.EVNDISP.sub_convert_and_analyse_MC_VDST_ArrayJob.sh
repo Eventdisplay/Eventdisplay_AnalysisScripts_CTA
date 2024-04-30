@@ -7,8 +7,8 @@
 
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="4G"
-tmpdir_size="40G"
+h_vmem="10G"
+tmpdir_size="100G"
 
 if [ ! -n "$1" ] && [ ! -n "$2" ] && [ ! -n "$3" ]
 then
