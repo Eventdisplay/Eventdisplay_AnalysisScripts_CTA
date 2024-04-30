@@ -43,6 +43,6 @@ echo "queue file matching files *.sh" >> ${SUBMITF}
 PDIR=$(pwd)
 if [[ ${2} == "submit" ]]; then
     cd ${JDIR}
-    condor_submit submit.txt
+    condor_submit submit.txt requirements='OpSysAndVer=="AlmaLinux9"'
     cd ${PDIR}
 fi

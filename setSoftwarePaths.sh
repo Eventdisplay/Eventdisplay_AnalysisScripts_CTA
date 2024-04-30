@@ -19,7 +19,8 @@ fi
 
 TDIR=$(pwd)
 
-export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root-6.20.04_build/
+# SL7 export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root-6.20.04_build/
+export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root_v6.30.02.Linux-almalinux9.3-x86_64-gcc11.4/
 
 # main working directory (logs and code)
 DSET="${1}"
