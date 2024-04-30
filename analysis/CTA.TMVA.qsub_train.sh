@@ -2,8 +2,6 @@
 #
 # script to train cuts/MVAs with TMVA
 #
-#
-#
 
 RPARA=RUNPARA
 NENE=NBINSNBINS
@@ -11,7 +9,9 @@ NENE=NBINSNBINS
 ulimit -n 2056
 
 # set the right observatory (environmental variables)
-source "${EVNDISPSYS}"/setObservatory.sh CTA
+if [ ! -n "$EVNDISP_APPTAINER" ]; then
+    source "${EVNDISPSYS}"/setObservatory.sh CTA
+fi
 
 for ((EBIN=0; EBIN < $NENE; EBIN++))
 do
@@ -49,5 +49,3 @@ do
        rm -f $CDIR/BDT_${EBIN}_BDT_0.weights.xml
     fi
 done
-
-exit

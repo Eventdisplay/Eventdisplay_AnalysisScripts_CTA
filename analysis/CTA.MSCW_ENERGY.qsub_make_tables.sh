@@ -2,7 +2,6 @@
 #
 # fill tables for CTA
 #
-#
 
 TFIL=TABLEFILE
 RECID=RECONSTRUCTIONID
@@ -13,7 +12,9 @@ MCAZ="AZIMUTH"
 MINTEL="MMTEL"
 
 # set the right observatory (environmental variables)
-source ${EVNDISPSYS}/setObservatory.sh CTA
+if [ ! -n "$EVNDISP_APPTAINER" ]; then
+    source "${EVNDISPSYS}"/setObservatory.sh CTA
+fi
 
 # output data files are written to this directory
 ODIR=${CTA_USER_DATA_DIR}"/analysis/AnalysisData/$DSET/"$ARRAY"/Tables/"
@@ -71,7 +72,7 @@ then
     LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod6${DARR}.lis
 elif [[ $DSET == *"prod3"* ]]
 then
-    if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]] 
+    if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
     then
        DARR=${ARRAY%??}
        LISFILE=$CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3${DARR}.lis
@@ -100,7 +101,7 @@ fi
 if [[ $DSET == *"prod3b"* ]] && [[ $DSET != *"SCT"* ]]
 then
        MOPT="$MOPT -teltypeweightfile $CTA_EVNDISP_AUX_DIR/DetectorGeometry/CTA.prod3b.TelescopeWeights.dat"
-fi   
+fi
 echo $MOPT
 
 #########################################
@@ -119,8 +120,3 @@ then
      ${EVNDISPSYS}/bin/logFile makeTableFileList $ODIR/$TFIL-$ARRAY.root ${TMPLIST}
      rm -f ${TMPLIST}
 fi
-
-# sleep
-sleep 2
-
-exit
