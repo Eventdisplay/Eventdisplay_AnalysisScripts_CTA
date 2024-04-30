@@ -321,10 +321,12 @@ then
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
-#   ARRAY=( "subArray.prod6.${NS}Hyper${SCT}.list" )
    ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
+   fi
+   if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
+       ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
    TDATE="g20220901"
@@ -379,7 +381,7 @@ echo "RUN: $RUN"
 if [[ $RUN == "EVNDISP" ]]
 then
   # Keep DST files on disk (require a lot of disk space
-  KEEPDST="0"
+  KEEPDST="1"
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
           N=${PARTICLE[$i]}
