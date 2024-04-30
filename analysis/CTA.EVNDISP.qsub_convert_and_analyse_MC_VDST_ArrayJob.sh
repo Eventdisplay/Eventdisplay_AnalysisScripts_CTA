@@ -26,11 +26,17 @@ fi
 # set array
 FIELD=$SUBA
 
+# TMPDIR - usually set on cluster nodes; useful for testing
+if [[ ! -n "$TMPDIR" ]]; then
+    TMPDIR="$CTA_USER_DATA_DIR/tmp/${DSET}"
+    mkdir -p "${TMPDIR}"
+fi
+
 ###################################
 # converter command line parameter
 COPT="-pe"
 # prod3(b): read effective focal lengths from external file
-if [[ $DSET == *"prod3"* ]] 
+if [[ $DSET == *"prod3"* ]]
 then
     COPT="-rfile ${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3b.EffectiveFocalLength.dat"
     COPT="$COPT -pe"
@@ -42,7 +48,7 @@ COPT="$COPT -c $PEDFILE"
 # OPT="-averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 OPT="-imagesquared -averagetzerofiducialradius=0.5 -reconstructionparameter $ACUT"
 OPT="$OPT -writeimagepixellist"
-if [[ $DSET == *"prod3"* ]] 
+if [[ $DSET == *"prod3"* ]]
 then
     # needs to be the same as used for IPR graph preparation
     OPT="$OPT -ignoredstgains"
@@ -114,7 +120,7 @@ do
 # input sim_telarray file: $SIMFIL
 # ($SIMFIL should be set then to the zero suppressed file)
 #
-# best to write to output (zero suppressed file) to the temporary disk on the 
+# best to write to output (zero suppressed file) to the temporary disk on the
 # current note: $TMPDIR/<zerosuppressed file>
 #
 # $HESSIOSYS/bin/ ....
@@ -123,7 +129,7 @@ do
 # execute converter
    SIMFIL=`ls $TMPDIR/*.simtel.${EXTE}`
    echo "TMPDIR FILES " $SIMFIL
-   if [[ $DSET == *"prod3"* ]] 
+   if [[ $DSET == *"prod3"* ]]
    then
        if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]
        then
@@ -137,13 +143,13 @@ do
        else
            DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod3Sb${N:1}.lis
        fi
-   elif [[ $DSET == *"prod4"* ]] 
+   elif [[ $DSET == *"prod4"* ]]
    then
        DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod4${N}.lis
-   elif [[ $DSET == *"prod5"* ]] 
+   elif [[ $DSET == *"prod5"* ]]
    then
        DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod5${N}.lis
-   elif [[ $DSET == *"prod6"* ]] 
+   elif [[ $DSET == *"prod6"* ]]
    then
        DETGEO=${CTA_EVNDISP_AUX_DIR}/DetectorGeometry/CTA.prod6${N}.lis
    fi
@@ -185,7 +191,7 @@ do
       fi
       cp -v -f $TMPDIR/[0-9]*.root ${ODIR}/${RUNN}HD_${ILINE}_${MCAZ}deg.root
   else
-      echo "No root files found!" 
+      echo "No root files found!"
       if [ -e $TMPDIR/$OFIL.$N.convert.log ]; then
          cp -f -v $TMPDIR/$OFIL.$N.convert.log $ODIR/
       fi
@@ -202,7 +208,7 @@ do
       cp -v -f $TMPDIR/$OFIL.root $ODIR/VDST/
    fi
    ls -lh $TMPDIR/*.root
-# clean up 
+# clean up
    rm -f $TMPDIR/$OFIL.root
    rm -f $TMPDIR/[0-9]*.root
    echo "==================================================================="
