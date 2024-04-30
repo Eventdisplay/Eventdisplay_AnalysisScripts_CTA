@@ -381,7 +381,7 @@ echo "RUN: $RUN"
 if [[ $RUN == "EVNDISP" ]]
 then
   # Keep DST files on disk (require a lot of disk space
-  KEEPDST="1"
+  KEEPDST="0"
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
           N=${PARTICLE[$i]}
