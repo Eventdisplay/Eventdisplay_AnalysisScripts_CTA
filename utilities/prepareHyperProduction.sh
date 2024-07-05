@@ -1,41 +1,38 @@
 #!/bin/bash
 #
-# prepare a hyper production
+# prepare a hyper production directory with links to files in the remove data directory
 #
-if [ ! -n "$3" ]
+if [ ! -n "$2" ]
 then
-    echo "./setSoftwarePaths.sh <hyper data set> <target data set> <list of layouts>"
-    echo 
-    echo "   Note: Hyperarray fixed for North Layout"
+    echo "./setSoftwarePaths.sh <directory with file lists> <hyper array directory>"
     echo
     exit
 fi
-HARRAY="N.MSTN.hyperarray"
 
-HDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$1"
-if [[ ! -d ${HDIR} ]]; then
-  echo "Error: directory with hyper data set not set" 
-  exit
-fi
-TDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${2}"
+# directory with file lists
+LDIR="${1}"
+
+TDIR="${2}"
 mkdir -p ${TDIR}
 
-if [[ ! -e ${3} ]]; then
-  echo "Error: array list not found ${3}"
-  exit
-fi
 
-ALIST=$(cat $3)
+for P in gamma_onSource gamma_cone proton electron; do
+   echo "Linking $P"
 
-for A in $ALIST
-do
-   echo "Linking $A"
+   FLIST="${LDIR}/${P}.list"
+   if [[ ! -e ${FLIST} ]]; then
+       echo "Error: file list ${FLIST} not found"
+       continue
+   fi
 
-   mkdir -p ${TDIR}/${A}/EVNDISP
-   rm -rfv ${TDIR}/${A}/EVNDISP/*
+   CURR_DIR=$(pwd)
+   mkdir ${TDIR}/${P}
+   cd ${TDIR}/${P}
 
-   for P in gamma_cone gamma_onSource proton electron
-   do
-      ln -s ${HDIR}/${HARRAY}/EVNDISP/${P} ${TDIR}/${A}/EVNDISP/${P}
+   FILES=$(cat $FLIST)
+   for FILE in $FILES; do
+       ln -s "${FILE}" .
    done
+   cd "${CURR_DIR}"
+
 done

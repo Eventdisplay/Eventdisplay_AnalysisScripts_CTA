@@ -274,10 +274,12 @@ then
    if [[ $P2 == *"SV0"* ]]; then
       ARRAY=( "subArray.prod5.South-SV0.list" )
    elif [[ $P2 == *"SV"* ]]; then
-       ARRAY=( "subArray.prod5.South-Alpha-SV.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-SV-2MSTs.list" )
        if [[ $P2 == *"sub"* ]]; then
            ARRAY=( "subArray.prod5.South-Alpha-SV-sub.list" )
        fi
+   elif [[ $P2 == *"MSTF"* ]]; then
+       ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
    ARRAYDIR="prod5"
    TDATE="g20230823"
@@ -317,7 +319,10 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq20-LL"
+   EDM="-sq30-LL"
+   if [[ $P2 == "prod6-N"* ]]; then
+       EDM="-lin30-LL"
+   fi
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -362,11 +367,12 @@ NIMAGESMIN=$((SCMST<NIMAGESMIN ? SCMST : NIMAGESMIN))
 # (note that all steps except CUTS and PHYS are done only for 50h)
 OBSTIME=( "50h" "5h" "30m" "10m" "10h" "20h" "100h" "500h" "5m" "1m" "2h" )
 OBSTIME=( "10s" "30s" "300s" "1000s" "3000s" "10000s" "30000s" )
-OBSTIME=( "50h" "30m" )
 OBSTIME=( "50h" "5h" )
 OBSTIME=( "50h" "5h" "30m" "100s" )
 OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "500h" "250h" "100h" "50h" "20h" "10h" "5h" "1h" "5m" "30m" "100s" )
+OBSTIME=( "50h" "30m" )
+OBSTIME=( "5h" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
