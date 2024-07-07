@@ -25,7 +25,7 @@ then
          add 'moon' for NSB5x data sets
          prod3b-S20-SCT156Tel
     Prod6 analysis:
-        prod6-North-20deg
+        prod6-North-20deg prod6-North-40deg prod6-North-52deg
         prod6-South-20deg
 
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
