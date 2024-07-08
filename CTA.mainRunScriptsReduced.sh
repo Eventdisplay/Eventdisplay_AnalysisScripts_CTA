@@ -61,8 +61,6 @@ else
        do
            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
        done < NIM-${SITE}-sub.dat
-   elif [[ $SITE == *"prod6"* ]]; then
-       ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    elif [[ $SITE == "North" ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi

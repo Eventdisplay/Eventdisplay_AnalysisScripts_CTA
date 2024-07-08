@@ -35,6 +35,7 @@ do
    echo "   into: ${ODIR}/${P}.list"
 
    find "${MCDIR}/${P}/" -name "*simtel.lin.root" > ${ODIR}/${P}.list
+#   find "${MCDIR}/${P}/" -name "*simtel.sq2.root" > ${ODIR}/${P}.list
 
    echo "total number of files found: "
    wc -l ${ODIR}/${P}.list
