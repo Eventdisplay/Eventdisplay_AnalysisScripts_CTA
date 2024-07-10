@@ -45,7 +45,7 @@ echo "PROCESSING PARTICLE $PART"
 # read analysis values from parameter file
 if [ ! -e $ANAPAR ]
 then
-  echo "error: analysis parameter file not found: $ANAPAR" 
+  echo "error: analysis parameter file not found: $ANAPAR"
   exit
 fi
 cp -f $ANAPAR $TMPDIR
@@ -54,7 +54,7 @@ ANAPAR="${TMPDIR}/${ANAPARF}"
 # check again than runparameter file is available
 if [ ! -e $ANAPAR ]
 then
-  echo "error: analysis parameter file not found in tmp directory: $ANAPAR" 
+  echo "error: analysis parameter file not found in tmp directory: $ANAPAR"
   exit
 fi
 echo "reading analysis parameter from $ANAPAR"
@@ -74,7 +74,7 @@ then
 fi
 
 NIMAGESMIN=`grep NIMAGESMIN $ANAPAR | awk {'print $2'}`
-# get telescope type dependent cuts 
+# get telescope type dependent cuts
 NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
 NCUTSST=`grep NSST $ANAPAR | awk {'print $2'}`
@@ -100,7 +100,7 @@ else
 fi
 THETA2MINENEERGY=`grep THETA2MINENEERGY $ANAPAR | awk {'print $2'}`
 
-for T in LST MST SST SCMST 
+for T in LST MST SST SCMST
 do
     NCUT="NCUT${T}"
     if [ -z "${!NCUT}" ]
@@ -140,7 +140,7 @@ echo "  Analysis parameters: $NIMAGESMIN $ANADIR $TMVACUT $EFFAREABASEDIR $OBSTI
 
 if [ -z "$ANADIR" ] || [ -z "$NIMAGESMIN" ] || [ -z "$TMVACUT" ] || [ -z "$EFFAREABASEDIR" ] || [ -z "$OBSTIME" ]
 then
-  echo "error: analysis parameter file not correct: $ANAPAR" 
+  echo "error: analysis parameter file not correct: $ANAPAR"
   echo " one variable missing"
   exit
 fi
@@ -259,10 +259,10 @@ then
       THETA2MIN=( 0. )
       THETA2MAX=( 1. )
       OFFMEA=( 0.5 )
-   fi   
+   fi
    ISOTROPY="1"
    DIRECTIONCUT="0"
-fi 
+fi
 if [ $PART = "proton" ] || [ $PART = "proton_onSource" ]
 then
    if [[ ${DSET:0:2} == "GR" ]]
@@ -270,7 +270,7 @@ then
        MSCFILE=$DDIR/proton*"deg$MCAZ"*mscw.root
    else
        MSCFILE=$DDIR/proton*."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root
-   fi    
+   fi
    if [ $ARRAY = "V5" ]
    then
       MSCFILE=$DDIR/proton."$ARRAY"_ID"$RECID$MCAZ".mscw.root
@@ -279,7 +279,7 @@ then
    OFFMIN=( 0. )
    OFFMAX=( 100000. )
 # NOTE: this is theta and not theta2
-   if [ $PART = "proton" ] 
+   if [ $PART = "proton" ]
    then
       OFIL=proton."$ARRAY"_ID"$RECID".eff
        if [ $BFINEBINNING = "TRUE" ]
@@ -389,8 +389,8 @@ do
           fi
     ###############################################################################
     # create cut file
-          iCBFILE=`basename $CFIL`      
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+          iCBFILE=`basename $CFIL`
+          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
           then
               CFILP="${CFIL}.gamma.dat"
           else
@@ -407,14 +407,14 @@ do
           cp -f $CFILP $iCFIL
 
     # wobble offset
-          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ] 
+          if [ $PART = "gamma_onSource" ] || [ $PART = "gamma_cone" ]
           then
              WOBBLEOFFSET=${OFFMEA[$i]}
           else
              WOBBLEOFFSET=${OFFMEA[$j]}
           fi
     # angular resolution file
-          if [ $PART = "gamma_onSource" ] 
+          if [ $PART = "gamma_onSource" ]
           then
              ANGRESFILE=${PRODBASEDIR}/EffectiveAreas/${EFFMCAZDIR}/AngularResolution/gamma_onSource."$ARRAY"_ID"$RECID".eff-0.root
           else
@@ -522,9 +522,9 @@ do
          echo "* ENERGYSPECTRUMINDEX  1 2.5 0.1" >> $MSCF
          echo "* ESPECTRUM_FOR_WEIGHTING $CTA_EVNDISP_AUX_DIR/AstroData/TeV_data/EnergySpectrum_literatureValues_CR.dat 0" >> $MSCF
          if  [ $GETXOFFYOFFAFTERCUTS = "yes" ]
-         then	
+         then
              echo "* GETXOFFYOFFAFTERCUTS 1" >> $MSCF
-         fi    
+         fi
 
       fi
       if [ $PART = "electron" ] || [ $PART = "electron_onSource" ]
@@ -624,8 +624,3 @@ do
       mv -v $OFIX.root ${ODIR}/
    done
 done
-
-exit
-
-
-exit
