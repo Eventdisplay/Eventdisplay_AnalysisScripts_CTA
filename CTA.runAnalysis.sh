@@ -322,6 +322,7 @@ then
    EDM="-sq30-LL"
    if [[ $P2 == "prod6-N"* ]]; then
        EDM="-lin30-LL"
+       EDM="-sq230-LL"
    fi
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
@@ -334,7 +335,7 @@ then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20220901"
+   TDATE="g20240826"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -573,7 +574,7 @@ do
                   fi
                   echo "OFFAXISFINEBINNING $BFINEBINNING" >> "$PARA"
                   if [[ ${RUN} == "CUTS" ]] && [[ ${OOTIME} == "50h" ]]; then
-                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"sq51"* ]] || [[ $EDM == *"lin51"* ]]; then
+                     if [[ $P2 == *"DL2plus"* ]] || [[ $EDM == *"prod6"* ]]; then
                          echo "DL2FILLING FULLTREES" >> "$PARA"
                      else
                          echo "DL2FILLING DL2" >> "$PARA"
