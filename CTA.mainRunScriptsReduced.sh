@@ -19,7 +19,7 @@ if [ $# -lt 2 ]; then
             prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
             prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
        Prod6 analysis:
-            prod6-North-20deg prod6-North-40deg prod6-North-52deg
+            prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
             prod6-South-20deg
 
     run modes:
