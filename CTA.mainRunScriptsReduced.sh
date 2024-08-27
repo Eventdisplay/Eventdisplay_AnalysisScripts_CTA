@@ -8,7 +8,7 @@
 if [ $# -lt 2 ]; then
     echo "
 ./CTA.mainRunScripts.sh <data set> <run mode>
-    
+
     data sets:
 
        Prod3b analysis:
@@ -19,7 +19,7 @@ if [ $# -lt 2 ]; then
             prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
             prod5b-North-20deg-moon prod5b-North-40deg-moon prod5b-North-60deg-moon
        Prod6 analysis:
-            prod6-North-20deg
+            prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
             prod6-South-20deg
 
     run modes:
@@ -34,7 +34,7 @@ P2="$1"
 RUN="$2"
 
 SITE="South"
-if [[ $P2 == *"North"* ]]; then 
+if [[ $P2 == *"North"* ]]; then
     SITE="North"
 fi
 
@@ -43,10 +43,10 @@ RECID="0"
 # run scripts are collected here
 RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
 mkdir -p ${RUNSCRIPTDIR}
-    
+
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
-   if [[ $SITE == "South" ]]; then
+   if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    elif [[ $SITE == *"North"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
@@ -60,7 +60,7 @@ else
        while IFS= read -r mult
        do
            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
-       done < NIM-South-sub.dat
+       done < NIM-${SITE}-sub.dat
    elif [[ $SITE == "North" ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi

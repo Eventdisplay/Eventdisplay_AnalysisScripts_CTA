@@ -7,8 +7,8 @@
 
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="4G"
-tmpdir_size="40G"
+h_vmem="10G"
+tmpdir_size="100G"
 
 if [ ! -n "$1" ] && [ ! -n "$2" ] && [ ! -n "$3" ]
 then
@@ -221,7 +221,8 @@ do
     fi
 done
 
-echo "writing shell script to $FNAM.sh"
+echo "submit script with $FNAM.sh"
+echo "condor_submit $FNAM.sh.condor requirements='OpSysAndVer==\"AlmaLinux9\"'"
 echo "writing queue log and error files to $QLOG"
 
 exit

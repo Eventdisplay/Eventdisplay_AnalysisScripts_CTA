@@ -19,7 +19,7 @@
 #
 SUBC="condor"
 h_cpu="47:29:00"
-h_vmem="12000M"
+h_vmem="24000M"
 tmpdir_size="1G"
 
 if [ $# -lt 5 ]
@@ -34,7 +34,7 @@ then
    echo "  <TMVA parameters>  file name of list of TMVA parameter file"
    echo "  <scaling>          layout scaling (e.g. 5); give 99 to ignore scaling"
    echo
-   echo "  (note 1: hardwired telescope types in this script)" 
+   echo "  (note 1: hardwired telescope types in this script)"
    echo "  (note 2: disp core training switched off)"
    echo
    exit
@@ -62,8 +62,8 @@ if [ -n $8 ]
 then
    QSUBOPT="$8"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 #########################################
 # TMVA options
@@ -153,7 +153,7 @@ else
 fi
 
 #########################################
-# 
+#
 #########################################
 for MLP in "${MLPLIST[@]}"
 do
