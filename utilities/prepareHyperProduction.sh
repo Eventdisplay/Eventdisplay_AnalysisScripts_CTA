@@ -17,13 +17,13 @@ mkdir -p ${TDIR}
 
 
 for P in gamma_onSource gamma_cone proton electron; do
-   echo "Linking $P from $FLIST"
 
    FLIST="${LDIR}/${P}.list"
    if [[ ! -e ${FLIST} ]]; then
        echo "Error: file list ${FLIST} not found"
        continue
    fi
+   echo "Linking $P from $FLIST"
    FILES=$(cat $FLIST)
 
    CURR_DIR=$(pwd)
