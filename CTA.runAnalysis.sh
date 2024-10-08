@@ -281,6 +281,7 @@ then
    elif [[ $P2 == *"MSTF"* ]]; then
        ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
+#   ARRAY=( "subArray.prod5.South-SV-5MSTs.list" )
    ARRAYDIR="prod5"
    TDATE="g20230823"
    ANADATE="${TDATE}"
@@ -319,13 +320,9 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq30-LL"
-   if [[ $P2 == "prod6-N"* ]]; then
-       EDM="-lin30-LL"
-       EDM="-sq230-LL"
-   fi
+   EDM="-sq40-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
-       EDM="-sq10-LL-DL2plus"
+       EDM="-sq40-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
