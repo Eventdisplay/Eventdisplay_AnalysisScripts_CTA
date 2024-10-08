@@ -12,7 +12,7 @@ then
 fi
 
 if [[ ! -d "$1" ]]; then
-  echo "Error, directory does not exist" 
+  echo "Error, directory does not exist"
   exit
 fi
 
@@ -21,6 +21,7 @@ OPTION="-print -delete"
 
 # North SV arrays
 find "$1" -name "*LST3MST*2LSTs00MSTs-*" ${OPTION}
+find "$1" -name "*NIM3LST3*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST4*3LSTs00MSTs-*" ${OPTION}
@@ -66,4 +67,3 @@ find "$1" -name "*ID3*-[0-9][0-9]MSTs-MSTF*" ${OPTION}
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST3*2LSTs00MSTs-*" ${OPTION}
-
