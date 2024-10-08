@@ -1,22 +1,22 @@
 #!/bin/bash
 #
 # link EVNDISP directories in analysis directories to
-# general EVNDISP production 
+# general EVNDISP production
 # (assume that EVNDISP is stable in the development)
 #
 if [ ! -n "$4" ]
 then
-    echo "./linkEvndispProduction.sh <EVNDISP data set> <target data set> <list of layouts> <site>"
+    echo "./linkEvndispProductiontoHyperArrayDirectory.sh <EVNDISP data set> <target data set> <list of layouts> <site>"
     echo
     echo "   <site> North or South"
-    echo 
+    echo
     exit
 fi
 
 # EVNDISP directory
 HDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$1"
 if [[ ! -d ${HDIR} ]]; then
-  echo "Error: directory with EVNDISP data set not found" 
+  echo "Error: directory with EVNDISP data set not found"
   exit
 fi
 TDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${2}"
