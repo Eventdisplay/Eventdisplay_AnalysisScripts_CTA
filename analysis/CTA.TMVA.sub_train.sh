@@ -7,7 +7,7 @@
 
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="4000M"
+h_vmem="8000M"
 tmpdir_size="1G"
 
 if [ $# -lt 4 ]
@@ -20,7 +20,7 @@ then
    echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
-   echo 
+   echo
    echo "  <direction>        e.g. for north: \"_180deg\", for south: \"_0deg\", for all directions: no option"
    echo
    echo "   note 1: keywords ENERGYBINS and OUTPUTFILE are ignored in the runparameter file"
@@ -39,7 +39,7 @@ fi
 ANAPAR=$4
 if [ ! -e "$ANAPAR" ]
 then
-  echo "error: analysis parameter file not found: $ANAPAR" 
+  echo "error: analysis parameter file not found: $ANAPAR"
   exit
 fi
 echo "reading analysis parameter from $ANAPAR"
@@ -76,9 +76,9 @@ if [ -n "$5" ]
 then
    QSUBOPT="$5"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
-QSUBOPT=${QSUBOPT//\"/} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
+QSUBOPT=${QSUBOPT//\"/}
 
 #####################################
 # energy bins
@@ -90,7 +90,7 @@ EMAX=( -1.40 -1.30 -1.15 -0.80 -0.25  0.25 0.75 1.50 2.50 )
 #EMAX=( -1.15 -0.50  0.25 1.50 2.50 )
 NENE=${#EMIN[@]}
 #####################################
-# offset bins 
+# offset bins
 if [ $CONE == "TRUE" ]
 then
    OFFMIN=( 0.0 1.0 2.0 2.5 4.0 5.0 )
@@ -153,7 +153,7 @@ do
    NTELTYPE=$(echo ${NTELTYPESTRING} | awk '{print $1}')
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
-   do 
+   do
        TELTYP=$(echo ${NTELTYPESTRING}| cut -d " " -f $((N+2)))
        if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
           echo "Error: telescope type not found: $N"
@@ -207,7 +207,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
          echo "* PREEVENTLIST ${PREEVENTLIST}" >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
-  
+
          sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
