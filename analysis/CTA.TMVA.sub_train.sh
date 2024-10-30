@@ -7,7 +7,7 @@
 
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="8000M"
+h_vmem="16000M"
 tmpdir_size="1G"
 
 if [ $# -lt 4 ]
