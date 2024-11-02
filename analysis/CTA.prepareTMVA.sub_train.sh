@@ -20,7 +20,7 @@ then
    echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
-   echo 
+   echo
    echo "  <direction>        e.g. for north: \"_180deg\", for south: \"_0deg\", for all directions: no option"
    echo
    echo "   note 1: keywords ENERGYBINS and OUTPUTFILE are ignored in the runparameter file"
@@ -39,7 +39,7 @@ fi
 ANAPAR=$4
 if [ ! -e "$ANAPAR" ]
 then
-  echo "error: analysis parameter file not found: $ANAPAR" 
+  echo "error: analysis parameter file not found: $ANAPAR"
   exit
 fi
 echo "reading analysis parameter from $ANAPAR"
@@ -74,9 +74,9 @@ if [ -n "$5" ]
 then
    QSUBOPT="$5"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
-QSUBOPT=${QSUBOPT//\"/} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
+QSUBOPT=${QSUBOPT//\"/}
 
 #####################################
 # offset bins
@@ -173,8 +173,9 @@ do
 # (separate training and events used for analysis)
 # NOTE: ASSUME THAT THIS IS NOT CHANGED
 #       IF DIRECTORY EXISTS, NO NEW ONES ARE CREATED
+#       2411: create always a new one.
     ANAEFF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ}"
-    # rm -rf $ANAEFF
+    rm -rf $ANAEFF
     if [ ! -e "$ANAEFF" ]
     then
         mkdir -p "$ANAEFF"
@@ -229,7 +230,7 @@ do
    NTYPECUT="NTtype==$NTELTYPE"
    # find correct index for each cut
    for (( N = 0; N < $NTELTYPE; N++ ))
-   do 
+   do
        TELTYP=$(echo ${NTELTYPESTRING}| cut -d " " -f $((N+2)))
        if [[ $TELTYP == "NOTELESCOPETYPE" ]]; then
           echo "Error: telescope type not found: $N"
@@ -287,7 +288,7 @@ echo "* ENERGYBINS 1 -5. 5.
       cat "${TEMPPAR}" >> $RFIL.runparameter
 ############################################################
 # setting the cuts in the run parameter file
-      
+
       sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
              -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
 
