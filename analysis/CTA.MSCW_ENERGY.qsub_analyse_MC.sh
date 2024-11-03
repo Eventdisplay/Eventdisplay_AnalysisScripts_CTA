@@ -147,7 +147,7 @@ fi
 
 #########################################
 # disp reconstruction
-# 
+#
 MVATYPE="BDT"
 # disp main directory name
 DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.R1"
@@ -160,9 +160,9 @@ else
 fi
 echo "DISPDIR $DISPSUBDIR"
 #########################################
-# unpack disp XML files for all telescope 
-# types to tmpdir
-for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy
+# unpack disp XML files for all telescope
+# types to tmpdir (not all of them might be used)
+for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy ${MVATYPE}DispCore
 do
    MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR}/${ML}/${MCAZ}/"
    echo "Unpacking ${ML} from ${MLDDIR}"
@@ -183,7 +183,7 @@ do
 #             exit
 #           fi
       fi
-   done 
+   done
 done
 
 #########################################
@@ -199,10 +199,14 @@ MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperro
 ##########################################################################################################
 # options for DISP method (core)
 # (switch on for single-telescope analysis)
-# DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
-# if [[ $ARRAY == *"SV1"* ]]; then
-#     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
-# fi
+DISPCOREDIR="${TMPDIR}/${MVATYPE}DispCore/${MCAZ}/${MVATYPE}DispCore_${MVATYPE}_"
+if [[ $ARRAY == *"1LSTs"* ]] || [[ $ARRAY == *"01MSTs"* ]]; then
+     MOPT="$MOPT -tmva_filename_core_reconstruction $DISPCOREDIR"
+fi
+# single telescope multiplicity (note expectation on array naming)
+if [[ $ARRAY == *"1LSTs00MSTs"* ]] || [[ $ARRAY == *"0LSTs01MSTs"* ]]; then
+    MINIMAGE=1
+fi
 
 ##########################################################################################################
 # options for DISP method (energy)
@@ -254,7 +258,7 @@ then
      rm -f $TMPDIR/iList.list
      rm -f $IFIL
 fi
-   
+
 mv -f -v $TMPDIR/$TFIL.root $ODIR/
 
 # sleep

@@ -5,7 +5,7 @@
 #
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="4000M"
+h_vmem="8000M"
 tmpdir_size="12G"
 
 if [ $# -lt 7 ]
@@ -47,8 +47,8 @@ if [ -n $9 ]
 then
    QSUBOPT="$9"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 #########################################
 # software paths
@@ -139,7 +139,7 @@ do
             -e "s|FILELIST|${TMPLIST}|" \
             -e "s|FILELENGTH|$FILEN|" \
             -e "s|NNNIMAGE|$MINIMAGE| " \
-            -e "s|AAAAADIR|$ANADIR|" $FSCRIPT.sh > $FNAM.sh 
+            -e "s|AAAAADIR|$ANADIR|" $FSCRIPT.sh > $FNAM.sh
 
         chmod u+x $FNAM.sh
         echo "run script written to $FNAM.sh"
@@ -147,7 +147,7 @@ do
 
 # submit the job
         if [[ $SUBC == *qsub* ]]; then
-            qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -o $QLOG -e $QLOG "$FNAM.sh" 
+            qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -o $QLOG -e $QLOG "$FNAM.sh"
         elif [[ $SUBC == *condor* ]]; then
             for (( i=1 ; i<=$NJOBTOT ; i++ )); do
                 sed -e "s|PIDNOTSET|$i|" "${FNAM}.sh" > "${FNAM}-${i}.sh"
