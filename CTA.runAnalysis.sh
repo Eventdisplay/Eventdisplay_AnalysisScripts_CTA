@@ -244,7 +244,9 @@ then
    else
        SITE="prod5-Paranal-20deg"
    fi
-   if [[ $P2 == *"moon"* ]]; then
+   if [[ $P2 == *"fullmoon"* ]]; then
+       SITE="${SITE}-NSB30x"
+   elif [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
    EDM="-sq52-LL"
@@ -255,9 +257,13 @@ then
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
+   ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
+       ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
+       ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
+       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod5.South-Hyper.list" )
@@ -281,7 +287,6 @@ then
    elif [[ $P2 == *"MSTF"* ]]; then
        ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
-#   ARRAY=( "subArray.prod5.South-SV-5MSTs.list" )
    ARRAYDIR="prod5"
    TDATE="g20230823"
    ANADATE="${TDATE}"
@@ -325,14 +330,16 @@ then
        EDM="-sq40-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20240826"
+   TDATE="g20241104"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -371,6 +378,7 @@ OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "500h" "250h" "100h" "50h" "20h" "10h" "5h" "1h" "5m" "30m" "100s" )
 OBSTIME=( "50h" "30m" )
 OBSTIME=( "5h" )
+OBSTIME=( "5h" "30m" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
