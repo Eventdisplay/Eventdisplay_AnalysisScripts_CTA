@@ -2,7 +2,6 @@
 #
 # script to analyse CTA MC files with lookup tables
 #
-#
 
 TABFIL=TABLEFILE
 RECID=RECONSTRUCTIONID
