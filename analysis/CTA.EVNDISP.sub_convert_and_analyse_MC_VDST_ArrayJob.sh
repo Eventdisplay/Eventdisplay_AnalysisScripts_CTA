@@ -102,7 +102,9 @@ then
 elif [[ $DSET == *"prod5"* ]]
 then
     ARRAYCUTS="EVNDISP.prod5.reconstruction.runparameter"
-    if [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
+    if [[ $DSET == *"fullmoon"* ]] || [[ $DSET == *"NSB30x"* ]]; then
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-full-ze20deg-IPR.root"
+    elif [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-halfmoon-IPR.root"
     else
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
