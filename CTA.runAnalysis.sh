@@ -22,7 +22,7 @@ then
          prod5b-N
          prod5-South-20deg  prod5-South-40deg  prod5-South-60deg
          prod5b-North-20deg prod5b-North-40deg prod5b-North-60deg
-         add 'moon' for NSB5x data sets
+         add 'moon' for NSB5x data sets, 'fullmoon' for NSB30x
          prod3b-S20-SCT156Tel
     Prod6 analysis:
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg

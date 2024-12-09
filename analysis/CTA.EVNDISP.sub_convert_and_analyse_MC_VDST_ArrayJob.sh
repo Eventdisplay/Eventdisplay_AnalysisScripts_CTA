@@ -102,7 +102,9 @@ then
 elif [[ $DSET == *"prod5"* ]]
 then
     ARRAYCUTS="EVNDISP.prod5.reconstruction.runparameter"
-    if [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
+    if [[ $DSET == *"fullmoon"* ]] || [[ $DSET == *"NSB30x"* ]]; then
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-fullmoon-IPR.root"
+    elif [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-halfmoon-IPR.root"
     else
         PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod5/prod5-IPR.root"
@@ -203,7 +205,7 @@ do
     then
         DCACHEOPT=" -l cta_dcache=1 "
     fi
-    echo "$DCACHEOPT"
+    echo "DCACHEOPT $DCACHEOPT"
 
     if [[ $NRUN -ne 0 ]]
     then

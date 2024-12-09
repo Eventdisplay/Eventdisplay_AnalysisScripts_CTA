@@ -9,7 +9,7 @@
 
 if [ $# -lt 1 ]; then
     echo "
-./produceIPRGraphs.sh <directory with simtel files> [production (default=PROD6; optional PROD5)
+    ./produceIPRGraphs.sh <(full) directory with simtel files> [production (default=PROD6; optional PROD5)
     "
     exit
 fi
@@ -40,8 +40,7 @@ do
                             -donotusepeds -usePedestalsInTimeSlices=0 \
                             -calibrationsumwindow=10 -calibrationsumfirst=0 \
                             -reconstructionparameter ${RUNPARA} \
-                            -nopedestalsintimeslices  -combine_pedestal_channels ${ADC} \
-                            >& ${SCRATCH}/${FILEN}.pedestal.log
+                            -nopedestalsintimeslices  -combine_pedestal_channels ${ADC}
 
     mv -f dst.root ${SCRATCH}/${FILEN}.pedestal.root
     cd ${CDIR}

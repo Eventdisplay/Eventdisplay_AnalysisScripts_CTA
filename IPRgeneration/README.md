@@ -9,7 +9,9 @@ To produce IPR graphs for all telescopes, run the scripts in the following order
 
 1. `producePedestals.sh` - This will run sim_telarray to produce the pedestal files. Notice to change environmental variable at the top to point to a scratch area where intermediate results will be saved. You will also need a dummy CORSIKA file "dummy1.corsika.gz" in your scratch area, which can be be set in the script as SCRATCH. This script requires adjustments at the top of the script.
 
-2. `produceIPRGraphs.sh` - Calculate the IPR graphs.
+2. `convertToDST.sh` - This will convert the simtel_array output to a `dst.root` file required as input to the next step.
+
+3. `produceIPRGraphs.sh` - Calculate the IPR graphs.
 Convert the output from sim_telarray to DST files and calulate IPR graphs. This requires having EVENTDISPLAY installed.
 
-3. mergeIPRGraphs.sh - Merge all graphs calculated into root file (save also all log files into this root file)
+4. mergeIPRGraphs.sh - Merge all graphs calculated into root file (save also all log files into this root file)

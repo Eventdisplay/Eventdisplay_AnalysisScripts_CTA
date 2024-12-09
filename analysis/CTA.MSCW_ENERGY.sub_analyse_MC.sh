@@ -119,6 +119,9 @@ do
          NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
          echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
          NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
+         if [[ $NJOBTOT == 0 ]]; then
+             NJOBTOT=1
+         fi
          echo "total number of jobs: $NJOBTOT"
 
 # output file name for mscw_energy
