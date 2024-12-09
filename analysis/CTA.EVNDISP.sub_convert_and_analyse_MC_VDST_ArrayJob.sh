@@ -205,7 +205,7 @@ do
     then
         DCACHEOPT=" -l cta_dcache=1 "
     fi
-    echo "$DCACHEOPT"
+    echo "DCACHEOPT $DCACHEOPT"
 
     if [[ $NRUN -ne 0 ]]
     then
