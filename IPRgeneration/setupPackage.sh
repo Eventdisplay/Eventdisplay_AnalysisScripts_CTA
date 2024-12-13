@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # make sure zstd is available
-source /cvmfs/cta.in2p3.fr/software/centos7/gcc48_default/tools/zstd/v1.4.5/setupPackage.sh
+source /cvmfs/sw.cta-observatory.org/software/centos7/gcc48_noOpt/tools/zstd/v1.5.2/setupPackage.sh
 # use our version of gsl (for random numbers in sim_telarray) - reset LD_LIBRARY_PATH
-source /cvmfs/cta.in2p3.fr/software/centos7/gcc48_default/tools/gsl/v1.15/setupPackage.sh
+source /cvmfs/sw.cta-observatory.org/software/centos7/gcc48_noOpt/tools/gsl/v1.15/setupPackage.sh
 
 # Main directory
 # USER: Change this path to the grid package you want to use! # TODO
-export CTA_PROD6_PATH="/cvmfs/cta.in2p3.fr/software/centos7/gcc83_noOpt/simulations/corsika_simtelarray/2022-08-03-sc/"
+export CTA_PROD6_PATH="/cvmfs/sw.cta-observatory.org/software/centos7/gcc48_noOpt/simulations/corsika_simtelarray/2020-06-29/"
 export CTA_PATH=${CTA_PROD6_PATH}
 
 # CORSIKA and SIMTEL
@@ -22,4 +22,3 @@ export SIMTEL_CONFIG_PREPROCESSOR="${SIM_TELARRAY_PATH}/bin/pfp -v -I."
 export MCDATA_PATH=${PWD}/Data
 export CORSIKA_DATA=${MCDATA_PATH}/corsika
 export SIM_TELARRAY_DATA=${MCDATA_PATH}/sim_telarray
-
