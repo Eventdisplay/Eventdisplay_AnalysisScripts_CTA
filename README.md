@@ -23,7 +23,7 @@ Main directory for all software and auxilaury files plus all log files from the 
 ${CTA_USER_WORK_DIR}/analysis/AnalysisData/${DSET}
 ```
 
-$DSET is the name of the data set to be analysed, e.g. *prod3b-paranal20deg_SCT-sq08-LL*. 
+$DSET is the name of the data set to be analysed, e.g. *prod3b-paranal20deg_SCT-sq08-LL*.
 
 The following subdirectories are expected:
 
@@ -99,7 +99,7 @@ e.g.,
 
 ## Running the analysis
 
-Central execution scripts are [CTA.mainRunScriptsReduced.sh](CTA.mainRunScriptsReduced.sh) and  [CTA.runAnalysis.sh](CTA.runAnalysis.sh). 
+Central execution scripts are [CTA.mainRunScriptsReduced.sh](CTA.mainRunScriptsReduced.sh) and  [CTA.runAnalysis.sh](CTA.runAnalysis.sh).
 In the best case, no changes are required to these scripts.
 
 e.g., to run the first step of the analysis with evndisp, do
@@ -116,7 +116,7 @@ To submit script, check the log file directory printed to the screen (the direct
 ./utilities/submit_scripts_to_htcondor.sh <log file directory> submit
 ```
 
-Try this first without the submit argument and check the `submit.txt` file. 
+Try this first without the submit argument and check the `submit.txt` file.
 This assumes the HTCondor job submission system. Gridengine will work after changing the variable `SUBC` from `condor` to `qsub` in the scripts `analysis/*sub*`.
 
 The script `./CTA.mainRunScriptsReduced.sh` does the following:
