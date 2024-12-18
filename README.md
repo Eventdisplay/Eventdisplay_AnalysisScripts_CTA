@@ -1,6 +1,7 @@
 # Eventdisplay Analysis Scripts for CTA
 
 [![DOI](https://zenodo.org/badge/221257176.svg)](https://zenodo.org/badge/latestdoi/221257176)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4d356e6133ee4548ba8e4650c25c3a03)](https://app.codacy.com/gh/Eventdisplay/Eventdisplay_AnalysisScripts_CTA?utm_source=github.com&utm_medium=referral&utm_content=Eventdisplay/Eventdisplay_AnalysisScripts_CTA&utm_campaign=Badge_Grade)
 
 Run scripts for CTA. Allows to efficiently run all analysis steps starting from the raw MC files to sensitivities using Eventdisplay.
