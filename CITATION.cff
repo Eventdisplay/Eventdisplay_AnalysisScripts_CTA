@@ -5,8 +5,8 @@ message: If you use this software, please cite it using these metadata.
 title: "Eventdisplay Analysis Scripts for CTA"
 abstract: "Run scripts for CTA. Allows to efficiently run all analysis steps starting from the raw MC files to sensitivities using Eventdisplay."
 doi: "https://doi.org/10.5281/zenodo.4263710"
-version: 1.7.0
-date-released: 2022-04-25
+version: 2.1.0
+date-released: 2024-08-18
 keywords:
 - "gamma-ray astronomy"
 - "astronomy software"
@@ -30,10 +30,10 @@ references:
   type: article
   title: "Eventdisplay: An Analysis and Reconstruction Package for Ground-based Gamma-ray Astronomy"
   authors:
-  - familiy-names: Maier
+  - family-names: Maier
     given-names: Gernot
     affiliation: DESY
-  - familiy-names: Holder
+  - family-names: Holder
     given-names: Jamie
     affiliation: "Department of Physics and Astronomy and the Bartol Research Institute, University of Delaware, Newark, DE 19716, USA"
   doi: 10.48550/arXiv.1708.04048
