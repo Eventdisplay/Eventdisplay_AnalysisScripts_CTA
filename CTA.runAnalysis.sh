@@ -327,21 +327,21 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq40-LL"
+   EDM="-sq50-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
-       EDM="-sq40-LL-DL2plus"
+       EDM="-sq50-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
        ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20241104"
+   TDATE="g20250212"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
