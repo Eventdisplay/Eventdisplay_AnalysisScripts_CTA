@@ -258,14 +258,16 @@ then
    ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
+   ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
-       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
+#       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
+#       ARRAY=( "subArray.prod5.South-HyperSST.list" )
        ARRAY=( "subArray.prod5.South-Hyper.list" )
    fi
    if [[ $P2 == *"LST"* ]]; then
@@ -290,9 +292,9 @@ then
    ARRAYDIR="prod5"
    TDATE="g20230823"
    ANADATE="${TDATE}"
+   ANADATE="g20250108"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod6 - Paranal and LaPalma
@@ -392,7 +394,7 @@ echo "RUN: $RUN"
 # run eventdisplay
 if [[ $RUN == "EVNDISP" ]]
 then
-  # Keep DST files on disk (require a lot of disk space
+  # Keep DST files on disk (require a lot of disk space)
   KEEPDST="0"
   for ((i = 0; i < ${#PARTICLE[@]}; i++ ))
   do
