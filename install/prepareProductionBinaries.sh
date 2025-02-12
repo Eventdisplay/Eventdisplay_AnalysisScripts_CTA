@@ -8,7 +8,7 @@
 
 if [ $# -lt 1 ]; then
     echo "
-./prepareProductionBinaries.sh <data set> <Eventdisplay version>
+./prepareProductionBinaries.sh <data set> <Eventdisplay branch>
 
    will install hessioxx, Eventdisplay analysis files and code
 
