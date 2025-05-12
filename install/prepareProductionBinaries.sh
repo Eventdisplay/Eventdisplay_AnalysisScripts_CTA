@@ -8,7 +8,7 @@
 
 if [ $# -lt 1 ]; then
     echo "
-./prepareProductionBinaries.sh <data set> <Eventdisplay version>
+./prepareProductionBinaries.sh <data set> <Eventdisplay branch>
 
    will install hessioxx, Eventdisplay analysis files and code
 
@@ -118,7 +118,7 @@ mkdir -p $CODEDIR || return
 echo "Software installation into $CODEDIR"
 echo "Preparing binaries for $DSET"
 
-echo 
+echo
 echo "Getting Eventdisplay..."
 cd $CODEDIR
 if [[ $VERSION == "main" ]]; then
