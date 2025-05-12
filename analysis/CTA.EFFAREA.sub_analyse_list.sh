@@ -12,7 +12,7 @@ h_cpu="11:29:00"
 h_vmem="40000M"
 tmpdir_size="15G"
 
-if [ $# -lt 6 ] 
+if [ $# -lt 6 ]
 then
    echo ""
    echo "./CTA.EFFAREA.sub_analyse_list.sh <subarray list> <cutfile template> <analysis parameter file> <output subdirectory> <data set> [filling mode] [qsub options] [job_dir] [direction (e.g. _180deg)]"
@@ -24,7 +24,7 @@ then
    echo "     template for gamma/hadron cut file"
    echo "     (suffix must be .gamma/.CRbck ; this will be added by this script)"
    echo "     examples can be found in $CTA_EVNDISP_AUX_DIR/GammaHadronCutFiles"
-   echo 
+   echo
    echo "<analysis parameter file>"
    echo "     file with analysis parameter"
    echo "     examples can be found in $CTA_EVNDISP_AUX_DIR/ParameterFiles/"
@@ -64,9 +64,9 @@ if [ -n $7 ]
 then
    QSUBOPT="$7"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
-QSUBOPT=${QSUBOPT//\"/} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
+QSUBOPT=${QSUBOPT//\"/}
 
 # set directories
 source ../setSoftwarePaths.sh $DSET
@@ -76,7 +76,7 @@ CDIR="$CTA_EVNDISP_AUX_DIR/GammaHadronCutFiles/"
 # read values from parameter file
 if [ ! -e $ANAPAR ]
 then
-  echo "error: analysis parameter file not found: $ANAPAR" 
+  echo "error: analysis parameter file not found: $ANAPAR"
   exit
 fi
 echo "reading analysis parameter from $ANAPAR"
@@ -106,7 +106,7 @@ mkdir -p $QSHELLDIR
 mkdir -p $QDIR
 
 #################################################
-# set particle types 
+# set particle types
 # (don't expect to have cone for all data sets)
 if [ $GMOD = "0" ] || [ $GMOD = "3" ]
 then

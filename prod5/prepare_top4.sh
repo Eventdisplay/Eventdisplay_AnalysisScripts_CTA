@@ -1,7 +1,7 @@
 # script to extract certain telescope combinations
 # from large telescope lists
 #
-# hardwired: 
+# hardwired:
 # - OF: output file
 # - IF: input (large) list
 # - list of MSTs and SST

@@ -32,7 +32,7 @@ $EVNDISPSYS/bin/writeCTAWPPhysSensitivityFiles $AXRRAY $OXBSTIME $DXDIR $OXUTNAM
 ############################################################################
 
 if [ -e $OXUTNAME.$AXRRAY.$OXBSTIME.log ]
-then 
+then
    DE=$(grep "error filling" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    DF=$(grep "error, cannot find effective area tree" $OXUTNAME.$AXRRAY.$OXBSTIME.log)
    if [[ -z ${DE} ]] && [[ -z ${DF} ]]; then

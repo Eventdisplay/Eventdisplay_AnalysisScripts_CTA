@@ -4,7 +4,7 @@
 # expect following (standard) environmental variables
 # $EVNDISPSYS
 # $DATADIR
-# 
+#
 
 # dataset used for layout optimisation
 DDAT="g20210409-20deg"

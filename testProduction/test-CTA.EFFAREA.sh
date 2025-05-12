@@ -31,7 +31,7 @@ NWBINS=6
 # (end of) hardwired values
 ##########################################################
 
-############## 
+##############
 # check array
 function checkArray() {
 if [[ ! -e ${FILENAME}.root ]] || [[ ! -s ${FILENAME}.root ]]; then
@@ -56,7 +56,7 @@ if  [[ -e ${FILENAME}.SMALLFILE ]]; then
        rm -f ${FILENAME}.SMALLFILE
     else
        FILELOGSTATUS="FALSE"
-       FFN=$(basename ${FILENAME}.SMALLFILE) 
+       FFN=$(basename ${FILENAME}.SMALLFILE)
        DFN=$(dirname ${FILENAME}.SMALLFILE)
        echo "Error: effective area small file ${FFN} in ${DFN}"
     fi
@@ -84,7 +84,7 @@ do
                  echo "ERROR: directory with input data not found: ${ADIR}"
              fi
              # number of MSCW files
-             for P in gamma_onSource gamma_cone proton electron 
+             for P in gamma_onSource gamma_cone proton electron
              do
                  NF=$(ls -1 ${ADIR}/${P}*mscw.root | wc -l)
                  if [[ $NF == "0" ]]; then
@@ -105,8 +105,8 @@ do
      #for E in BDT.${OBSTIME}-V3.${EFFDATE}
      for E in BDT.30m-V3.${EFFDATE}
      do
-         #################### 
-         # multiplicity loop 
+         ####################
+         # multiplicity loop
          # (tmp: only MST and SST implemented)
          for M in 2 3 4 5 6
          do
@@ -174,7 +174,7 @@ do
                   cd ./testProduction
               fi
             done
-         done 
+         done
      done
   done
 done

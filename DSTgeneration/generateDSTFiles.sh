@@ -1,5 +1,5 @@
 #!/bin/sh
-# 
+#
 # generate DST files
 #
 
@@ -111,7 +111,7 @@ elif [[ $SITE == "Paranal" ]]; then
         OFILE="${ODIR}/${N}-${TYPE}-Emin05TeV"
         $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${ARRAY} -minenergy 5. -c ${IPR} -o ${OFILE}.root ${MCFILE} > ${OFILE}.log
 
-        # superE 
+        # superE
         OFILE="${ODIR}/${N}-${TYPE}-Emin20TeV"
         $EVNDISPSYS/bin/CTA.convert_hessio_to_VDST -a ${ARRAY} -minenergy 20. -c ${IPR} -o ${OFILE}.root ${MCFILE} > ${OFILE}.log
 

@@ -34,7 +34,7 @@ This script:
 - counts number of linked mscw_energy files used as input to effective area stage (observe the numbers)
 - test for existence of effective area output files
 
-e.g., 
+e.g.,
 ```
 ./test-CTA.EFFAREA.sh prod5b-LaPalma-20deg-sq08-LL subArray.prod5b.North-test2.list 0
 ```
