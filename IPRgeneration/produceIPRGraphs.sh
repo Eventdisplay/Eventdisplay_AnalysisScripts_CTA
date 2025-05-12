@@ -38,7 +38,7 @@ do
                             -sourcefile ${SCRATCH}/${FILEN}.dst.root \
                             -runmode=1 -singlepedestalrootfile=1  \
                             -donotusepeds -usePedestalsInTimeSlices=0 \
-                            -calibrationsumwindow=10 -calibrationsumfirst=0 \
+                            -calibrationsumwindow=30 -calibrationsumfirst=0 \
                             -reconstructionparameter ${RUNPARA} \
                             -nopedestalsintimeslices  -combine_pedestal_channels ${ADC}
 
