@@ -118,7 +118,7 @@ mkdir -p $CODEDIR || return
 echo "Software installation into $CODEDIR"
 echo "Preparing binaries for $DSET"
 
-echo 
+echo
 echo "Getting Eventdisplay..."
 cd $CODEDIR
 if [[ $VERSION == "main" ]]; then
