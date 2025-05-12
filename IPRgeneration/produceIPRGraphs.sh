@@ -13,7 +13,7 @@ if [ $# -lt 1 ]; then
     "
     exit
 fi
-SCRATCH=${1}
+SCRATCH=$(realpath "$1")
 [[ "$2" ]] && PROD=$2 || PROD="PROD6"
 CDIR=$(pwd)
 
