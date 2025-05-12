@@ -140,8 +140,8 @@ elif [[ $RECID == "2" ]]; then
     MOPT="$MOPT -maxloss=0.2 -minfui=0."
     MOPT="$MOPT -maxdistfraction=0.75"
 else
-    MOPT="$MOPT -maxloss=0.2 -minfui=0."
-    MOPT="$MOPT -maxdistfraction=0.80"
+    MOPT="$MOPT -maxloss=0.4 -minfui=0."
+#    MOPT="$MOPT -maxdistfraction=0.80"
 fi
 
 #########################################
