@@ -17,9 +17,9 @@ IPRFILE=${2}
 CDIR=$(pwd)
 
 # list of files to be merged
-FLIST=${SCRATCH}/pedestals-${MOON}-ze-${ZE}.list
+FLIST="${SCRATCH}/pedestals.list"
 rm -f ${FLIST}
-find $SCRATCH -name "*.pedestal.root" > ${FLIST}
+find $SCRATCH -name "*.pedestal.root" | sort  > ${FLIST}
 echo "IPR files to be merged (from ${FLIST}):"
 cat ${FLIST}
 
@@ -27,7 +27,8 @@ cat ${FLIST}
 root -l -q -b 'mergeIPRGraphs.C( '\"$IPRFILE\"', '\"$FLIST\"' )'
 
 # add log files
-for logFileNow in $(ls ${SCRATCH}/*.log)
+LOGFILES=$(find $SCRATCH -name "*.log" | sort)
+for logFileNow in $LOGFILES
 do
     logFile=$(basename -- "$logFileNow")
     fileTitle="${logFile%.*}"
