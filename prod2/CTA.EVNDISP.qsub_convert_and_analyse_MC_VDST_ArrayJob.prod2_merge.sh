@@ -45,7 +45,7 @@ fi
 
 
 ################################
-# sim_telarray files 
+# sim_telarray files
 
 # string in file 1
 IDFIL1="prod2_desert"
@@ -92,7 +92,7 @@ echo "COPYING FILES TO $TMPDIR"
 # check if files are on local disc or on dCache
 # (note: DESY only, this can not handle mixed lists)
 z=1
-for F in $IFIL1 $IFIL2 
+for F in $IFIL1 $IFIL2
 do
     G=`basename $F`
     mkdir -p $TMPDIR"/FILE$z"
@@ -133,7 +133,7 @@ do
 # remove spaces
    N=`echo $N | tr -d ' '`
 
-# start a log file 
+# start a log file
    SLOG=$TMPDIR/$OFIL.$N.shell.log
    touch $SLOG
    echo "files in $TMPDIR" >> $SLOG
@@ -162,7 +162,7 @@ do
    ls -l $IFIL2
    echo $SIMFIL
    ls -l $SIMFIL
-   
+
 ####################################################################
 # execute converter
    echo "TMPDIR FILES " $SIMFIL  >> $SLOG
@@ -191,7 +191,7 @@ do
    fi
    ls -lh $TMPDIR/*.root >> $SLOG
    ls -lh $TMPDIR/*.log >> $SLOG
-# clean up 
+# clean up
    rm -f $TMPDIR/$OFIL.root
    rm -f $TMPDIR/[0-9]*.root
    rm -f $SIMFIL

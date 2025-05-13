@@ -21,9 +21,8 @@ Execute:
 ./generateDSTFiles.sh
 ```
 
-Output is written to: 
+Output is written to:
 
 ```
 $CTA_USER_DATA_DIR/DST_testDevelopment_prod5/
 ```
-

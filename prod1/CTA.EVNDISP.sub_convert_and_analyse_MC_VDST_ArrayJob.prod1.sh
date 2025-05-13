@@ -69,7 +69,7 @@ fi
 NRUN=`wc -l $RUNLIST | awk '{print $1}'`
 RUNFROMTO="1-$NRUN"
 
-   
+
 
 #########################################
 # output directory for error/output from batch system

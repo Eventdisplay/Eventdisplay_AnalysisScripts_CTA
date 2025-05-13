@@ -1,10 +1,10 @@
 #!/bin/sh
 #
-# simple script to step through different TMVA training options 
+# simple script to step through different TMVA training options
 #
-# can be used with the run scripts 
+# can be used with the run scripts
 #     analysis/CTA.DISPTRAINING.sub_analyse.sh
-#     will step through all parameter lines 
+#     will step through all parameter lines
 #
 
 # NTrees=2000:BoostType=Grad:IgnoreNegWeightsInTraining:Shrinkage=0.1:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=20:MaxDepth=6:PruneMethod=ExpectedError
@@ -60,4 +60,3 @@ do
       done
    done
 done
-

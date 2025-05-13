@@ -7,9 +7,9 @@
 ##############################################
 
 
-if [ $# -ne 2 ] 
+if [ $# -ne 2 ]
 then
-   echo 
+   echo
    echo "./CTA.runProd2Analysis.sh <N/S/SM/P1/LAYOUT> <run mode>"
    echo
    echo "  N=prod2-North, S=prod2-South, SM=prod2-South-merged, P1=prod1, LAYOUT=array layout analysis"
@@ -71,8 +71,8 @@ then
 # Armazones
 #     SITE=( "prod2-Armazones-NS" )
 ##########################################################
-# 40 deg data sets 
-# started: 
+# 40 deg data sets
+# started:
 #   SITE=( "prod2-Aar-40deg-NS" "prod2-Leoncito-40deg-NS" "prod2-LeoncitoPP-40deg-NS" )
 ##########################################################
 # NSB data sets
@@ -230,7 +230,7 @@ do
           # standard evndisplay analysis
           else
                ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod2.sh $ARRAY $LIST $N $S$M 0 $i $QSUBOPT $TRG
-          fi 
+          fi
        done
        continue
     fi
@@ -266,7 +266,7 @@ do
         OOTIME=${OBSTIME[$o]}
 
 ##########################################
-# loop over all shower directions 
+# loop over all shower directions
 # (i.e. North and South)
        for ((a = 0; a < ${#MCAZ[@]}; a++ ))
        do
@@ -292,11 +292,11 @@ do
 	  echo "OBSERVINGTIME_H $OOTIME" >> $PARA
           echo "GETXOFFYOFFAFTERCUTS yes" >> $PARA
 ##########################################
-# train BDTs   
+# train BDTs
 # (note: BDT training does not need to be done for all observing periods)
 	  if [[ $RUN == "TRAIN" ]]
 	  then
-	    echo "$AZ " 
+	    echo "$AZ "
 	     ./CTA.TMVA.sub_train.sh $ARRAY $OFFAXIS $S$M $PARA $QSUBOPT $AZ
 ##########################################
 # IRFs: angular resolution
@@ -337,6 +337,6 @@ do
       done
      done
    done
-   echo 
+   echo
    echo "(end of script)"
 done

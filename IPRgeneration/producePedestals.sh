@@ -41,7 +41,6 @@ SCRATCH="."
 
 if [[ $PROD == "PROD5" ]]; then
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST )
-    TELTYPES=( SST )
 else
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
     SITE=( CTA_NORTH CTA_SOUTH CTA_NORTH CTA_SOUTH CTA_SOUTH CTA_NORTH )

@@ -5,7 +5,7 @@
 if [ ! -n "$3" ]
 then
     echo "test-TMVA.sh <data set> <list of layouts> <recid>"
-    echo 
+    echo
     echo "   runmodes: EVNDISP"
     echo
     exit
@@ -13,7 +13,7 @@ fi
 
 HDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$1"
 if [[ ! -d ${HDIR} ]]; then
-  echo "Error: directory with data not found" 
+  echo "Error: directory with data not found"
   exit
 fi
 

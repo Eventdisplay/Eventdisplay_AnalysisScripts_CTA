@@ -13,7 +13,7 @@ if [ $# -lt 1 ]; then
     "
     exit
 fi
-SCRATCH=${1}
+SCRATCH=$(realpath "$1")
 [[ "$2" ]] && PROD=$2 || PROD="PROD6"
 CDIR=$(pwd)
 
@@ -38,7 +38,7 @@ do
                             -sourcefile ${SCRATCH}/${FILEN}.dst.root \
                             -runmode=1 -singlepedestalrootfile=1  \
                             -donotusepeds -usePedestalsInTimeSlices=0 \
-                            -calibrationsumwindow=10 -calibrationsumfirst=0 \
+                            -calibrationsumwindow=30 -calibrationsumfirst=0 \
                             -reconstructionparameter ${RUNPARA} \
                             -nopedestalsintimeslices  -combine_pedestal_channels ${ADC}
 

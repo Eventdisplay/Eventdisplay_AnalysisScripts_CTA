@@ -65,7 +65,7 @@ do
     for O in ${OBS}
     do
         if [[ ${O} == "50h" ]] || [[ ${O} == "5h" ]] ; then
-            # full arrays 
+            # full arrays
             if [[ ${SITE} == "South" ]]; then
                 M="NIM3LST3MST3SST4SCMST3"
             else

@@ -79,7 +79,7 @@ do
 #   QLOG=$CTA_USER_LOG_DIR/$DATE/EVNDISP/
 #   mkdir -p $QLOG
    QLOG="/dev/null"
-   
+
    echo "submitting $AFIL ($LDIR)"
 
    FNAM="$SHELLDIR/E-$DSET-$PART-$ARRAY-$FLL"

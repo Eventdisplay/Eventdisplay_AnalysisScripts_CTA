@@ -16,7 +16,7 @@ ROOT installed (v6.14 or newer)
 
 ## Software installation
 
-Install all necessary software using 
+Install all necessary software using
 
     ./prepareProductionBinaries.sh <DSET>
 
@@ -33,7 +33,7 @@ d. Eventdisplay software from github ($CTA_USER_DATA_DIR/analysis/AnalysisData/$
 
 ## Analysis
 
-Main analysis script is 
+Main analysis script is
 
 To start the analysis do:
 
@@ -42,7 +42,7 @@ To start the analysis do:
      source ./setSoftwarePaths.sh prod3b-LaPalma-20degu05b-LL
 
 2. start analysis
- 
+
     ./CTA.runAnalysis.sh
 
 ### Eventdisplay analysis steps
@@ -57,5 +57,3 @@ Requires:
 To run the La Palma analysis, e.g. do:
 
     ./CTA.runAnalysis.sh N20deg EVNDISP 0
-
-
