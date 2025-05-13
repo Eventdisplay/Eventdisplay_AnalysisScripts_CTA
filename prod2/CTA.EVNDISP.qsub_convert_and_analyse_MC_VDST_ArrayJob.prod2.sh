@@ -141,7 +141,7 @@ do
       cp -v -f $TMPDIR/$OFIL.root $ODIR/VDST/
    fi
    ls -lh $TMPDIR/*.root
-# clean up 
+# clean up
    rm -f $TMPDIR/$OFIL.root
    rm -f $TMPDIR/[0-9]*.root
    echo "==================================================================="

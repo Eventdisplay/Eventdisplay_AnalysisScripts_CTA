@@ -5,14 +5,14 @@
 if [ ! -n "$2" ]
 then
     echo "./test-CTA.EVNDISP.sh <data set> <list of layouts>"
-    echo 
+    echo
     echo
     exit
 fi
 
 HDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$1"
 if [[ ! -d ${HDIR} ]]; then
-  echo "Error: directory with data not found" 
+  echo "Error: directory with data not found"
   exit
 fi
 

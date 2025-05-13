@@ -21,7 +21,7 @@ BDTS=".T1"
 # directory with disp results
 HDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/${1}/DISPBDT/"
 if [[ ! -d ${HDIR} ]]; then
-  echo "ERROR: directory with data not found: ${HDIR}" 
+  echo "ERROR: directory with data not found: ${HDIR}"
   exit
 fi
 
@@ -31,8 +31,8 @@ for A in ${ALIST}
 do
    echo "Layout $A"
    DDIR=${HDIR}/BDTdisp.${A}${BDTS}
-   if [[ ! -d ${DDIR} ]]; then 
-      echo "ERROR: directory with disp data not found: ${DDIR}" 
+   if [[ ! -d ${DDIR} ]]; then
+      echo "ERROR: directory with disp data not found: ${DDIR}"
       continue
    fi
    for BDT in BDTDisp BDTDispEnergy BDTDispError BDTDispCore

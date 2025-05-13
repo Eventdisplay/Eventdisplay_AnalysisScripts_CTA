@@ -4,9 +4,9 @@
  *  eventdisplay analysis
  *
  *  root -l -q -b 'mergeIPRGraphs.C( "output.root", "inputdirectory/" )'
- *. 
- *. If the output file name contains the word "halfmoon", e.g., prod5-halfmoon-ze-20-IPR.root,
- *. then the halfmoon pedestal files are merged.
+ *
+ *  If the output file name contains the word "halfmoon", e.g., prod5-halfmoon-ze-20-IPR.root,
+ *  then the halfmoon pedestal files are merged.
  */
 
 vector< string > get_file_list( string iFileListName )
@@ -69,4 +69,3 @@ void mergeIPRGraphs( string iMergedFile = "prod6-ze-20-IPR.root",
       }
       f->Close();
 }
-

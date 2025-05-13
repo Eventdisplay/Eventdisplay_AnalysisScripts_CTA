@@ -10,7 +10,7 @@ tmpdir_size="1G"
 
 if [ $# -lt 7 ]
 then
-   echo 
+   echo
    echo "./CTA.WPPhysWriter.sh <sub array list> <directory with effective areas> <observation time> <output file name> <offset=0/1> <recid> <data set> [off-axis fine binning (default=FALSE)] [name] [job_dir] [qsub options]"
    echo
    echo "  <sub array list>          text file with list of subarray IDs"
@@ -51,8 +51,8 @@ QSUBOPT=""
 if [ -n ${11} ]; then
    QSUBOPT="${11}"
 fi
-QSUBOPT=${QSUBOPT//_X_/ } 
-QSUBOPT=${QSUBOPT//_M_/-} 
+QSUBOPT=${QSUBOPT//_X_/ }
+QSUBOPT=${QSUBOPT//_M_/-}
 
 ############################################################################
 # software paths

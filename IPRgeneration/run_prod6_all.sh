@@ -4,7 +4,7 @@
 
 if [ $# -lt 1 ]; then
     echo "
-    ./run_all.sh <producePedestals/convertToDST/produceIPRGraphs/mergeIPRGraphs> 
+    ./run_all.sh <producePedestals/convertToDST/produceIPRGraphs/mergeIPRGraphs>
     "
     exit
 fi

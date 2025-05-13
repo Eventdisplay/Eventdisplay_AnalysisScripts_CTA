@@ -12,7 +12,7 @@ Usage:
 ./prepareProductionBinaries.sh <data set> <Eventdisplay version>
 ```
 
-This will install the required binaries and data files into 
+This will install the required binaries and data files into
 ```
 $CTA_USER_WORK_DIR/analysis/AnalysisData/<data set>
 ```

@@ -7,9 +7,9 @@
 ##############################################
 
 
-if [ $# -ne 3 ] 
+if [ $# -ne 3 ]
 then
-   echo 
+   echo
    echo "./CTA.runProd2Analysis.sh <N/S/SM/P1> <run mode> <reconstruction ID (default=0)>"
    echo
    echo "  N=prod2-North, S=prod2-South, SM=prod2-South-merged, P1=prod1"
@@ -68,7 +68,7 @@ then
 # data sets with trgmask files
 #   SITE=( "prod2-SAC100-NS" "prod2-Leoncito-NS" )
 ##########################################################
-# 40 deg data sets 
+# 40 deg data sets
 # (change run list directories!)
 #   SITE=( "prod2-Aar-40deg-NS" "prod2-Leoncito-40deg-NS" "prod2-LeoncitoPP-40deg-NS" )
 ##########################################################
@@ -203,7 +203,7 @@ do
           # standard evndisplay analysis
           else
                ./CTA.EVNDISP.sub_convert_and_analyse_MC_VDST_ArrayJob.prod2.sh $ARRAY $LIST $N $S 0 $i $QSUBOPT $TRG
-          fi 
+          fi
        done
        continue
     fi
@@ -260,11 +260,11 @@ do
           echo "GETXOFFYOFFAFTERCUTS yes" >> $PARA
 	  EFFDIR="/lustre/fs9/group/cta/users/$USER/CTA/analysis/AnalysisData/$S/$EFFDIR/"
 ##########################################
-# train BDTs   
+# train BDTs
 # (note: BDT training does not need to be done for all observing periods)
 	  if [[ $RUN == "TRAIN" ]]
 	  then
-	    echo "$AZ " 
+	    echo "$AZ "
 	     ./CTA.TMVA.sub_train.sh $ARRAY onSource $S $PARA $QSUBOPT $AZ
 	     ./CTA.TMVA.sub_train.sh $ARRAY cone $S $PARA $QSUBOPT $AZ
 ##########################################
@@ -301,6 +301,6 @@ do
       done
      done
    done
-   echo 
+   echo
    echo "(end of script)"
 done
