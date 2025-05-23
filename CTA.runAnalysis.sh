@@ -249,7 +249,8 @@ then
    elif [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq52-LL"
+   EDM="-sq60-LL"
+   EDM="-sq6030ns-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -259,12 +260,14 @@ then
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
+   ARRAY=( "subArray.prod5.South-Alpha-SST30ns.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
 #       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
+       ARRAY=( "subArray.prod5.South-Alpha-SST30ns-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
 #       ARRAY=( "subArray.prod5.South-HyperSST.list" )
