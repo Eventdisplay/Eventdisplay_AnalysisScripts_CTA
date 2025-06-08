@@ -60,6 +60,7 @@ then
   CONE="TRUE"
 fi
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
+TMVARUNMODE="TrainGammaHadronSeparation"
 
 ######################################################
 # TMVA parameters are detetermined from data set name
@@ -209,6 +210,7 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
 # setting the cuts in the run parameter file
 
          sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
+                -e "s|TMVA_RUN_MODE|$TMVARUNMODE|" \
                 -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
      done
      rm -f -v ${ODIR}/TMVA.BDT.runparameter
