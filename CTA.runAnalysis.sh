@@ -30,6 +30,8 @@ then
 
     possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
 
+    optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
+
     [recids]: 0 = all telescopes (default), 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
 
     [job_dir]: run scripts and job files are written to this directory
@@ -561,6 +563,8 @@ do
                   EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
                   echo "MSCWSUBDIRECTORY ${MSCWSUBDIRECTORY}" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
+                  echo "TMVA_RECO_METHOD BDT-RECO-METHOD-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
+                  echo "TMVA_RECO_QUALITY BDT-RECO-QUALITY-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR ${EFFDIR}" >> "$PARA"
                   EFFBDIR=EffectiveArea-50h-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
                   echo "EFFAREASUBBASEDIR $EFFBDIR" >> "$PARA"
@@ -610,11 +614,20 @@ do
 ##########################################
 # train BDTs
 # (note: BDT training does not need to be done for all observing periods)
-                  elif [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
+                  elif [[ $RUN == TRAIN* ]] || [[ $RUN == "TMVA" ]]
                   then
+
+                     if [ $RUN == "TRAIN_RECO_METHOD" ]; then
+                         TMVA_RUN_MODE="TrainAngularReconstructionMethod"
+                     elif [ $RUN == "TRAIN_RECO_QUALITY" ]; then
+                         TMVA_RUN_MODE="TrainReconstructionQuality"
+                     else
+                         TMVA_RUN_MODE="TrainGammaHadronSeparation"
+                     fi
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
                          ./CTA.TMVA.sub_train.sh \
+                                "$TMVA_RUN_MODE" \
                                 "$NFILARRAY" \
                                 $OFFAXIS \
                                 ${SITE}${EDM} \

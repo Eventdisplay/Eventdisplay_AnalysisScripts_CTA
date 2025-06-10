@@ -49,9 +49,8 @@ NCUTMST=$(grep NMST "$ANAPAR" | awk {'print $2'})
 NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
 NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
 ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
-DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
-echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DDIR"
+echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR"
 DSET=$3
 CONE="FALSE"
 if [[ $2 == cone ]]
@@ -290,6 +289,7 @@ echo "* ENERGYBINS 1 -5. 5.
 # setting the cuts in the run parameter file
 
       sed -i -e "s|MINIMAGES|$NIMAGESMIN|;s|MINIMAGETYPECUT|$TYPECUT|" \
+             -e "s|TMVA_RUN_MODE|WriteTrainingEvents|" \
              -e 's|ENERGYVARIABLE|ErecS|;s|ENERGYCHI2VARIABLE|EChi2S|g;s|ENERGYDEVARIABLE|dES|g' $RFIL.runparameter
 
       FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.${OFFMEA[$W]}.AZ${MCAZ}.ID${RECID}.NIMAGES${NIMAGESMIN}

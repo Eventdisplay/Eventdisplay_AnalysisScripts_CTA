@@ -13,8 +13,10 @@ tmpdir_size="1G"
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.TMVA.sub_train.sh <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.TMVA.sub_train.sh <run mode > <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
+   echo "  <run mode>        mva run mode ('TrainGammaHadronSeparation', 'TrainAngularReconstructionMethod', 'TrainReconstructionQuality')"
+   echo
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
    echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
@@ -36,12 +38,13 @@ fi
 
 #######################################
 # read values from parameter file
-ANAPAR=$4
+ANAPAR=$5
 if [ ! -e "$ANAPAR" ]
 then
   echo "error: analysis parameter file not found: $ANAPAR"
   exit
 fi
+TMVARUNMODE="$1"
 echo "reading analysis parameter from $ANAPAR"
 NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk {'print $2'})
 NCUTLST=$(grep NLST "$ANAPAR" | awk {'print $2'})
@@ -49,33 +52,38 @@ NCUTMST=$(grep NMST "$ANAPAR" | awk {'print $2'})
 NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
 NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
 ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
-DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
+if [ $TMVARUNMODE == "TrainAngularReconstructionMethod" ]; then
+    DDIR=$(grep TMVA_RECO_METHOD "$ANAPAR" | awk {'print $2'})
+elif [ $TMVARUNMODE == "TrainReconstructionQuality" ]; then
+    DDIR=$(grep TMVA_RECO_QUALITY "$ANAPAR" | awk {'print $2'})
+else
+    DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
+fi
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
 echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DDIR"
-DSET=$3
+DSET=$4
 OFIL="BDT"
 CONE="FALSE"
-if [[ $2 == cone ]]
+if [[ $3 == cone ]]
 then
   CONE="TRUE"
 fi
-VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
-TMVARUNMODE="TrainGammaHadronSeparation"
+VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$2")
 
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
 RXPAR=$(basename "$RPAR".runparameter runparameter)
 #####################################
-if [ -n "$6" ]
+if [ -n "$7" ]
 then
-  MCAZ=$6
+  MCAZ=$7
 fi
 
 # batch farm submission options
-if [ -n "$5" ]
+if [ -n "$6" ]
 then
-   QSUBOPT="$5"
+   QSUBOPT="$6"
 fi
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
@@ -121,8 +129,8 @@ fi
 # log files
 DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
-if [ -n ${7} ]; then
-    LDIR=${7}
+if [ -n ${8} ]; then
+    LDIR=${8}
 fi
 QLOG=$LDIR
 mkdir -p "$LDIR"

@@ -26,6 +26,8 @@ if [ $# -lt 2 ]; then
     run modes:
         MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
 
+    optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
+
     "
     exit
 fi
