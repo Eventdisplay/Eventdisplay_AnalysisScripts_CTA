@@ -15,6 +15,8 @@ TMVAO=TTT
 DSET="DATASET"
 ARRAY=AAA
 QC="QQQQ"
+# WEIGHT="MCe0*MCe0/(1.-loss)/(1.-loss)/(1.-loss)/(1.-loss)/(1.-loss)/(1.-loss)"
+WEIGHT="1."
 
 # set the right observatory (environmental variables)
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -67,7 +69,8 @@ $EVNDISPSYS/bin/trainTMVAforAngularReconstruction $TLIST \
                                                   ${TMVAO} \
                                                   ${ADIR} \
                                                   "" \
-                                                  ${QC} \
+                                                  "${QC}" \
+                                                  "${WEIGHT}" \
                                                   0 > $ODIR/${BDT}-${TTYPE}.training.log 2>&1
 #########################################
 
