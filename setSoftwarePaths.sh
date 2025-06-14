@@ -40,6 +40,7 @@ ROOTCONF=`root-config --libdir`
 export LD_LIBRARY_PATH=${ROOTCONF}
 
 # EVNDISPSYS settings
+export EVNDISPSCRIPTS="$TDIR"
 if [[ -d ${WORKDIR}/code/Eventdisplay/ ]]; then
     export EVNDISPSYS="${WORKDIR}/code/Eventdisplay/"
 elif [[ -d ${WORKDIR}/code ]]; then
