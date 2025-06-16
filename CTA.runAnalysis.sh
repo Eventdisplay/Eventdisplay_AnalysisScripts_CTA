@@ -343,11 +343,9 @@ then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20250212"
+   TDATE="g20250616"
    ANADATE="${TDATE}"
-   ANADATE="g20250611"
    TMVADATE="${ANADATE}"
-   TMVADATE="g20250611"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
 else
