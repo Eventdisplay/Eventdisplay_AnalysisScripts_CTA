@@ -128,9 +128,9 @@ fi
 # options for simple stereo reconstruction
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE"
 if [[ $DSET == *"LaPalma"* ]]; then
-    MOPT="$MOPT -minangle_stereo_reconstruction=15."
+    MOPT="$MOPT -minangle_stereo_reconstruction=5."
 else
-    MOPT="$MOPT -minangle_stereo_reconstruction=10."
+    MOPT="$MOPT -minangle_stereo_reconstruction=5."
 fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 if [[ $RECID == "1" ]]; then
@@ -161,7 +161,7 @@ echo "DISPDIR $DISPSUBDIR"
 #########################################
 # unpack disp XML files for all telescope
 # types to tmpdir (not all of them might be used)
-for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy ${MVATYPE}DispCore
+for ML in ${MVATYPE}Disp ${MVATYPE}DispError ${MVATYPE}DispEnergy ${MVATYPE}DispCore ${MVATYPE}DispSign
 do
    MLDDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR}/${ML}/${MCAZ}/"
    echo "Unpacking ${ML} from ${MLDDIR}"
@@ -194,6 +194,11 @@ MOPT="$MOPT -tmva_nimages_max_stereo_reconstruction=100 -tmva_filename_stereo_re
 # options for DISP method (direction error)
 DISPERRORDIR="${TMPDIR}/${MVATYPE}DispError/${MCAZ}/${MVATYPE}DispError_${MVATYPE}_"
 MOPT="$MOPT -tmva_filename_disperror_reconstruction $DISPERRORDIR -tmva_disperror_weight 50"
+
+##########################################################################################################
+# options for DISP method (direction sign)
+DISPSIGNDIR="${TMPDIR}/${MVATYPE}DispSign/${MCAZ}/${MVATYPE}DispSign_${MVATYPE}_"
+MOPT="$MOPT -tmva_filename_dispsign_reconstruction $DISPSIGNDIR"
 
 ##########################################################################################################
 # options for DISP method (core)
