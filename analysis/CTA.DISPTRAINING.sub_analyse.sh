@@ -149,7 +149,7 @@ fi
 if [[ $TMVAP == *"MLP"* ]]; then
    declare -a MLPLIST=( "MLPDisp" "MLPDispEnergy" "MLPDispError" "MLPDispCore" )
 else
-   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" "BDTDispPhi" )
+   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" "BDTDispPhi" "BDTDispSign" )
 fi
 
 #########################################
