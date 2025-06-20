@@ -21,12 +21,12 @@ ${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter WRITE
 if [ -e ${PFIL}.log ] && [ -e ${OFIL}.root ]
 then
     ${EVNDISPSYS}/bin/logFile tmvaPrepareLog ${OFIL}.root ${PFIL}.log
-#    rm -f ${PFIL}.log
+    rm -f ${PFIL}.log
 fi
 if [ -e ${PFIL}.runparameter ]
 then
     ${EVNDISPSYS}/bin/logFile tmvaPrepareRunparameter ${OFIL}.root ${PFIL}.runparameter
-#    rm -f ${PFIL}.runparameter
+    rm -f ${PFIL}.runparameter
 fi
 
 exit
