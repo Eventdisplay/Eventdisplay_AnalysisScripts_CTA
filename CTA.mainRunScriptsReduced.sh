@@ -59,7 +59,7 @@ else
    do
        ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
    done < NIM-${SITE}.dat
-   if [[ $SITE == "South" ]]; then
+   if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
        while IFS= read -r mult
        do
            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
