@@ -223,7 +223,7 @@ do
 
                 ####################
                 # prepare run scripts
-                FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
+                FNAM="$SHELLDIR/EDISP-$ARRAY-$DSET-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
                 cp $FSCRIPT.sh $FNAM.sh
 
                   sed -i -e "s|OFILE|$TDIR|" \
