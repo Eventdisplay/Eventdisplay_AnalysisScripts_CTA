@@ -9,7 +9,7 @@ set -e
 
 SUBC="condor"
 h_cpu="11:29:00"
-h_vmem="40000M"
+h_vmem="24000M"
 tmpdir_size="15G"
 
 if [ $# -lt 6 ]
