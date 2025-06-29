@@ -25,7 +25,10 @@ find "$1" -name "*NIM3LST3*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST4*3LSTs00MSTs-*" ${OPTION}
-find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs-*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs.*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*3LSTs00MSTs.*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*2LSTs00MSTs.*" ${OPTION}
+find "$1" -name "*NIM3LST3MST3*2LSTs00MSTs.*" ${OPTION}
 find "$1" -name "*MST3*0LSTs02MSTs-MSTN*" ${OPTION}
 find "$1" -name "*MST4*0LSTs02MSTs-MSTN*" ${OPTION}
 find "$1" -name "*MST4*0LSTs03MSTs-MSTN*" ${OPTION}
