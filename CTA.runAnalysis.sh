@@ -330,6 +330,7 @@ then
        SITE="${SITE}-dark"
    fi
    EDM="-sq50-LL"
+   EDM="-sq51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq50-LL-DL2plus"
    fi
@@ -343,9 +344,8 @@ then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20250616"
+   TDATE="g20250813"
    ANADATE="${TDATE}"
-   ANADATE="g20250621"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
