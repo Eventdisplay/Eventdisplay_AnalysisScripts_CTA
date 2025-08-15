@@ -28,7 +28,7 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
+    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -423,6 +423,12 @@ then
           cd ../
    done
    continue
+fi
+# remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
+if [[ $RUN == "CLEANUP" ]]; then
+    PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
+    ./utilities/removeUnreaseonablePhysFiles.sh ${PHYSDIR}
+    exit
 fi
 ##########################################
 # for the following: duplicate the array list adding the scaling to array names

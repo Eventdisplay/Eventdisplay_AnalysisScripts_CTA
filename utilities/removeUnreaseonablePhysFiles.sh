@@ -16,7 +16,6 @@ if [[ ! -d "$1" ]]; then
   exit
 fi
 
-#OPTION="-delete -print"
 OPTION="-print -delete"
 
 # North SV arrays
