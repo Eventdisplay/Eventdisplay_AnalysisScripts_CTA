@@ -173,7 +173,7 @@ do
             # removed cross and tgrad
             OFFDIR=${ODIR}.S${NSTEP}
             # tgrad^2 to trad
-            OFFDIR=${ODIR}.R${NSTEP}
+            OFFDIR=${ODIR}.F${NSTEP}
             ####################
             # output directory
             TDIR="${OFFDIR}/${MLP}/${MCAZ}/"
@@ -198,7 +198,8 @@ do
                 # South:  10%
                 # North: 20%
                 k=`expr 0.2*$NFIL | bc`
-                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.25}')
+                # k=$(echo $NFIL | awk '{printf "%d\n",$1*0.25}')
+                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
                 # SV1 arrays: mix directories by hand!!
                 if [[ $ARRAY == *"SV1"* ]]
                 then

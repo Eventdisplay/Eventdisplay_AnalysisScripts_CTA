@@ -33,6 +33,7 @@ find "$1" -name "*MST4*0LSTs02MSTs-MSTN*" ${OPTION}
 find "$1" -name "*MST4*0LSTs03MSTs-MSTN*" ${OPTION}
 find "$1" -name "*LST4*2LSTs00MSTs-MSTN*" ${OPTION}
 find "$1" -name "*LST4*2LSTs00MSTs-MSTN*" ${OPTION}
+find "$1" -name "*MST4*LSTs03MSTs*" ${OPTION}
 
 
 ##################
