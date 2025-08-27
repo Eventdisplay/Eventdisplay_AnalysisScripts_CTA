@@ -12,7 +12,7 @@ then
 fi
 
 if [[ ! -d "$1" ]]; then
-  echo "Error, directory does not exist"
+  echo "Error, directory does not exist: $1"
   exit
 fi
 
