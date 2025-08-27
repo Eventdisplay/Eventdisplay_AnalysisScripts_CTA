@@ -168,12 +168,8 @@ do
             echo $QC
 
             let "NSTEP = $NSTEP + 1"
-            OFFDIR=${ODIR}.T${NSTEP}
-            OFFDIR=${ODIR}.E${NSTEP}
-            # removed cross and tgrad
-            OFFDIR=${ODIR}.S${NSTEP}
-            # tgrad^2 to trad
-            OFFDIR=${ODIR}.F${NSTEP}
+            # output directory (match CTA.MSCW_ENERGY.qsub_analyse_MC.sh)
+            OFFDIR=${ODIR}.G${NSTEP}
             ####################
             # output directory
             TDIR="${OFFDIR}/${MLP}/${MCAZ}/"

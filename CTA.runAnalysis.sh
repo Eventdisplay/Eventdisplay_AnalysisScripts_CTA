@@ -294,8 +294,9 @@ then
        ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20250813"
+   TDATE="g20250822"
    ANADATE="${TDATE}"
+   ANADATE="g20250826"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -345,7 +346,7 @@ then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20250813"
+   TDATE="g20250822"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
