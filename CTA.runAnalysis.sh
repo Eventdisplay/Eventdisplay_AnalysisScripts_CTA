@@ -294,9 +294,8 @@ then
        ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20250822"
+   TDATE="g20250826"
    ANADATE="${TDATE}"
-   ANADATE="g20250826"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"

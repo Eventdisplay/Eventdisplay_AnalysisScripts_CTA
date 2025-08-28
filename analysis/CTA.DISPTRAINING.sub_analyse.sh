@@ -194,13 +194,13 @@ do
                 # South:  10%
                 # North: 20%
                 k=`expr 0.2*$NFIL | bc`
-                # k=$(echo $NFIL | awk '{printf "%d\n",$1*0.25}')
-                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
+                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
                 # SV1 arrays: mix directories by hand!!
                 if [[ $ARRAY == *"SV1"* ]]
                 then
                     k=$(echo $NFIL)
                 fi
+                # experimental only
                 if [[ $ARRAY == *"DISP"* ]]
                 then
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.50}')

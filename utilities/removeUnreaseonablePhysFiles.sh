@@ -59,6 +59,11 @@ find "$1" -name "*NIM[5-9]LST*S-*4LSTs*" ${OPTION}
 # 2LST 3 MSTs
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" ${OPTION}
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" ${OPTION}
+# 2 MSTs
+find "$1" -name "*NIM3LST3MST3*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*0LSTs02MSTs00SSTs*" ${OPTION}
+# 3 MSTs
+find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs00SSTs*" ${OPTION}
 
 # South SST arrays only
 find "$1" -name "*ID2*-[0-9][0-9]SSTs.*" ${OPTION}
