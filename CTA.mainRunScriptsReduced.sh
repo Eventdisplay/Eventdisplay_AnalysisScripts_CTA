@@ -24,7 +24,9 @@ if [ $# -lt 2 ]; then
             prod6-South-20deg
 
     run modes:
-        MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
+        MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+
+    optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
     "
     exit
@@ -52,12 +54,14 @@ if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "AN
    elif [[ $SITE == *"North"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi
+elif [[ ${RUN} == "CLEANUP" ]]; then
+   ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
 else
    while IFS= read -r mult
    do
        ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}
    done < NIM-${SITE}.dat
-   if [[ $SITE == "South" ]]; then
+   if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
        while IFS= read -r mult
        do
            ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} $mult ${RUNSCRIPTDIR}

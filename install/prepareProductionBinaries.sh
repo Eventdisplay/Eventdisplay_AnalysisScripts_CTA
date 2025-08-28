@@ -130,7 +130,7 @@ fi
 install_hessio
 
 cd $EVNDISPSYS
-./install_sofa.sh
+./install_sofa.sh CI
 
 cd ${TDIR}
 source  ../setSoftwarePaths.sh ${DSET}

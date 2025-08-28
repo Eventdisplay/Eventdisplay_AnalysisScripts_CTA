@@ -149,7 +149,7 @@ fi
 if [[ $TMVAP == *"MLP"* ]]; then
    declare -a MLPLIST=( "MLPDisp" "MLPDispEnergy" "MLPDispError" "MLPDispCore" )
 else
-   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" "BDTDispPhi" )
+   declare -a MLPLIST=( "BDTDisp" "BDTDispEnergy" "BDTDispError" "BDTDispCore" "BDTDispPhi" "BDTDispSign" )
 fi
 
 #########################################
@@ -168,12 +168,8 @@ do
             echo $QC
 
             let "NSTEP = $NSTEP + 1"
-            OFFDIR=${ODIR}.T${NSTEP}
-            OFFDIR=${ODIR}.E${NSTEP}
-            # removed cross and tgrad
-            OFFDIR=${ODIR}.S${NSTEP}
-            # tgrad^2 to trad
-            OFFDIR=${ODIR}.R${NSTEP}
+            # output directory (match CTA.MSCW_ENERGY.qsub_analyse_MC.sh)
+            OFFDIR=${ODIR}.G${NSTEP}
             ####################
             # output directory
             TDIR="${OFFDIR}/${MLP}/${MCAZ}/"
@@ -198,20 +194,13 @@ do
                 # South:  10%
                 # North: 20%
                 k=`expr 0.2*$NFIL | bc`
-                if [[ $DSET == *"LaPalma"* ]]
-                then
-                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.25}')
-                elif [[ $DSET == *"SCT"* ]]
-                then
-                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.30}')
-                else
-                    k=$(echo $NFIL | awk '{printf "%d\n",$1*0.10}')
-                fi
+                k=$(echo $NFIL | awk '{printf "%d\n",$1*0.20}')
                 # SV1 arrays: mix directories by hand!!
                 if [[ $ARRAY == *"SV1"* ]]
                 then
                     k=$(echo $NFIL)
                 fi
+                # experimental only
                 if [[ $ARRAY == *"DISP"* ]]
                 then
                     k=$(echo $NFIL | awk '{printf "%d\n",$1*0.50}')
@@ -223,7 +212,7 @@ do
 
                 ####################
                 # prepare run scripts
-                FNAM="$SHELLDIR/EDISP-$ARRAY-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
+                FNAM="$SHELLDIR/EDISP-$ARRAY-$DSET-$SCALING-$MCAZ-$TELTYPE-$MLP-$NSTEP"
                 cp $FSCRIPT.sh $FNAM.sh
 
                   sed -i -e "s|OFILE|$TDIR|" \

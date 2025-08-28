@@ -28,7 +28,9 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS
+    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+
+    optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
     [recids]: 0 = all telescopes (default), 1 = LSTs, 2 = MSTs, 3 = SSTs, 4 = MSTs+SSTs, 5 = LSTs+MSTs
 
@@ -249,7 +251,7 @@ then
    elif [[ $P2 == *"moon"* ]]; then
        SITE="${SITE}-NSB5x"
    fi
-   EDM="-sq52-LL"
+   EDM="-sq70-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
@@ -259,11 +261,13 @@ then
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
+   ARRAY=( "subArray.prod5.South-Beta.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
+       ARRAY=( "subArray.prod5.South-Beta-sub.list" )
 #       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
@@ -290,9 +294,8 @@ then
        ARRAY=( "subArray.prod5.South-MSTF.list" )
    fi
    ARRAYDIR="prod5"
-   TDATE="g20230823"
+   TDATE="g20250826"
    ANADATE="${TDATE}"
-   ANADATE="g20250108"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -327,21 +330,22 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq40-LL"
+   EDM="-sq50-LL"
+   EDM="-sq51-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
-       EDM="-sq40-LL-DL2plus"
+       EDM="-sq50-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
        ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20241104"
+   TDATE="g20250822"
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -419,6 +423,12 @@ then
           cd ../
    done
    continue
+fi
+# remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
+if [[ $RUN == "CLEANUP" ]]; then
+    PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
+    ./utilities/removeUnreaseonablePhysFiles.sh ${PHYSDIR}
+    exit
 fi
 ##########################################
 # for the following: duplicate the array list adding the scaling to array names
@@ -559,6 +569,8 @@ do
                   EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
                   echo "MSCWSUBDIRECTORY ${MSCWSUBDIRECTORY}" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
+                  echo "TMVA_RECO_METHOD BDT-RECO-METHOD-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
+                  echo "TMVA_RECO_QUALITY BDT-RECO-QUALITY-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "EFFAREASUBDIR ${EFFDIR}" >> "$PARA"
                   EFFBDIR=EffectiveArea-50h-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
                   echo "EFFAREASUBBASEDIR $EFFBDIR" >> "$PARA"
@@ -608,11 +620,20 @@ do
 ##########################################
 # train BDTs
 # (note: BDT training does not need to be done for all observing periods)
-                  elif [[ $RUN == "TRAIN" ]] || [[ $RUN == "TMVA" ]]
+                  elif [[ $RUN == TRAIN* ]] || [[ $RUN == "TMVA" ]]
                   then
+
+                     if [ $RUN == "TRAIN_RECO_METHOD" ]; then
+                         TMVA_RUN_MODE="TrainAngularReconstructionMethod"
+                     elif [ $RUN == "TRAIN_RECO_QUALITY" ]; then
+                         TMVA_RUN_MODE="TrainReconstructionQuality"
+                     else
+                         TMVA_RUN_MODE="TrainGammaHadronSeparation"
+                     fi
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
                          ./CTA.TMVA.sub_train.sh \
+                                "$TMVA_RUN_MODE" \
                                 "$NFILARRAY" \
                                 $OFFAXIS \
                                 ${SITE}${EDM} \

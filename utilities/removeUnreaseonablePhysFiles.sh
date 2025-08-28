@@ -12,11 +12,10 @@ then
 fi
 
 if [[ ! -d "$1" ]]; then
-  echo "Error, directory does not exist"
+  echo "Error, directory does not exist: $1"
   exit
 fi
 
-#OPTION="-delete -print"
 OPTION="-print -delete"
 
 # North SV arrays
@@ -25,12 +24,16 @@ find "$1" -name "*NIM3LST3*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST4*3LSTs00MSTs-*" ${OPTION}
-find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs-*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs.*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*3LSTs00MSTs.*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*2LSTs00MSTs.*" ${OPTION}
+find "$1" -name "*NIM3LST3MST3*2LSTs00MSTs.*" ${OPTION}
 find "$1" -name "*MST3*0LSTs02MSTs-MSTN*" ${OPTION}
 find "$1" -name "*MST4*0LSTs02MSTs-MSTN*" ${OPTION}
 find "$1" -name "*MST4*0LSTs03MSTs-MSTN*" ${OPTION}
 find "$1" -name "*LST4*2LSTs00MSTs-MSTN*" ${OPTION}
 find "$1" -name "*LST4*2LSTs00MSTs-MSTN*" ${OPTION}
+find "$1" -name "*MST4*LSTs03MSTs*" ${OPTION}
 
 
 ##################
@@ -56,6 +59,11 @@ find "$1" -name "*NIM[5-9]LST*S-*4LSTs*" ${OPTION}
 # 2LST 3 MSTs
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" ${OPTION}
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" ${OPTION}
+# 2 MSTs
+find "$1" -name "*NIM3LST3MST3*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*0LSTs02MSTs00SSTs*" ${OPTION}
+# 3 MSTs
+find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs00SSTs*" ${OPTION}
 
 # South SST arrays only
 find "$1" -name "*ID2*-[0-9][0-9]SSTs.*" ${OPTION}

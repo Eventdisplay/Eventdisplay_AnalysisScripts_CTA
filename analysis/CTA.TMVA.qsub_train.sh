@@ -20,7 +20,6 @@ do
 
     echo ${PFIL}.runparameter
 
-    echo "JOB ID ${SGE_JOB_ID}" > "${PFIL}".log
     ${EVNDISPSYS}/bin/trainTMVAforGammaHadronSeparation "${PFIL}".runparameter >> "${PFIL}".log
 
     CDIR=$(dirname "$PFIL".log)
