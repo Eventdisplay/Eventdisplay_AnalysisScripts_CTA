@@ -146,7 +146,7 @@ fi
 #
 MVATYPE="BDT"
 # disp main directory name
-DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.G1"
+DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.I1"
 echo "CHECKING ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
 if [[ -d ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY} ]]; then
     DISPSUBDIR="${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
@@ -256,7 +256,6 @@ fi
 if [ -e $TMPDIR/iList.list ] && [ -e $TMPDIR/$TFIL.root ]
 then
      $EVNDISPSYS/bin/logFile mscwTableList $TMPDIR/$TFIL.root $TMPDIR/iList.list
-     rm -f $TMPDIR/iList.list
      rm -f $IFIL
 fi
 
