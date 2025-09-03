@@ -77,8 +77,8 @@ do
            echo "   Filling ${P} for ${MCAZ} with fraction of ${LOOKUP[$P]}"
 
            ALL_FILE_LIST=${HDIR}/${HYPERARRAY}/EVNDISP/${P}_${MCAZ}.all.list
-           TRAIN_FILE_LIST=${TRAINDIR}/${P}_${MCAZ}.all.list
-           ANA_FILE_LIST=${ANADIR}/${P}_${MCAZ}.all.list
+           TRAIN_FILE_LIST=${TRAINDIR}/${P}_${MCAZ}.list
+           ANA_FILE_LIST=${ANADIR}/${P}_${MCAZ}.list
 
            awk -v n="${LOOKUP[$P]}" 'NR % n == 0' "$ALL_FILE_LIST" > "$TRAIN_FILE_LIST"
            awk -v n="${LOOKUP[$P]}" 'NR % n != 0' "$ALL_FILE_LIST" > "$ANA_FILE_LIST"
