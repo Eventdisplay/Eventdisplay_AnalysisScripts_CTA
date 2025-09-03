@@ -169,7 +169,7 @@ do
 
             let "NSTEP = $NSTEP + 1"
             # output directory (match CTA.MSCW_ENERGY.qsub_analyse_MC.sh)
-            OFFDIR=${ODIR}.I${NSTEP}
+            OFFDIR=${ODIR}.J${NSTEP}
             ####################
             # output directory
             TDIR="${OFFDIR}/${MLP}/${MCAZ}/"

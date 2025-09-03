@@ -56,8 +56,11 @@ if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "AN
    elif [[ $SITE == *"North"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi
-elif [[ ${RUN} == "CLEANUP" ]] || [[ ${RUN} == "PREPAREFILELISTS" ]]; then
+elif [[ ${RUN} == "CLEANUP" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+elif [[ ${RUN} == "PREPAREFILELISTS" ]]; then
+   ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+   ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
 else
    while IFS= read -r mult
    do

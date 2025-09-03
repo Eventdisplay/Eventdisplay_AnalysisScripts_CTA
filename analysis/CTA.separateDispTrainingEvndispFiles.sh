@@ -19,7 +19,8 @@ fi
 
 # Fractions used for train
 declare -A LOOKUP=(
-  [gamma_cone]=5       # 20%
+#  [gamma_cone]=5       # 20%
+  [gamma_cone]=2       # 50%
   [gamma_onSource]=10  # 10%
   [proton]=1000        # 1% (not used)
   [electron]=1000      # 1% (not used)
