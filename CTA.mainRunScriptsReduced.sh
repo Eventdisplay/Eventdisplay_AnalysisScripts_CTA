@@ -24,7 +24,7 @@ if [ $# -lt 2 ]; then
             prod6-South-20deg
 
     run modes:
-        MAKETABLES DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+        MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -44,8 +44,10 @@ fi
 RECID="0"
 
 # run scripts are collected here
-RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
-mkdir -p ${RUNSCRIPTDIR}
+if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
+    RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
+    mkdir -p ${RUNSCRIPTDIR}
+fi
 
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
@@ -54,7 +56,7 @@ if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "AN
    elif [[ $SITE == *"North"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    fi
-elif [[ ${RUN} == "CLEANUP" ]]; then
+elif [[ ${RUN} == "CLEANUP" ]] || [[ ${RUN} == "PREPAREFILELISTS" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
 else
    while IFS= read -r mult
@@ -71,5 +73,7 @@ else
    fi
 fi
 
-echo "#####"
-echo "RUNSCRIPTDIR: ${RUNSCRIPTDIR}/${RUN}"
+if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
+    echo "#####"
+    echo "RUNSCRIPTDIR: ${RUNSCRIPTDIR}/${RUN}"
+fi
