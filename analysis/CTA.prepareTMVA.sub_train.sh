@@ -13,11 +13,9 @@ tmpdir_size="1G"
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.prepareTMVA.sub_train.sh <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.prepareTMVA.sub_train.sh <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
-   echo
-   echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
    echo
@@ -36,7 +34,7 @@ fi
 
 #######################################
 # read values from parameter file
-ANAPAR=$4
+ANAPAR=$3
 if [ ! -e "$ANAPAR" ]
 then
   echo "error: analysis parameter file not found: $ANAPAR"
@@ -50,55 +48,31 @@ NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
 NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
 ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
-echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR"
-DSET=$3
-CONE="FALSE"
-if [[ $2 == cone ]]
-then
-  CONE="TRUE"
-fi
+DSET=$2
+echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DSET"
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 
 ######################################################
 # TMVA parameters are detetermined from data set name
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
 #####################################
-if [ -n "$6" ]
-then
-  MCAZ=$6
-fi
-
+MCAZ=${5:-$MCAZ}
 # batch farm submission options
-if [ -n "$5" ]
-then
-   QSUBOPT="$5"
-fi
+QSUBOPT=${5:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
+# log dir
+DATE=$(date +"%y%m%d")
+LDIR=$CTA_USER_LOG_DIR/$DATE/PRETMVATRAINING/
+LDIR=${6:-$LDIR}
 
 #####################################
 # offset bins
-if [ $CONE == "TRUE" ]
-then
-   OFFMIN=( 0.0 1.0 2.0 2.5 4.0 5.0 )
-   OFFMAX=( 3.0 3.0 3.5 4.5 5.0 6.0 )
-   OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
-   DSUF="gamma_cone"
-   GTYPE="cone10_evndisp"
-   ASUF="gamma_onSource"
-   ATYPE="baseline_evndisp"
-else
-   OFFMIN=( "0.0" )
-   OFFMAX=( "3." )
-# value used until 2015-11-09
-#   OFFMAX=( "1.e10" )
-   OFFMEA=( 0.0 )
-   DSUF="gamma_onSource"
-   GTYPE="baseline_evndisp"
-   ASUF="gamma_cone"
-   ATYPE="cone10_evndisp"
-fi
+OFFMIN=( 0.0 1.0 2.0 2.5 4.0 5.0 )
+OFFMAX=( 3.0 3.0 3.5 4.5 5.0 6.0 )
+OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
+ASUF="gamma_onSource"
 NOFF=${#OFFMIN[@]}
 
 ######################################
@@ -113,11 +87,6 @@ fi
 
 ######################################
 # log files
-DATE=$(date +"%y%m%d")
-LDIR=$CTA_USER_LOG_DIR/$DATE/PRETMVATRAINING/
-if [ -n ${7} ]; then
-    LDIR=${7}
-fi
 QLOG=$LDIR
 mkdir -p "$LDIR"
 echo "Log directory: " "$LDIR"
@@ -130,81 +99,35 @@ FSCRIPT="CTA.prepareTMVA.qsub_train"
 # loop over all arrays
 for ARRAY in $VARRAY
 do
-   echo "STARTING $DSET ARRAY $ARRAY MCAZ $MCAZ"
+    echo "STARTING $DSET ARRAY $ARRAY MCAZ $MCAZ"
 
-# signal and background files
-# (no electrons are used for the background training)
-# ensure mixed training set for the two different pointing directions
-# two lists for signal and background, alternating from previous lists
-# (list must be sorted; and then mixed)
-# Splitmode=BLOCK
-# SFIL1, BFIL1 used for training
-# SFIL2, BFIL2 used for testing and analysis
+    # signal and background files
+    # (no electrons are used for the background training)
+    # ensure mixed training set for the two different pointing directions
+    # two lists for signal and background, alternating from previous lists
+    # (list must be sorted; and then mixed)
+    # Splitmode=BLOCK
 
-# different namings for GRID and local productions
-   if [[ ${DSET:0:2} == "GR" ]]
-   then
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$GTYPE"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"deg$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma*"deg$MCAZ"*"$ATYPE"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"deg$MCAZ"*mscw.root)
-    elif [[ $DSET == *"NSB"* ]]
-    then
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF*"_ID"$RECID"$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton*"_ID"$RECID"$MCAZ"*mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF*"_ID"$RECID"$MCAZ"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/elec*"_ID"$RECID"$MCAZ"*mscw.root)
-    else
-       SFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       SFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$DSUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       BFIL1=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-       BFIL2=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-       GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$ASUF."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-       EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-    fi
+    # Training files for TMVA
+    SIGNALTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 != 0')
+    BACKGROUNDTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+    # Analysis and Testing files for TMVA
+    SIGNALTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 == 0')
+    BACKGROUNDTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+    # Analysis (note electrons are not used in training)
+    GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
+    EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
 
-##########################################################
-# set links for events used in effective area calculation
-# (separate training and events used for analysis)
-# NOTE: ASSUME THAT THIS IS NOT CHANGED
-#       IF DIRECTORY EXISTS, NO NEW ONES ARE CREATED
-#       2411: create always a new one.
+    ##########################################################
+    # set links for events used in effective area calculation
+    # (separate training and events used for analysis)
     ANAEFF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ}"
     rm -rf $ANAEFF
-    if [ ! -e "$ANAEFF" ]
-    then
-        mkdir -p "$ANAEFF"
-        # testing signal list
-        for arg in $SFIL2
-        do
-            BW=$(basename "$arg")
-            ln -s $arg "$ANAEFF"/"$BW"
-        done
-        # testing proton list
-        for arg in $BFIL2
-        do
-            BW=$(basename "$arg")
-            ln -s $arg "$ANAEFF"/"$BW"
-        done
-        # depending on CONE parameter: either onSource (if CONE=TRUE) or cone (if CONE=FALSE)
-        for arg in $GFIL
-        do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
-        done
-        # electrons (not used in training)
-        for arg in $EFIL
-        do
-            BW=$(basename $arg)
-            ln -s $arg $ANAEFF/$BW
-        done
-    else
-        echo "EXISTING LINKED ANALYSIS (MSCW) FILES with testing events"
-    fi
+    mkdir -p "$ANAEFF"
+    for arg in $SIGNALTESTLIST $BACKGROUNDTESTLIST $GFIL $EFIL
+    do
+        ln -s "$arg" "$ANAEFF/$(basename "$arg")"
+    done
     ###############################################################
     # add a 'continue' here if linking file is the main purpose
     #continue
@@ -214,7 +137,7 @@ do
 # get number of telescopes depending of telescope types
 
 # use first file
-   set -- $SFIL1
+   set -- $SIGNALTRAINLIST
    # check the file exists - otherwise continue
    if [ -z "$1" ] || [ ! -e "$1" ]
    then
@@ -258,11 +181,11 @@ do
    touch "${TEMPPAR}"
    # write signal and background files
    # (note: training is in splitmode=block)
-   for arg in $SFIL1
+   for arg in $SIGNALTRAINLIST
    do
       echo "* SIGNALFILE $arg" >> "${TEMPPAR}"
    done
-   for arg in $BFIL1
+   for arg in $BACKGROUNDTRAINLIST
    do
       echo "* BACKGROUNDFILE $arg" >> "${TEMPPAR}"
    done
