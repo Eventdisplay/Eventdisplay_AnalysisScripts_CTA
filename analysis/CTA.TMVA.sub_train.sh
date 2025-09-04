@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # script to train cuts/MVAs with TMVA
 #
@@ -13,13 +13,11 @@ tmpdir_size="1G"
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.TMVA.sub_train.sh <run mode > <subarray list> <onSource/cone> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.TMVA.sub_train.sh <run mode > <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <run mode>        mva run mode ('TrainGammaHadronSeparation', 'TrainAngularReconstructionMethod', 'TrainReconstructionQuality')"
    echo
    echo "  <subarray list>   text file with list of subarray IDs"
-   echo
-   echo "  <onSource/cone>    calculate tables for on source or different wobble offsets"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
    echo
@@ -38,7 +36,7 @@ fi
 
 #######################################
 # read values from parameter file
-ANAPAR=$5
+ANAPAR=$4
 if [ ! -e "$ANAPAR" ]
 then
   echo "error: analysis parameter file not found: $ANAPAR"
@@ -60,14 +58,9 @@ else
     DDIR=$(grep TMVASUBDIR "$ANAPAR" | awk {'print $2'})
 fi
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
+DSET=$3
 echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DDIR"
-DSET=$4
 OFIL="BDT"
-CONE="FALSE"
-if [[ $3 == cone ]]
-then
-  CONE="TRUE"
-fi
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$2")
 
 ######################################################
@@ -75,44 +68,27 @@ VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$2")
 RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
 RXPAR=$(basename "$RPAR".runparameter runparameter)
 #####################################
-if [ -n "$7" ]
-then
-  MCAZ=$7
-fi
-
+MCAZ=${6:-$MCAZ}
 # batch farm submission options
-if [ -n "$6" ]
-then
-   QSUBOPT="$6"
-fi
+QSUBOPT=${5:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
+# log dir
+DATE=$(date +"%y%m%d")
+LDIR=$CTA_USER_LOG_DIR/$DATE/TRAIN/
+LDIR=${7:-$LDIR}
 
 #####################################
 # energy bins
-# default
 EMIN=( -1.90 -1.90 -1.45 -1.20 -0.95 -0.50 -0.10 0.45 0.90 )
 EMAX=( -1.40 -1.30 -1.15 -0.80 -0.25  0.25 0.75 1.50 2.50 )
-# 20201009
-#EMIN=( -1.90 -1.20 -0.75 0.00 0.50 )
-#EMAX=( -1.15 -0.50  0.25 1.50 2.50 )
 NENE=${#EMIN[@]}
 #####################################
 # offset bins
-if [ $CONE == "TRUE" ]
-then
-   OFFMIN=( 0.0 1.0 2.0 2.5 4.0 5.0 )
-   OFFMAX=( 3.0 3.0 3.5 4.5 5.0 6.0 )
-   OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
-   GTYPE="cone10_evndisp"
-else
-   OFFMIN=( "0.0" )
-   OFFMAX=( "3." )
-# value used until 2015-11-09
-#   OFFMAX=( "1.e10" )
-   OFFMEA=( 0.0 )
-fi
+OFFMIN=( 0.0 1.0 2.0 2.5 4.0 5.0 )
+OFFMAX=( 3.0 3.0 3.5 4.5 5.0 6.0 )
+OFFMEA=( 0.5 1.5 2.5 3.5 4.5 5.5 )
 NOFF=${#OFFMIN[@]}
 
 ######################################
@@ -127,11 +103,6 @@ fi
 
 ######################################
 # log files
-DATE=$(date +"%y%m%d")
-LDIR=$CTA_USER_LOG_DIR/$DATE/TMVATRAINING/
-if [ -n ${8} ]; then
-    LDIR=${8}
-fi
 QLOG=$LDIR
 mkdir -p "$LDIR"
 echo "Log directory: " "$LDIR"
@@ -181,8 +152,6 @@ do
    then
        TYPECUT="${TYPECUT})"
    fi
-   #NTYPECUT="NTtype==$NTELTYPE"
-   #TYPECUT="$NTYPECUT\&\&$TYPECUT"
    TYPECUT="$TYPECUT"
    echo "Telescope type cut: $TYPECUT"
 
@@ -239,5 +208,3 @@ echo "* ENERGYBINS 1 ${EMIN[$i]} ${EMAX[$i]}
      fi
   done
 done
-
-exit

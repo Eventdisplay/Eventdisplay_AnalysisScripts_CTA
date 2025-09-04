@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # script to prepare event files for TMVA
 #
