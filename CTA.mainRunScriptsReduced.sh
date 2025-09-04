@@ -78,5 +78,5 @@ fi
 
 if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
     echo "#####"
-    echo "RUNSCRIPTDIR: ${RUNSCRIPTDIR}/${RUN}"
+    echo "RUNSCRIPTDIR: ${RUNSCRIPTDIR%/}/${RUN}"
 fi

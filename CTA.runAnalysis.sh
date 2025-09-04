@@ -258,13 +258,13 @@ then
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-Beta-b.list" )
+   ARRAY=( "subArray.prod5.South-Beta.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
-       ARRAY=( "subArray.prod5.South-Beta-b-sub.list" )
+       ARRAY=( "subArray.prod5.South-Beta-sub.list" )
 #       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
@@ -293,7 +293,8 @@ then
    ARRAYDIR="prod5"
    TDATE="g20250826"
    ANADATE="${TDATE}"
-   ANADATE="g20250903"
+   ANADATE="g20250905"
+   ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -356,7 +357,7 @@ fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
 fi
-# should be either onSource or cone (default is cone)
+# NOT USED ANYMORE! Keep 'cone'
 OFFAXIS="cone"
 
 #####################################
@@ -611,7 +612,6 @@ do
                      then
                          ./CTA.prepareTMVA.sub_train.sh \
                          "$NFILARRAY" \
-                         $OFFAXIS \
                          ${SITE}${EDM} \
                          "$PARA" \
                          $QSUBOPT \
@@ -636,7 +636,6 @@ do
                          ./CTA.TMVA.sub_train.sh \
                                 "$TMVA_RUN_MODE" \
                                 "$NFILARRAY" \
-                                $OFFAXIS \
                                 ${SITE}${EDM} \
                                 "$PARA" \
                                 $QSUBOPT \

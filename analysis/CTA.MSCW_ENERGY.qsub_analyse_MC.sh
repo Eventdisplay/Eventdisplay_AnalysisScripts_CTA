@@ -123,11 +123,19 @@ else
      exit
 fi
 
+# number of telescopes
+NTEL=$(grep -vE '^\s*#|^$' $LISFILE | wc -l)
+echo "Number of telescopes in array: $NTEL"
+
 
 #########################################
 # options for simple stereo reconstruction
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE"
-MOPT="$MOPT -minangle_stereo_reconstruction=5."
+if [[ $NTEL == "2" ]]; then
+    MOPT="$MOPT -minangle_stereo_reconstruction=15."
+else
+    MOPT="$MOPT -minangle_stereo_reconstruction=5."
+fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 if [[ $RECID == "1" ]]; then
     MOPT="$MOPT -maxloss=0.1 -minfui=0."
@@ -137,8 +145,6 @@ elif [[ $RECID == "2" ]]; then
     MOPT="$MOPT -maxdistfraction=0.75"
 else
     MOPT="$MOPT -maxloss=0.2 -minfui=0."
-# 2025, June - remove -maxdistfraction
-#    MOPT="$MOPT -maxdistfraction=0.80"
 fi
 
 #########################################
