@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
 # script to analyse CTA MC files with lookup tables
-#
 #
 SUBC="condor"
 h_cpu="11:29:00"
@@ -89,48 +88,43 @@ for SUBAR in $VARRAY
 do
     echo "STARTING ARRAY $SUBAR"
 
-# output directory
     ODIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${SUBAR}/${ANADIR}"
     mkdir -p ${ODIR}
 
-#########################################
-# loop over all particle types
+    #########################################
+    # loop over all particle types
     for ((m = 0; m < $NPART; m++ ))
     do
         PART=${VPART[$m]}
 
-# delete all old files (data and log files) for the particle type and azimuth angle
-         rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
+        # delete all old files (data and log files) for the particle type and azimuth angle
+        rm -f ${ODIR}/${PART}*ID${RECID}_${MCAZ}*
 
-# take $FILEN files and combine them into one mscw file
-         FILEN=125
-         if [ $PART = "proton" ]
-         then
-            FILEN=500
-         fi
+        # take $FILEN files and combine them into one mscw file
+        FILEN=125
+        if [ $PART = "proton" ]
+        then
+           FILEN=500
+        fi
 
-#########################################
-# input files lists
+        #########################################
+        # input files lists
+        TMPLIST=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP.ANALYSIS/${PART}_${MCAZ}.list
+        NTMPLIST=$(wc -l < "$TMPLIST")
+        echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
+        NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
+        if [[ $NJOBTOT == 0 ]]; then
+            NJOBTOT=1
+        fi
+        echo "total number of jobs: $NJOBTOT"
 
-         TMPLIST=${ODIR}/$PART$NC"."$SUBAR"_ID"${RECID}${MCAZ}"-"$DSET".list"
-         rm -f $TMPLIST
-         echo $TMPLIST ${MCAZ}
-         find $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$SUBAR/EVNDISP/$PART/ -name "*[0-9]*[\.,_]${MCAZ}*.root" > $TMPLIST
-         NTMPLIST=`wc -l $TMPLIST | awk '{print $1}'`
-         echo "total number of files for particle type $PART ($MCAZ) : $NTMPLIST"
-         NJOBTOT=$(( NTMPLIST / (FILEN - 1)))
-         if [[ $NJOBTOT == 0 ]]; then
-             NJOBTOT=1
-         fi
-         echo "total number of jobs: $NJOBTOT"
+        # output file name for mscw_energy
+        TFIL=$PART$NC"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET
 
-# output file name for mscw_energy
-         TFIL=$PART$NC"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET
-
-# skeleton script
+        # skeleton script
         FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
 
-# name of script actually submitted to the queue
+        # name of script actually submitted to the queue
         FNAM="$SHELLDIR/MSCW.ana-$DSET-ID$RECID-$PART-${MCAZ}-array$SUBAR-$6"
 
         sed -e "s|TABLEFILE|$TABLE|" \
@@ -148,7 +142,7 @@ do
         echo "run script written to $FNAM.sh"
         echo "queue log and error files written to $QLOG"
 
-# submit the job
+        # submit the job
         if [[ $SUBC == *qsub* ]]; then
             qsub $QSUBOPT -t 1-$NJOBTOT:1 -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -V -o $QLOG -e $QLOG "$FNAM.sh"
         elif [[ $SUBC == *condor* ]]; then
@@ -161,5 +155,3 @@ do
         fi
     done
 done
-
-exit

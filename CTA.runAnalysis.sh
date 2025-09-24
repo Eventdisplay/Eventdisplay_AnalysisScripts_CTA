@@ -28,7 +28,7 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES DISPBDT/DISPMLP ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -60,9 +60,6 @@ echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 # even without using gridengine: do not remove this
 QSUBOPT="_M_P_X_cta_high_X__M_js_X_9"
 
-#####################################
-# output directory for script parameter files
-mkdir -p "${PDIR%/}/tempRunParameterDir/"
 
 #####################################
 # analysis dates and table dates
@@ -268,7 +265,6 @@ then
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
        ARRAY=( "subArray.prod5.South-Beta-sub.list" )
-#       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
 #       ARRAY=( "subArray.prod5.South-HyperSST.list" )
@@ -296,6 +292,8 @@ then
    ARRAYDIR="prod5"
    TDATE="g20250826"
    ANADATE="${TDATE}"
+   ANADATE="g20250905"
+   ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -347,6 +345,7 @@ then
    ARRAYDIR="prod6"
    TDATE="g20250822"
    ANADATE="${TDATE}"
+   ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -358,7 +357,7 @@ fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
 fi
-# should be either onSource or cone (default is cone)
+# NOT USED ANYMORE! Keep 'cone'
 OFFAXIS="cone"
 
 #####################################
@@ -427,7 +426,12 @@ fi
 # remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
 if [[ $RUN == "CLEANUP" ]]; then
     PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
-    ./utilities/removeUnreaseonablePhysFiles.sh ${PHYSDIR}
+    ./utilities/removeUnreasonablePhysFiles.sh ${PHYSDIR}
+    exit
+fi
+# Prepare file lists required for DispBDT training
+if [[ $RUN == "PREPAREFILELISTS" ]]; then
+    ./analysis/CTA.separateDispTrainingEvndispFiles.sh "${SITE}${EDM}" "${ARRAYDIR}/$ARRAY"
     exit
 fi
 ##########################################
@@ -436,6 +440,9 @@ if [[ ! -e ${ARRAYDIR}/$ARRAY ]]; then
    echo "Error: array file not found: ${ARRAYDIR}/$ARRAY"
    exit
 fi
+#####################################
+# output directory for script parameter files
+mkdir -p "${PDIR%/}/tempRunParameterDir/"
 NXARRAY=$(cat ${ARRAYDIR}/$ARRAY)
 NFILARRAY=${PDIR%/}/tempRunParameterDir/temp.$ARRAY.list
 rm -f "$NFILARRAY"
@@ -448,13 +455,8 @@ done
 # dispBDT training
 if [[ $RUN == "DISP"* ]]
 then
-    if [[ $RUN == "DISPMLP" ]]; then
-        BDTDIR="MLPdisp."
-        RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.MLPDisp.runparameter"
-    else
-        BDTDIR="BDTdisp."
-        RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
-    fi
+    BDTDIR="BDTdisp."
+    RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
     QCPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
     DDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/"
     for A in $NXARRAY
@@ -610,7 +612,6 @@ do
                      then
                          ./CTA.prepareTMVA.sub_train.sh \
                          "$NFILARRAY" \
-                         $OFFAXIS \
                          ${SITE}${EDM} \
                          "$PARA" \
                          $QSUBOPT \
@@ -635,7 +636,6 @@ do
                          ./CTA.TMVA.sub_train.sh \
                                 "$TMVA_RUN_MODE" \
                                 "$NFILARRAY" \
-                                $OFFAXIS \
                                 ${SITE}${EDM} \
                                 "$PARA" \
                                 $QSUBOPT \

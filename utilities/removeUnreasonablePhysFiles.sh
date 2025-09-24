@@ -5,7 +5,7 @@
 #
 if [ ! -n "$1" ]
 then
-    echo "./removeUnreaseonablePhysFiles.sh <path>"
+    echo "./removeUnreasonablePhysFiles.sh <path>"
     echo
     echo
     exit
@@ -53,6 +53,8 @@ find "$1" -name "*NIM4LST4*2LSTs00MSTs00SSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs-*" ${OPTION}
 find "$1" -name "*NIM3LST3*S.BL-2LSTs[A-Z]*" ${OPTION}
 find "$1" -name "*NIM4LST4*S.BL-2LSTs[A-Z]*" ${OPTION}
+find "$1" -name "*NIM4LST4*-2LSTs*" ${OPTION}
+find "$1" -name "*NIM3LST3*-2LSTs*" ${OPTION}
 find "$1" -name "*NIM[3-9]LST*S-*2LSTs*" ${OPTION}
 find "$1" -name "*NIM[4-9]LST*S-*3LSTs*" ${OPTION}
 find "$1" -name "*NIM[5-9]LST*S-*4LSTs*" ${OPTION}
@@ -60,8 +62,11 @@ find "$1" -name "*NIM[5-9]LST*S-*4LSTs*" ${OPTION}
 find "$1" -name "*NIM3LST3MST3*2LSTs03MSTs*" ${OPTION}
 find "$1" -name "*NIM4LST4MST4*2LSTs03MSTs*" ${OPTION}
 # 2 MSTs
-find "$1" -name "*NIM3LST3MST3*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM3LST3MST3*0LSTs02MSTs*" ${OPTION}
+find "$1" -name "*NIM3*MST4*0LSTs02MST*" ${OPTION}
+find "$1" -name "*NIM4LST4MST4*02MST*" ${OPTION}
 find "$1" -name "*NIM4LST4MST4*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0NIM2LST2MST3*02MSTs*" ${OPTION}
 # 3 MSTs
 find "$1" -name "*NIM4LST4MST4*0LSTs03MSTs00SSTs*" ${OPTION}
 

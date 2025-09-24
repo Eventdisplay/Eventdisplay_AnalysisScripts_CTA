@@ -123,11 +123,19 @@ else
      exit
 fi
 
+# number of telescopes
+NTEL=$(grep -vE '^\s*#|^$' $LISFILE | wc -l)
+echo "Number of telescopes in array: $NTEL"
+
 
 #########################################
 # options for simple stereo reconstruction
 MOPT="$MOPT -redo_stereo_reconstruction -sub_array_sim_telarray_counting $LISFILE"
-MOPT="$MOPT -minangle_stereo_reconstruction=5."
+if [[ $NTEL == "2" ]]; then
+    MOPT="$MOPT -minangle_stereo_reconstruction=15."
+else
+    MOPT="$MOPT -minangle_stereo_reconstruction=5."
+fi
 # IMPORTANT: this must be the same or lower value as in dispBDT training
 if [[ $RECID == "1" ]]; then
     MOPT="$MOPT -maxloss=0.1 -minfui=0."
@@ -137,8 +145,6 @@ elif [[ $RECID == "2" ]]; then
     MOPT="$MOPT -maxdistfraction=0.75"
 else
     MOPT="$MOPT -maxloss=0.2 -minfui=0."
-# 2025, June - remove -maxdistfraction
-#    MOPT="$MOPT -maxdistfraction=0.80"
 fi
 
 #########################################
@@ -146,7 +152,7 @@ fi
 #
 MVATYPE="BDT"
 # disp main directory name
-DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.G1"
+DISPSUBDIR="DISPBDT/${MVATYPE}disp.${ARRAY}.J1"
 echo "CHECKING ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
 if [[ -d ${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}/${DISPSUBDIR/${ARRAY}/HYPERARRAY} ]]; then
     DISPSUBDIR="${DISPSUBDIR/${ARRAY}/HYPERARRAY}"
@@ -256,7 +262,6 @@ fi
 if [ -e $TMPDIR/iList.list ] && [ -e $TMPDIR/$TFIL.root ]
 then
      $EVNDISPSYS/bin/logFile mscwTableList $TMPDIR/$TFIL.root $TMPDIR/iList.list
-     rm -f $TMPDIR/iList.list
      rm -f $IFIL
 fi
 

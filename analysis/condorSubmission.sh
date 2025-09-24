@@ -20,7 +20,6 @@ fi
 echo "Log = ${1}.\$(Cluster)_\$(Process).log" >> ${SUBFIL}
 echo "Output = ${1}.\$(Cluster)_\$(Process).output" >> ${SUBFIL}
 echo "Error = ${1}.\$(Cluster)_\$(Process).error" >> ${SUBFIL}
-echo "Log = ${1}.\$(Cluster)_\$(Process).log" >> ${SUBFIL}
 echo "request_memory = ${2}" >> ${SUBFIL}
 echo "request_disk = ${3}" >> ${SUBFIL}
 echo "getenv = True" >> ${SUBFIL}
