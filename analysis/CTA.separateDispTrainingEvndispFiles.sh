@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Separate training files for DispBDT traing
+# Separate training files for DispBDT training
 #
 # - fraction of gamma_cone and gamma_onSource
 # - random selection of files
@@ -38,7 +38,7 @@ if [[ $1 == *Paranal* ]]; then
 fi
 
 if [[ ! -e ${2} ]]; then
-  echo "Error: layout list not found ${3}"
+  echo "Error: layout list not found ${2}"
   exit
 fi
 
