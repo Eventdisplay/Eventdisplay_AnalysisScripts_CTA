@@ -265,7 +265,6 @@ then
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
        ARRAY=( "subArray.prod5.South-Beta-sub.list" )
-#       ARRAY=( "subArray.prod5.South-70SSTs-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
 #       ARRAY=( "subArray.prod5.South-HyperSST.list" )
@@ -346,6 +345,7 @@ then
    ARRAYDIR="prod6"
    TDATE="g20250822"
    ANADATE="${TDATE}"
+   ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
