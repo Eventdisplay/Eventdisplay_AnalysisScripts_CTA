@@ -5,7 +5,7 @@
 #
 if [ ! -n "$1" ]
 then
-    echo "./removeUnreaseonablePhysFiles.sh <path>"
+    echo "./removeUnreasonablePhysFiles.sh <path>"
     echo
     echo
     exit

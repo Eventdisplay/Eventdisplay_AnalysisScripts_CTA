@@ -426,7 +426,7 @@ fi
 # remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
 if [[ $RUN == "CLEANUP" ]]; then
     PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
-    ./utilities/removeUnreaseonablePhysFiles.sh ${PHYSDIR}
+    ./utilities/removeUnreasonablePhysFiles.sh ${PHYSDIR}
     exit
 fi
 # Prepare file lists required for DispBDT training
