@@ -28,7 +28,7 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREO PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -424,7 +424,7 @@ then
 fi
 # remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
 if [[ $RUN == "CLEANUP" ]]; then
-    PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
+    PHYSDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
     ./utilities/removeUnreasonablePhysFiles.sh ${PHYSDIR}
     exit
 fi
@@ -457,7 +457,7 @@ then
     BDTDIR="BDTdisp."
     RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
     QCPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
-    DDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/"
+    DDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/"
     for A in $NXARRAY
     do
         cd ./analysis/
@@ -567,7 +567,7 @@ do
                   touch "$PARA"
                   echo "WRITING PARAMETERFILE $PARA"
                   EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
-                  EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
+                  EFFFULLDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
                   echo "MSCWSUBDIRECTORY ${MSCWSUBDIRECTORY}" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "TMVA_RECO_METHOD BDT-RECO-METHOD-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
@@ -604,8 +604,22 @@ do
                   fi
                   cd ./analysis/
 ##########################################
+# XGB stereo analysis training
+                  if [[ $RUN == "XGBSTEREO" ]]
+                  then
+                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     then
+                         ./CTA.XGBSTEREOTRAINING.sub_train.sh \
+                         "$NFILARRAY" \
+                         ${SITE}${EDM} \
+                         "$PARA" \
+                         $QSUBOPT \
+                         $AZ \
+                         ${PDIR}/${RUN}
+                  fi
+##########################################
 # prepare train BDTs
-                  if [[ $RUN == "PREPARETMVA" ]]
+                  elif [[ $RUN == "PREPARETMVA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
