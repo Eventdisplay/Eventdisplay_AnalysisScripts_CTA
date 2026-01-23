@@ -9,7 +9,7 @@ DSET="DATASET"
 env_name="eventdisplay_ml_cta"
 P="0.5"
 N="5000000"
-MAXCORES=48
+MAXCORES=32
 
 # set environmental variables
 source $EVNDISPSYS/setObservatory.sh CTA
