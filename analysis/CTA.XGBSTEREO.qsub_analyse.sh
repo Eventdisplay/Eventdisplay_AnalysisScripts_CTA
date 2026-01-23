@@ -57,7 +57,7 @@ echo "LOG FILE: $LOGFILE"
 eventdisplay-ml-apply-xgb-stereo \
     --input_file "$MSCW_FILE" \
     --model_prefix "${PREFIX}" \
-    --output_file "${OFIL}" \
+    --output_file "${OFIL}.root" \
     --max_cores $MAXCORES \
     --observatory $site  >| "${LOGFILE}" 2>&1
 
