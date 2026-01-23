@@ -109,7 +109,6 @@ do
           elif [[ $SUBC == *condor* ]]; then
               ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size
           fi
-          exit
      done
    done
 done

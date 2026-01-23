@@ -6,8 +6,8 @@
 #
 
 SUBC="condor"
-h_cpu="0:29:00"
-h_vmem="4000M"
+h_cpu="8:29:00"
+h_vmem="24000M"
 tmpdir_size="1G"
 
 if [ $# -lt 4 ]
