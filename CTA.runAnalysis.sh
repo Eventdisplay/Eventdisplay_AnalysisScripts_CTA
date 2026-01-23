@@ -28,7 +28,7 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREO PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -604,12 +604,24 @@ do
                   fi
                   cd ./analysis/
 ##########################################
-# XGB stereo analysis training
-                  if [[ $RUN == "XGBSTEREO" ]]
+# XGB stereo analysis training and analysis
+                  if [[ $RUN == "XGBSTEREOTRAIN" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
-                         ./CTA.XGBSTEREOTRAINING.sub_train.sh \
+                         ./CTA.XGBSTEREO.sub_train.sh \
+                         "$NFILARRAY" \
+                         ${SITE}${EDM} \
+                         "$PARA" \
+                         $QSUBOPT \
+                         $AZ \
+                         ${PDIR}/${RUN}
+                  fi
+                  elif [[ $RUN == "XGBSTEREOANA" ]]
+                  then
+                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     then
+                         ./CTA.XGBSTEREO.sub_analyse.sh \
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
@@ -636,7 +648,6 @@ do
 # (note: BDT training does not need to be done for all observing periods)
                   elif [[ $RUN == TRAIN* ]] || [[ $RUN == "TMVA" ]]
                   then
-
                      if [ $RUN == "TRAIN_RECO_METHOD" ]; then
                          TMVA_RUN_MODE="TrainAngularReconstructionMethod"
                      elif [ $RUN == "TRAIN_RECO_QUALITY" ]; then

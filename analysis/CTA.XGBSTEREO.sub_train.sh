@@ -73,7 +73,7 @@ echo "Log directory: " "$LDIR"
 
 ######################################
 # script name template
-FSCRIPT="CTA.XGBSTEREOTRAINING.qsub_train"
+FSCRIPT="CTA.XGBSTEREO.qsub_train"
 
 ###############################################################
 # loop over all arrays
