@@ -258,13 +258,13 @@ then
    ARRAY=( "subArray.prod5.South-Alpha.list" )
    ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
    ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-Beta.list" )
+   ARRAY=( "subArray.prod5.South-Betab.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
        ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
        ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
        ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
-       ARRAY=( "subArray.prod5.South-Beta-sub.list" )
+       ARRAY=( "subArray.prod5.South-Betab-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
 #       ARRAY=( "subArray.prod5.South-HyperSST.list" )
@@ -334,18 +334,17 @@ then
        EDM="-sq50-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
-   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alphab${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
-       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alphab-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20250822"
+   TDATE="g20251021"
    ANADATE="${TDATE}"
-   ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -383,7 +382,7 @@ OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "500h" "250h" "100h" "50h" "20h" "10h" "5h" "1h" "5m" "30m" "100s" )
 OBSTIME=( "50h" "30m" )
 OBSTIME=( "5h" )
-OBSTIME=( "5h" "30m" )
+OBSTIME=( "5h" "30m" "100s" )
 OBSTIME=( "50h" )
 
 echo "$RUN" "$SITE"
