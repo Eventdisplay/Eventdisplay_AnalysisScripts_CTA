@@ -9,7 +9,7 @@ DSET="DATASET"
 env_name="eventdisplay_ml_cta"
 P="0.5"
 N="5000000"
-MAXCORES=64
+MAXCORES=48
 
 # set environmental variables
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -46,10 +46,10 @@ PREFIX="${ODIR}/dispdir_bdt"
 LOGFILE="${PREFIX}.log"
 rm -f "$LOGFILE"
 
-if [[ $DSET == *"LaPalma"* ]]
-    site="CTA-NORTH"
+if [[ $DSET == *"LaPalma"* ]]; then
+    site="CTAO-NORTH"
 else
-    site="CTA-SOUTH"
+    site="CTAO-SOUTH"
 fi
 
 eventdisplay-ml-train-xgb-stereo \
