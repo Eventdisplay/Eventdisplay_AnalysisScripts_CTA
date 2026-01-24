@@ -159,7 +159,6 @@ do
 
       chmod u+x $QSHELLDIR/$FNAM.sh
 
-      echo $QSHELLDIR/$FNAM.sh
 
 ###########################################
 # submit the job script
@@ -173,6 +172,7 @@ do
                  sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
+                 echo "$QSHELLDIR/${FNAM}-${PARTICLEID}.sh"
              done
              rm -f "$QSHELLDIR/$FNAM.sh"
          fi
@@ -187,6 +187,7 @@ do
                  sed -e "s|PARTIDNOTSET|$PARTICLEID|" "${QSHELLDIR}/${FNAM}.sh" > "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  chmod u+x "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh"
                  ./condorSubmission.sh "${QSHELLDIR}/${FNAM}-${PARTICLEID}.sh" $h_vmem $tmpdir_size
+                 echo "$QSHELLDIR/${FNAM}-${PARTICLEID}.sh"
              done
              rm -f "$QSHELLDIR/$FNAM.sh"
          fi

@@ -93,10 +93,12 @@ do
 
        FILES=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/$PART."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
 
+       i=0
        for FILE in $FILES
        do
+          ((i++))
 
-          FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}
+          FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}.${PART}-${i}
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh

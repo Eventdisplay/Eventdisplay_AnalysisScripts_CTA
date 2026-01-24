@@ -51,7 +51,7 @@ RUN="$2"
 [[ "$5" ]] && MST=$5 || MST="2"
 [[ "$6" ]] && SST=$6 || SST="2"
 [[ "$7" ]] && SCMST=$7 || SCMST="2"
-[[ "$8" ]] && PDIR=${8} || PDIR="${CTA_USER_LOG_DIR%/}/"
+[[ "$8" ]] && PDIR=${8} || PDIR="${CTA_USER_LOG_DIR%/}"
 echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 
 #####################################
@@ -347,6 +347,7 @@ then
    ANADATE="${TDATE}"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20260126"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
