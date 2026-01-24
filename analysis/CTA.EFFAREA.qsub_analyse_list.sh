@@ -505,6 +505,7 @@ do
          echo "* FILLINGMODE 3" >> $MSCF
       fi
 # fill IRFs only
+      echo "* RECONSTRUCTIONTYPE 8" >> $MSCF    # 8 = XGBSTEREO
       echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
       echo "* ENERGYAXISBINS 60 -2. 4." >> $MSCF
       echo "* ENERGYAXISBINHISTOS 25 -1.9 3.1" >> $MSCF
