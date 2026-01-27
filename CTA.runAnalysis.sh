@@ -334,10 +334,10 @@ then
        EDM="-sq50-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
-   ARRAY=( "subArray.prod6.${NS}Alphab${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
-       ARRAY=( "subArray.prod6.${NS}Alphab-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
@@ -345,9 +345,9 @@ then
    ARRAYDIR="prod6"
    TDATE="g20251021"
    ANADATE="${TDATE}"
+   ANADATE="g20260127"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20260126"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
