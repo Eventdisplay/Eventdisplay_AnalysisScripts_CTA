@@ -55,6 +55,9 @@ DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/XGBSTEREOTRAINING/
 LDIR=${6:-$LDIR}
 
+# Evalation mscw files only
+ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
+
 ######################################
 # software paths
 source ../setSoftwarePaths.sh "$DSET"
@@ -84,7 +87,7 @@ FSCRIPT="CTA.XGBSTEREO.qsub_analyse"
 # loop over all arrays
 for ARRAY in $VARRAY
 do
-   XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo${MCAZ}
+   XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo
 
    for ((m = 0; m < $NPART; m++ ))
    do

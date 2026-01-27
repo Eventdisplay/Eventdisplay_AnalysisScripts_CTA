@@ -7,8 +7,8 @@ ODIR=OUTPUTDIR
 LLIST=MSCWLIST
 DSET="DATASET"
 env_name="eventdisplay_ml_cta"
-P="0.5"
-N="5000000"
+P="0.90"
+N="500000000"
 MAXCORES=32
 
 # set environmental variables

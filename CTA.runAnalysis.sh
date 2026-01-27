@@ -608,15 +608,14 @@ do
 # XGB stereo analysis training and analysis
                   if [[ $RUN == "XGBSTEREOTRAIN" ]]
                   then
-                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     # Train XGB independently of AZ
+                     if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
                      then
                          ./CTA.XGBSTEREO.sub_train.sh \
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
-                         $QSUBOPT \
-                         $AZ \
-                         ${PDIR}/${RUN}
+                         $QSUBOPT
                   fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then

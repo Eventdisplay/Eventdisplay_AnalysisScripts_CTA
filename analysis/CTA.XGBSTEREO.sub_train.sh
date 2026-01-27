@@ -44,7 +44,6 @@ DSET=$2
 echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DSET"
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 
-MCAZ=${5:-$MCAZ}
 # batch farm submission options
 QSUBOPT=${5:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
@@ -79,16 +78,16 @@ FSCRIPT="CTA.XGBSTEREO.qsub_train"
 # loop over all arrays
 for ARRAY in $VARRAY
 do
-   echo "STARTING $DSET ARRAY $ARRAY MCAZ $MCAZ"
+   echo "STARTING $DSET ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo${MCAZ}
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo
    mkdir -p "$ODIR"
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
-   ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
+   ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
-  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}
+  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh

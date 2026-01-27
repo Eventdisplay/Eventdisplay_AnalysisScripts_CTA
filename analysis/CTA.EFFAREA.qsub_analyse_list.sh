@@ -28,6 +28,12 @@ MCAZ="PPPMCAZ"
 PARTID="PARTIDNOTSET"
 ######################################################################
 
+if [[ ! -n "$TMPDIR" ]];
+then
+    TMPDIR="$CTA_USER_DATA_DIR/tmp"
+    mkdir "$TMPDIR"
+fi
+
 # Choose PARTICLE type from job id for SGE qsub system
 re='^[0-9]+$'
 if ! [[ $PARTID =~ $re ]] ; then
@@ -505,7 +511,7 @@ do
          echo "* FILLINGMODE 3" >> $MSCF
       fi
 # fill IRFs only
-      echo "* RECONSTRUCTIONTYPE 8" >> $MSCF    # 8 = XGBSTEREO
+      echo "* RECONSTRUCTIONTYPE XGBSTEREO" >> $MSCF
       echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
       echo "* ENERGYAXISBINS 60 -2. 4." >> $MSCF
       echo "* ENERGYAXISBINHISTOS 25 -1.9 3.1" >> $MSCF
