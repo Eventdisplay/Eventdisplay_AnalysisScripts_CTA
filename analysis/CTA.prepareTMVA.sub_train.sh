@@ -109,10 +109,10 @@ do
     # Splitmode=BLOCK
 
     # Training files for TMVA
-    SIGNALTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
+    SIGNALTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 != 0')
     BACKGROUNDTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
     # Analysis and Testing files for TMVA
-    SIGNALTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
+    SIGNALTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 == 0')
     BACKGROUNDTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
     # Analysis (note electrons are not used in training)
     GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
