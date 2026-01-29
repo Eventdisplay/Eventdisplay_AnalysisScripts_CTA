@@ -85,7 +85,7 @@ do
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
-   ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 2 == 1' > "${SIGNALTRAINLIST}"
+   ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
   FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
