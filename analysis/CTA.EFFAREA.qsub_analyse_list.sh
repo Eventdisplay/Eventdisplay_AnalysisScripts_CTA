@@ -28,6 +28,12 @@ MCAZ="PPPMCAZ"
 PARTID="PARTIDNOTSET"
 ######################################################################
 
+if [[ ! -n "$TMPDIR" ]];
+then
+    TMPDIR="$CTA_USER_DATA_DIR/tmp"
+    mkdir "$TMPDIR"
+fi
+
 # Choose PARTICLE type from job id for SGE qsub system
 re='^[0-9]+$'
 if ! [[ $PARTID =~ $re ]] ; then
@@ -125,7 +131,7 @@ if [ -z $EFFAREABASEDIR ]
 then
    EFFAREABASEDIR=$EFFAREADIR
 fi
-# see if strict separation of training/testing events if possible
+# see if strict separation of training/testing events is possible
 # (mscw files would be in a directory ....EFF)
 if [ -e ${PRODBASEDIR}/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
 then
@@ -505,6 +511,7 @@ do
          echo "* FILLINGMODE 3" >> $MSCF
       fi
 # fill IRFs only
+      echo "* RECONSTRUCTIONTYPE XGBSTEREO" >> $MSCF
       echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
       echo "* ENERGYAXISBINS 60 -2. 4." >> $MSCF
       echo "* ENERGYAXISBINHISTOS 25 -1.9 3.1" >> $MSCF

@@ -28,7 +28,7 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg
 
-    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
+    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN PREPAREANA ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -51,7 +51,7 @@ RUN="$2"
 [[ "$5" ]] && MST=$5 || MST="2"
 [[ "$6" ]] && SST=$6 || SST="2"
 [[ "$7" ]] && SCMST=$7 || SCMST="2"
-[[ "$8" ]] && PDIR=${8} || PDIR="${CTA_USER_LOG_DIR%/}/"
+[[ "$8" ]] && PDIR=${8} || PDIR="${CTA_USER_LOG_DIR%/}"
 echo "Telescope multiplicities: LST ${LST} MST ${MST} SST ${SST} SCMST ${SCMST}"
 
 #####################################
@@ -334,10 +334,10 @@ then
        EDM="-sq50-LL-DL2plus"
    fi
    ARRAY=( "subArray.prod6.${NS}ML${SCT}.list" )
-   ARRAY=( "subArray.prod6.${NS}Alphab${SCT}.list" )
+   ARRAY=( "subArray.prod6.${NS}Alpha${SCT}.list" )
    if [[ $P2 == *"sub"* ]]; then
        ARRAY=( "subArray.prod6.${NS}ML-sub.list" )
-       ARRAY=( "subArray.prod6.${NS}Alphab-sub.list" )
+       ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
        ARRAY=( "subArray.prod6.NorthHyper.list" )
@@ -345,6 +345,7 @@ then
    ARRAYDIR="prod6"
    TDATE="g20251021"
    ANADATE="${TDATE}"
+   ANADATE="g20260127"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -424,7 +425,7 @@ then
 fi
 # remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
 if [[ $RUN == "CLEANUP" ]]; then
-    PHYSDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
+    PHYSDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/Phys-${PHYSDATE}"
     ./utilities/removeUnreasonablePhysFiles.sh ${PHYSDIR}
     exit
 fi
@@ -457,7 +458,7 @@ then
     BDTDIR="BDTdisp."
     RUNPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDisp.runparameter"
     QCPAR="${CTA_EVNDISP_AUX_DIR}/ParameterFiles/TMVA.BDTDispQualityCuts.runparameter"
-    DDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/"
+    DDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/"
     for A in $NXARRAY
     do
         cd ./analysis/
@@ -567,7 +568,7 @@ do
                   touch "$PARA"
                   echo "WRITING PARAMETERFILE $PARA"
                   EFFDIR=EffectiveArea-"$OOTIME"-ID$ID$AZ-$ETYPF-$EFFDATE-$EFFVERSION
-                  EFFFULLDIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
+                  EFFFULLDIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/${SITE}${EDM}/EffectiveAreas/${EFFDIR}/"
                   echo "MSCWSUBDIRECTORY ${MSCWSUBDIRECTORY}" >> "$PARA"
                   echo "TMVASUBDIR BDT-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
                   echo "TMVA_RECO_METHOD BDT-RECO-METHOD-${TMVAVERSION}-ID$ID$AZ-$TMVATYPF-$TMVADATE" >> "$PARA"
@@ -604,8 +605,33 @@ do
                   fi
                   cd ./analysis/
 ##########################################
+# XGB stereo analysis training and analysis
+                  if [[ $RUN == "XGBSTEREOTRAIN" ]]
+                  then
+                     # Train XGB independently of AZ
+                     if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
+                     then
+                         ./CTA.XGBSTEREO.sub_train.sh \
+                         "$NFILARRAY" \
+                         ${SITE}${EDM} \
+                         "$PARA" \
+                         $QSUBOPT
+                    fi
+                  elif [[ $RUN == "XGBSTEREOANA" ]]
+                  then
+                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     then
+                         ./CTA.XGBSTEREO.sub_analyse.sh \
+                         "$NFILARRAY" \
+                         ${SITE}${EDM} \
+                         "$PARA" \
+                         $QSUBOPT \
+                         $AZ \
+                         ${PDIR}/${RUN}
+                    fi
+##########################################
 # prepare train BDTs
-                  if [[ $RUN == "PREPARETMVA" ]]
+                  elif [[ $RUN == "PREPARETMVA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
                      then
@@ -616,13 +642,24 @@ do
                          $QSUBOPT \
                          $AZ \
                          ${PDIR}/${RUN}
-                  fi
+                    fi
+##########################################
+# prepare analysis files to separate training / evaluation
+# (already done for non-empty Az in PREPARETMVA stage
+                 elif [[ $RUN == "PREPAREANA" ]]
+                 then
+                     if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
+                     then
+                         ./CTA.prepareAnalysis_no_sub.sh \
+                         "$NFILARRAY" \
+                         ${SITE}${EDM} \
+                         "$PARA"
+                     fi
 ##########################################
 # train BDTs
 # (note: BDT training does not need to be done for all observing periods)
                   elif [[ $RUN == TRAIN* ]] || [[ $RUN == "TMVA" ]]
                   then
-
                      if [ $RUN == "TRAIN_RECO_METHOD" ]; then
                          TMVA_RUN_MODE="TrainAngularReconstructionMethod"
                      elif [ $RUN == "TRAIN_RECO_QUALITY" ]; then
@@ -640,7 +677,7 @@ do
                                 $QSUBOPT \
                                 $AZ \
                                 ${PDIR}/${RUN}
-                  fi
+                     fi
 ##########################################
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]
