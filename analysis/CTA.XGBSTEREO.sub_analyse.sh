@@ -46,7 +46,7 @@ VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 
 MCAZ=${5:-$MCAZ}
 # batch farm submission options
-QSUBOPT=${5:-$QSUBOPT}
+QSUBOPT=${4:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
