@@ -13,7 +13,7 @@ tmpdir_size="1G"
 if [ $# -lt 4 ]
 then
    echo
-   echo "/CTA.XGBSTEREOTRAINING.sub_train <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
