@@ -54,8 +54,7 @@ QSUBOPT=${QSUBOPT//\"/}
 DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/XGBSTEREOTRAINING/
 LDIR=${6:-$LDIR}
-
-# Evalation mscw files only
+# Evaluation mscw files only
 ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
 
 ######################################
