@@ -131,7 +131,7 @@ if [ -z $EFFAREABASEDIR ]
 then
    EFFAREABASEDIR=$EFFAREADIR
 fi
-# see if strict separation of training/testing events if possible
+# see if strict separation of training/testing events is possible
 # (mscw files would be in a directory ....EFF)
 if [ -e ${PRODBASEDIR}/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
 then

@@ -24,7 +24,7 @@ if [ $# -lt 2 ]; then
             prod6-South-20deg
 
     run modes:
-        MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA XGBSTEREOTRAIN XGBSTEREOANA TRAIN ANGRES QC CUTS PHYS CLEANUP
+        MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA PREPAREANA XGBSTEREOTRAIN XGBSTEREOANA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -49,7 +49,7 @@ if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
     mkdir -p ${RUNSCRIPTDIR}
 fi
 
-if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "XGBSTEREOTRAIN" ]] || [[ ${RUN} == "XGBSTEREOANA" ]]; then
+if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "PREPAREANA" ]] || [[ ${RUN} == "XGBSTEREOTRAIN" ]] || [[ ${RUN} == "XGBSTEREOANA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
