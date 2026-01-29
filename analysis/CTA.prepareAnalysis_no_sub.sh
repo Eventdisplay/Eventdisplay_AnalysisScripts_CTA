@@ -14,6 +14,7 @@ then
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
    echo
+   exit 1
 fi
 
 #######################################

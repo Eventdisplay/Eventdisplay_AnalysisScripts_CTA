@@ -616,7 +616,7 @@ do
                          ${SITE}${EDM} \
                          "$PARA" \
                          $QSUBOPT
-                  fi
+                    fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
@@ -628,7 +628,7 @@ do
                          $QSUBOPT \
                          $AZ \
                          ${PDIR}/${RUN}
-                  fi
+                    fi
 ##########################################
 # prepare train BDTs
                   elif [[ $RUN == "PREPARETMVA" ]]
@@ -642,7 +642,7 @@ do
                          $QSUBOPT \
                          $AZ \
                          ${PDIR}/${RUN}
-                  fi
+                    fi
 ##########################################
 # prepare analysis files to separate training / evaluation
 # (already done for non-empty Az in PREPARETMVA stage
@@ -677,7 +677,7 @@ do
                                 $QSUBOPT \
                                 $AZ \
                                 ${PDIR}/${RUN}
-                  fi
+                     fi
 ##########################################
 # IRFs: angular resolution
                   elif [[ $RUN == "ANGRES" ]]

@@ -39,7 +39,6 @@ source activate base
 conda activate $env_name
 
 PREFIX="${XGBDIR}/dispdir_bdt"
-rm -f "$LOGFILE"
 
 if [[ $DSET == *"LaPalma"* ]]; then
     site="CTAO-NORTH"
@@ -51,6 +50,7 @@ OFIL=$(basename $MSCW_FILE .root)
 ODIR=$(dirname $MSCW_FILE)
 OFIL="${ODIR}/${OFIL}.${XGB}"
 LOGFILE="${OFIL}.log"
+rm -f "$LOGFILE"
 
 echo "LOG FILE: $LOGFILE"
 
