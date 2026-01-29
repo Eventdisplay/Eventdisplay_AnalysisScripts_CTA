@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# XGB stereo analysis trianing
+# XGB stereo analysis training
 #
 #
 #
