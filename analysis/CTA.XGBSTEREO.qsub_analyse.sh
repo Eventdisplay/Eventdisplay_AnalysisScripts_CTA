@@ -8,7 +8,7 @@ XGBDIR="DIRXGB"
 XGB="xgb_stereo"
 DSET="DATASET"
 env_name="eventdisplay_ml_cta"
-MAXCORES=48
+MAXCORES=1
 
 # set environmental variables
 source $EVNDISPSYS/setObservatory.sh CTA

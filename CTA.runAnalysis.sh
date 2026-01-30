@@ -345,8 +345,10 @@ then
    ARRAYDIR="prod6"
    TDATE="g20251021"
    ANADATE="${TDATE}"
-   ANADATE="g20260127"
+   ANADATE="g20260129"
+   XGBDATE="${ANADATE}"
    TMVADATE="${ANADATE}"
+   EFFDATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
 else
@@ -615,6 +617,7 @@ do
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
+                         "XGBStereo_${XGBDATE}" \
                          $QSUBOPT
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
@@ -625,6 +628,7 @@ do
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
+                         "XGBStereo_${XGBDATE}" \
                          $QSUBOPT \
                          $AZ \
                          ${PDIR}/${RUN}
