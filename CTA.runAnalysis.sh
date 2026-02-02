@@ -622,7 +622,7 @@ do
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then
-                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
                      then
                          ./CTA.XGBSTEREO.sub_analyse.sh \
                          "$NFILARRAY" \
@@ -630,7 +630,7 @@ do
                          "$PARA" \
                          "XGBStereo_${XGBDATE}" \
                          $QSUBOPT \
-                         $AZ \
+                         "$AZ" \
                          ${PDIR}/${RUN}
                     fi
 ##########################################
