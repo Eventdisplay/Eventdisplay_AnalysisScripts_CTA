@@ -26,7 +26,7 @@ then
          prod3b-S20-SCT156Tel
     Prod6 analysis:
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
-        prod6-South-20deg
+        prod6-South-20deg prod6-South-40deg
 
     possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN PREPAREANA ANGRES QC CUTS PHYS CLEANUP
 
@@ -340,7 +340,7 @@ then
        ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
-       ARRAY=( "subArray.prod6.NorthHyper.list" )
+       ARRAY=( "subArray.prod6.${NS}Hyper.list" )
    fi
    ARRAYDIR="prod6"
    TDATE="g20251021"
