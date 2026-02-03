@@ -622,7 +622,7 @@ do
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then
-                     if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
+                     if [ ${o} -eq 0 ]
                      then
                          ./CTA.XGBSTEREO.sub_analyse.sh \
                          "$NFILARRAY" \
