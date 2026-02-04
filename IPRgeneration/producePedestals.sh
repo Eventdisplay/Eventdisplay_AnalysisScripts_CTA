@@ -45,11 +45,6 @@ else
     TELTYPES=( LST MST-FlashCam MST-NectarCam SST SCT MAGIC )
 fi
 
-# dedicated scratch directory
-SCRATCH=${SCRATCH}/${PROD}/ze${ZE}deg-${MOONSET}
-mkdir -p ${SCRATCH}
-echo "Writing all data products to ${SCRATCH}"
-echo "(use this directory as input for all following analysis steps)"
 
 for i in "${!TELTYPES[@]}"
 do
@@ -57,6 +52,11 @@ do
 
     for SITE in CTA_NORTH CTA_SOUTH
     do
+        # dedicated scratch directory
+        SCRATCH=./${PROD}/${SITE}-ze${ZE}deg-${MOONSET}
+        mkdir -p ${SCRATCH}
+        echo "Writing all data products to ${SCRATCH}"
+        echo "(use this directory as input for all following analysis steps)"
         if [[ $T == "SST" ]] && [[ $SITE == "CTA_NORTH" ]]
         then
             continue
@@ -87,16 +87,32 @@ do
 
         if [[ $PROD == "PROD5" ]]; then
             SITEOPT=""
-        else
+            ALT="-C Altitude=2150"
+            ATMO="-C atmospheric_transmission=atmospheric_transmission=atm_trans_2150_1_10_0_0_2150.dat"
+            TEL=""
+        elif [[ $PROD == "PROD6" ]]; then
             SITEOPT="-D${SITE}"
+            if [[ $SITE == "CTA_NORTH" ]]; then
+                ALT="-C Altitude=2156"
+                ATMO="-C atmospheric_transmission=atm_trans_2156_1_3_2_0_0_0.1_0.1.dat"
+                TEL=""
+                # North: LST1 is different - generate pedestals for 2/3/4 and use that also for LST1
+                if [[ $T == "LST" ]]; then
+                    TEL="-DLST2"
+                fi
+            else
+                ALT="-C Altitude=2147"
+                ATMO="-C atmospheric_transmission=atm_trans_2147_1_10_2_0_2147.dat"
+                TEL=""
+            fi
         fi
 
         ${SIM_TELARRAY_PATH}/bin/sim_telarray -c ${CFG} \
            -I${SIM_TELARRAY_PATH}/cfg/CTA -I${SIM_TELARRAY_PATH}/cfg/common \
-           -I${SIM_TELARRAY_PATH}/cfg/hess ${INCLUDEOPT} ${SITEOPT} -C Altitude=2150 -C iobuf_maximum=1000000000 \
-           ${MOONOPT} -DNUM_TELESCOPES=1 -C maximum_telescopes=1 \
-           -C atmospheric_transmission=atm_trans_2150_1_10_0_0_2150.dat \
-           -DNSB_AUTOSCALE -C telescope_theta=${ZENITH} -C telescope_phi=180 \
+           -I${SIM_TELARRAY_PATH}/cfg/hess ${INCLUDEOPT} ${SITEOPT} ${ALT} -C iobuf_maximum=1000000000 \
+           ${MOONOPT} -DNUM_TELESCOPES=1 -C maximum_telescopes=1 ${TEL} \
+           ${ATMO} \
+           -DNSB_AUTOSCALE -C telescope_theta=${ZENITH} -C telescope_phi=180  \
            -C pedestal_events=1000 \
            -C output_file=${outputFile}.simtel.gz \
            ${CDIR}/dummy1.corsika.gz >& ${outputFile}.log
