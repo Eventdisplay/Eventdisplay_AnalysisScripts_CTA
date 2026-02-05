@@ -114,7 +114,7 @@ then
     ARRAYCUTS="EVNDISP.prod6.reconstruction.runparameter"
     ZE=$(echo $DSET | cut -d'-' -f3)
     obs="north"
-    if [[ $DSET == *"paranal"* ]]; then
+    if [[ $DSET == *"Paranal"* ]]; then
         obs="south"
     fi
     if [[ $DSET == *"fullmoon"* ]]; then
