@@ -1,30 +1,36 @@
 #!/bin/sh
-# Run analysis for all zenith angles and light levels
+# Run analysis for all run modes, site, zenith angles and light levels
 #
 
-if [ $# -lt 1 ]; then
-    echo "
-    ./run_all.sh <producePedestals/convertToDST/produceIPRGraphs/mergeIPRGraphs>
-    "
-    exit
-fi
-RUNMODE=${1}
-
-for Z in 20.0 40.0 52.0 60.0
+# for RUNMODE in producePedestals convertToDST produceIPRGraphs mergeIPRGraphs
+for RUNMODE in convertToDST produceIPRGraphs mergeIPRGraphs
 do
-    for M in dark half
+    for Z in 20.0 40.0 52.0 60.0
     do
-        ZE=${Z%.*}
-        if [[ $RUNMODE == "producePedestals" ]]; then
-            ./producePedestals.sh PROD6 "${Z}" ${M} >& log_pedestals_${Z}_${M} &
-        elif [[ $RUNMODE == "convertToDST" ]]; then
-            ./convertToDST.sh PROD6/ze${ZE}deg-${M} >& log_convert_${Z}_${M} &
-        elif [[ $RUNMODE == "produceIPRGraphs" ]]; then
-            ./produceIPRGraphs.sh PROD6/ze${ZE}deg-${M} >& log_ipr_${Z}_${M} &
-        elif [[ $RUNMODE == "mergeIPRGraphs" ]]; then
-            ./mergeIPRGraphs.sh PROD6/ze${ZE}deg-${M} prod6-${M}-ze${ZE}deg-IPR.root
-        else
-            echo "Unknown run mode, should be one of producePedestals/produceIPRGraphs/mergeIPRGraphs"
-        fi
+        for M in dark half
+        do
+            ZE=${Z%.*}
+            echo $RUNMODE $M $Z $ZE
+            if [[ $RUNMODE == "producePedestals" ]]; then
+                ./producePedestals.sh PROD6 "${Z}" ${M} >& pedestals_${Z}_${M}.log
+            else
+                for SITE in CTA_NORTH CTA_SOUTH
+                do
+                    DATADIR="PROD6/${SITE}-ze${ZE}deg-${M}"
+                    if [[ $RUNMODE == "convertToDST" ]]; then
+                        ./convertToDST.sh ${DATADIR} >& ${DATADIR}/convert_${SITE}_${Z}_${M}.log
+                    elif [[ $RUNMODE == "produceIPRGraphs" ]]; then
+                        ./produceIPRGraphs.sh ${DATADIR} >& ${DATADIR}/ipr_${SITE}_${Z}_${M}.log
+                    elif [[ $RUNMODE == "mergeIPRGraphs" ]]; then
+                        if [[ $SITE == "CTA_NORTH" ]]; then
+                            S="north"
+                        else
+                            S="south"
+                        fi
+                        ./mergeIPRGraphs.sh ${DATADIR} prod6-${S}-${M}-ze${ZE}deg-IPR.root
+                    fi
+                done
+            fi
+        done
     done
 done
