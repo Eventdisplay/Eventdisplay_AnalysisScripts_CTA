@@ -95,10 +95,14 @@ install_hessio()
     then
        export HESSIOCFLAGS="-DCTA_PROD4 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
        EFLAGS="PROD5"
-    elif [[ $DSET = *"prod6"* ]]
+    elif [[ $DSET = *"prod6-LaPalma"* ]]
     then
        export HESSIOCFLAGS="-DCTA_PROD6_SC -DMAXIMUM_TELESCOPES=120 -DWITH_GSL_RNG"
-       EFLAGS="PROD6"
+       EFLAGS="PROD6-North"
+    elif [[ $DSET = *"prod6-Paranal"* ]]
+    then
+       export HESSIOCFLAGS="-DCTA_PROD6 -DMAXIMUM_TELESCOPES=180 -DWITH_GSL_RNG"
+       EFLAGS="PROD6-South"
     else
        echo "unknown production"
        exit
