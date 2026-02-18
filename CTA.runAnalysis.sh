@@ -292,7 +292,6 @@ then
    ARRAYDIR="prod5"
    TDATE="g20250826"
    ANADATE="${TDATE}"
-   ANADATE="g20250905"
    ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -328,8 +327,8 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq50-LL"
-   EDM="-sq51-LL"
+# N   EDM="-sq51-LL"
+   EDM="-sq01-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq50-LL-DL2plus"
    fi
@@ -343,13 +342,15 @@ then
        ARRAY=( "subArray.prod6.${NS}Hyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20251021"
+   TDATE="g20260214"
+# N   TDATE="g20251021"
    ANADATE="${TDATE}"
-   ANADATE="g20260129"
+# N   ANADATE="g20260129"
    XGBDATE="${ANADATE}"
+   XGBDATE="g20260218"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="${ANADATE}"
+   EFFDATE="g20260217"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"

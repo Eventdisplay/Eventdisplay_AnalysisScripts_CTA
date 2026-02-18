@@ -57,6 +57,7 @@ eventdisplay-ml-train-xgb-stereo \
     --model_prefix "${PREFIX}" \
     --max_cores $MAXCORES \
     --observatory $site \
+    --max_tel_per_type 20 \
     --train_test_fraction $P --max_events $N >| "${LOGFILE}" 2>&1
 
 python --version >> "${LOGFILE}"
