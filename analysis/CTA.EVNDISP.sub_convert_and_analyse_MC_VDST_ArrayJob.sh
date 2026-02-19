@@ -113,12 +113,16 @@ elif [[ $DSET == *"prod6"* ]]
 then
     ARRAYCUTS="EVNDISP.prod6.reconstruction.runparameter"
     ZE=$(echo $DSET | cut -d'-' -f3)
+    obs="north"
+    if [[ $DSET == *"Paranal"* ]]; then
+        obs="south"
+    fi
     if [[ $DSET == *"fullmoon"* ]]; then
-        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-full-ze${ZE}-IPR.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-${obs}-full-ze${ZE}-IPR.root"
     elif [[ $DSET == *"moon"* ]] || [[ $DSET == *"Moon"* ]] || [[ $DSET == *"NSB5x"* ]]; then
-        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-half-ze${ZE}-IPR.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-${obs}-half-ze${ZE}-IPR.root"
     else
-        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-dark-ze${ZE}-IPR.root"
+        PEDFIL="$CTA_EVNDISP_AUX_DIR/Calibration/prod6/prod6-${obs}-dark-ze${ZE}-IPR.root"
     fi
 else
     echo "error: unknown production in $DSET"

@@ -5,6 +5,7 @@
 
 ODIR=OUTPUTDIR
 LLIST=MSCWLIST
+MINTEL=TELMIN
 DSET="DATASET"
 env_name="eventdisplay_ml_cta"
 P="0.90"
@@ -42,7 +43,7 @@ check_conda_installation
 source activate base
 conda activate $env_name
 
-PREFIX="${ODIR}/dispdir_bdt"
+PREFIX="${ODIR}/dispdir_bdt_mintel${MINTEL}"
 LOGFILE="${PREFIX}.log"
 rm -f "$LOGFILE"
 
@@ -57,6 +58,8 @@ eventdisplay-ml-train-xgb-stereo \
     --model_prefix "${PREFIX}" \
     --max_cores $MAXCORES \
     --observatory $site \
+    --max_tel_per_type 10 \
+    --min_images $MINTEL \
     --train_test_fraction $P --max_events $N >| "${LOGFILE}" 2>&1
 
 python --version >> "${LOGFILE}"

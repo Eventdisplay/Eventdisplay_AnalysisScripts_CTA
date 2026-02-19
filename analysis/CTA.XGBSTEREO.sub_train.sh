@@ -13,7 +13,7 @@ tmpdir_size="1G"
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> <output directory> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
@@ -43,6 +43,7 @@ RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
 DSET=$2
 echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DSET"
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
+ODIRNAME="$4"
 
 # batch farm submission options
 QSUBOPT=${5:-$QSUBOPT}
@@ -51,7 +52,7 @@ QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
 # log dir
 DATE=$(date +"%y%m%d")
-LDIR=$CTA_USER_LOG_DIR/$DATE/XGBSTEREOTRAINING/
+LDIR=$CTA_USER_LOG_DIR/$DATE/$ODIRNAME
 LDIR=${6:-$LDIR}
 
 ######################################
@@ -80,16 +81,17 @@ for ARRAY in $VARRAY
 do
    echo "STARTING $DSET ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ODIRNAME
    mkdir -p "$ODIR"
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
    ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
-  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}
+  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${NIMAGESMIN}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
+      -e "s|TELMIN|$NIMAGESMIN|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh
   chmod u+x $FNAM.sh
   echo "SCRIPT $FNAM.sh"

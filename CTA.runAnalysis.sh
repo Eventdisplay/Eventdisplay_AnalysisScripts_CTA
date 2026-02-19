@@ -26,7 +26,7 @@ then
          prod3b-S20-SCT156Tel
     Prod6 analysis:
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
-        prod6-South-20deg
+        prod6-South-20deg prod6-South-40deg
 
     possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN PREPAREANA ANGRES QC CUTS PHYS CLEANUP
 
@@ -292,7 +292,6 @@ then
    ARRAYDIR="prod5"
    TDATE="g20250826"
    ANADATE="${TDATE}"
-   ANADATE="g20250905"
    ANADATE="g20250906"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -328,8 +327,8 @@ then
    else
        SITE="${SITE}-dark"
    fi
-   EDM="-sq50-LL"
-   EDM="-sq51-LL"
+# N   EDM="-sq51-LL"
+   EDM="-sq01-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq50-LL-DL2plus"
    fi
@@ -340,14 +339,18 @@ then
        ARRAY=( "subArray.prod6.${NS}Alpha-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
-       ARRAY=( "subArray.prod6.NorthHyper.list" )
+       ARRAY=( "subArray.prod6.${NS}Hyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20251021"
+   TDATE="g20260214"
+# N   TDATE="g20251021"
    ANADATE="${TDATE}"
-   ANADATE="g20260127"
+# N   ANADATE="g20260129"
+   XGBDATE="${ANADATE}"
+   XGBDATE="g20260218"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20260217"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
@@ -615,18 +618,20 @@ do
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
+                         "XGBStereo_${XGBDATE}" \
                          $QSUBOPT
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then
-                     if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
+                     if [ ${o} -eq 0 ]
                      then
                          ./CTA.XGBSTEREO.sub_analyse.sh \
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
                          "$PARA" \
+                         "XGBStereo_${XGBDATE}" \
                          $QSUBOPT \
-                         $AZ \
+                         "$AZ" \
                          ${PDIR}/${RUN}
                     fi
 ##########################################

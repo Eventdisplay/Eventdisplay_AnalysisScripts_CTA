@@ -2,18 +2,16 @@
 #
 # XGB stereo analysis training
 #
-#
-#
 
 SUBC="condor"
 h_cpu="0:29:00"
-h_vmem="4000M"
+h_vmem="12000M"
 tmpdir_size="1G"
 
 if [ $# -lt 4 ]
 then
    echo
-   echo "/CTA.XGBSTEREO.sub_analyse <subarray list> <data set> <analysis parameter file> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "/CTA.XGBSTEREO.sub_analyse <subarray list> <data set> <analysis parameter file> <model directory> [qsub options] [direction (e.g. _180deg)] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
@@ -41,19 +39,20 @@ NCUTMSCT=$(grep NSCMST "$ANAPAR" | awk {'print $2'})
 ANADIR=$(grep MSCWSUBDIRECTORY  "$ANAPAR" | awk {'print $2'})
 RECID=$(grep RECID "$ANAPAR" | awk {'print $2'})
 DSET=$2
+MODELDIR="$4"
 echo "Analysis parameter: " "$NIMAGESMIN" "$ANADIR" "$DSET"
 VARRAY=$(awk '{printf "%s ",$0} END {print ""}' "$1")
 
-MCAZ=${5:-$MCAZ}
+MCAZ=${6:-$MCAZ}
 # batch farm submission options
-QSUBOPT=${4:-$QSUBOPT}
+QSUBOPT=${5:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
 # log dir
 DATE=$(date +"%y%m%d")
 LDIR=$CTA_USER_LOG_DIR/$DATE/XGBSTEREOTRAINING/
-LDIR=${6:-$LDIR}
+LDIR=${7:-$LDIR}
 # Evaluation mscw files only
 ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
 
@@ -86,7 +85,7 @@ FSCRIPT="CTA.XGBSTEREO.qsub_analyse"
 # loop over all arrays
 for ARRAY in $VARRAY
 do
-   XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/XGB_stereo
+   XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$MODELDIR
 
    for ((m = 0; m < $NPART; m++ ))
    do
@@ -100,9 +99,10 @@ do
        do
           ((i++))
 
-          FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}.${PART}-${i}
+          FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}.${PART}-${i}.${NIMAGESMIN}
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
+              -e "s|TELMIN|$NIMAGESMIN|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh
           chmod u+x $FNAM.sh
           echo "SCRIPT $FNAM.sh"

@@ -21,7 +21,7 @@ if [ $# -lt 2 ]; then
        Prod6 analysis:
             prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
             prod6-North-20deg-moon prod6-North-40deg-moon prod6-North-52deg-moon prod6-North-60deg-moon
-            prod6-South-20deg
+            prod6-South-20deg prod6-South-40deg
 
     run modes:
         MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA PREPAREANA XGBSTEREOTRAIN XGBSTEREOANA TRAIN ANGRES QC CUTS PHYS CLEANUP
@@ -49,12 +49,19 @@ if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
     mkdir -p ${RUNSCRIPTDIR}
 fi
 
-if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "PREPAREANA" ]] || [[ ${RUN} == "XGBSTEREOTRAIN" ]] || [[ ${RUN} == "XGBSTEREOANA" ]]; then
+if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "PREPAREANA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    elif [[ $SITE == *"North"* ]]; then
        ./CTA.runAnalysis.sh ${P2}-LST ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+   fi
+elif [[ ${RUN} == "XGBSTEREOTRAIN" ]] || [[ ${RUN} == "XGBSTEREOANA" ]]; then
+   ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+   ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 3 3 3 3 ${RUNSCRIPTDIR}
+   if [[ $SITE == "South" ]] || [[ $P2 == *"prod6"* ]]; then
+       ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
+       ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 3 3 3 3 ${RUNSCRIPTDIR}
    fi
 elif [[ ${RUN} == "CLEANUP" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}

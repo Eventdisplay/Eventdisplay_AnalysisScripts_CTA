@@ -57,6 +57,7 @@ if [[ -e ${EVNDISPSYS}/hessioxxx ]]; then
 else
     export HESSIOSYS=${WORKDIR}/code/hessioxxx
 fi
+#export HESSIOSYS=/cvmfs/sw.cta-observatory.org/software/centos7/gcc83_noOpt/simulations/corsika_simtelarray/2024-02-05/hessioxxx
 export LD_LIBRARY_PATH=$HESSIOSYS/lib:${LD_LIBRARY_PATH}
 
 if [ $VBFSYS ]
