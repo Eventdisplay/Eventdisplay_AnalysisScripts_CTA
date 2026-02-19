@@ -80,6 +80,8 @@ then
 fi
 
 NIMAGESMIN=`grep NIMAGESMIN $ANAPAR | awk {'print $2'}`
+XGBMINTEL="${NIMAGESMIN}"
+[ "$XGBMINTEL" -ge 3 ] && XGBMINTEL=3
 # get telescope type dependent cuts
 NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
@@ -511,7 +513,7 @@ do
          echo "* FILLINGMODE 3" >> $MSCF
       fi
 # fill IRFs only
-      echo "* RECONSTRUCTIONTYPE XGBSTEREO" >> $MSCF
+      echo "* RECONSTRUCTIONTYPE XGBSTEREO ${XGBMINTEL}" >> $MSCF
       echo "* ENERGYRECONSTRUCTIONMETHOD 1" >> $MSCF
       echo "* ENERGYAXISBINS 60 -2. 4." >> $MSCF
       echo "* ENERGYAXISBINHISTOS 25 -1.9 3.1" >> $MSCF
