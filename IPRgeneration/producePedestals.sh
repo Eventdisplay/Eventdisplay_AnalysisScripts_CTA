@@ -69,7 +69,7 @@ do
 
 
         outputFile="${SCRATCH}/pedestals-${SITE}-${T}${MOON}-ze-${ZE}-1k"
-        rm -f $outputFile
+        rm -f "${outputFile}" "${outputFile}.simtel.gz" "${outputFile}.log"
 
         if [[ $PROD == "PROD5" ]] && [[ $T == "SST" ]]; then
             CFG="${SIM_TELARRAY_PATH}/cfg/CTA/CTA-${PROD}-${T}.cfg"
