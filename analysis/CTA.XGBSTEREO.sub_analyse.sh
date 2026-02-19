@@ -102,7 +102,7 @@ do
           FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.AZ${MCAZ}.ID${RECID}.${PART}-${i}.${NIMAGESMIN}
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
-              -i "s|TELMIN|$NIMAGESMIN|" \
+              -e "s|TELMIN|$NIMAGESMIN|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh
           chmod u+x $FNAM.sh
           echo "SCRIPT $FNAM.sh"
