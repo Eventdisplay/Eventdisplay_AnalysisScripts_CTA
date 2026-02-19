@@ -88,9 +88,10 @@ do
    rm -f "${SIGNALTRAINLIST}"
    ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
-  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}
+  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${NIMAGESMIN}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
+      -e "s|TELMIN|$NIMAGESMIN|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh
   chmod u+x $FNAM.sh
   echo "SCRIPT $FNAM.sh"

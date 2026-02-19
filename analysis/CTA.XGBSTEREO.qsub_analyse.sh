@@ -5,6 +5,7 @@
 
 MSCW_FILE="FFILE"
 XGBDIR="DIRXGB"
+MINTEL=TELMIN
 XGB="xgb_stereo"
 DSET="DATASET"
 env_name="eventdisplay_ml_cta"
@@ -38,7 +39,10 @@ check_conda_installation
 source activate base
 conda activate $env_name
 
-PREFIX="${XGBDIR}/dispdir_bdt"
+# hardwired max training images to three
+[ "$MINTEL" -ge 3 ] && MINTEL=3
+
+PREFIX="${XGBDIR}/dispdir_bdt_mintel${MINTEL}"
 
 if [[ $DSET == *"LaPalma"* ]]; then
     site="CTAO-NORTH"
