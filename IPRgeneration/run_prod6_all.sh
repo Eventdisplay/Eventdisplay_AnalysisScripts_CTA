@@ -11,23 +11,23 @@ do
         do
             ZE=${Z%.*}
             echo $RUNMODE $M $Z $ZE
-            if [[ $RUNMODE == "producePedestals" ]]; then
-                ./producePedestals.sh PROD6 "${Z}" ${M} >& pedestals_${Z}_${M}.log
+            if [ "$RUNMODE" = "producePedestals" ]; then
+                ./producePedestals.sh PROD6 "${Z}" "${M}" > "pedestals_${Z}_${M}.log" 2>&1
             else
                 for SITE in CTA_NORTH CTA_SOUTH
                 do
                     DATADIR="PROD6/${SITE}-ze${ZE}deg-${M}"
-                    if [[ $RUNMODE == "convertToDST" ]]; then
-                        ./convertToDST.sh ${DATADIR} >& ${DATADIR}/convert_${SITE}_${Z}_${M}.log
-                    elif [[ $RUNMODE == "produceIPRGraphs" ]]; then
-                        ./produceIPRGraphs.sh ${DATADIR} >& ${DATADIR}/ipr_${SITE}_${Z}_${M}.log
-                    elif [[ $RUNMODE == "mergeIPRGraphs" ]]; then
-                        if [[ $SITE == "CTA_NORTH" ]]; then
+                    if [ "$RUNMODE" = "convertToDST" ]; then
+                        ./convertToDST.sh "${DATADIR}" > "${DATADIR}/convert_${SITE}_${Z}_${M}.log" 2>&1
+                    elif [ "$RUNMODE" = "produceIPRGraphs" ]; then
+                        ./produceIPRGraphs.sh "${DATADIR}" > "${DATADIR}/ipr_${SITE}_${Z}_${M}.log" 2>&1
+                    elif [ "$RUNMODE" = "mergeIPRGraphs" ]; then
+                        if [ "$SITE" = "CTA_NORTH" ]; then
                             S="north"
                         else
                             S="south"
                         fi
-                        ./mergeIPRGraphs.sh ${DATADIR} prod6-${S}-${M}-ze${ZE}deg-IPR.root
+                        ./mergeIPRGraphs.sh "${DATADIR}" "prod6-${S}-${M}-ze${ZE}deg-IPR.root"
                     fi
                 done
             fi
