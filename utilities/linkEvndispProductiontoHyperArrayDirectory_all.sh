@@ -1,3 +1,7 @@
+#!/bin/bash
+# Link EVNDISP production directories to the hyperarray directories for all data sets in the list
+#
+# Note that many hardwired parameters.
 
 LIST="../prod6/subArray.prod6.NorthAlphab.list"
 DSET="prod6-LaPalma-ZEdeg-NSB-sq51-LL"

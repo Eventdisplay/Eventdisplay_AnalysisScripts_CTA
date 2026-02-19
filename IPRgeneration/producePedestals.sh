@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Produce pedestal files from NSB simulations using sim_telarray
 #
 # script prepared for prod5/prod6 simulations
@@ -88,7 +88,7 @@ do
         if [[ $PROD == "PROD5" ]]; then
             SITEOPT=""
             ALT="-C Altitude=2150"
-            ATMO="-C atmospheric_transmission=atmospheric_transmission=atm_trans_2150_1_10_0_0_2150.dat"
+            ATMO="-C atmospheric_transmission=atm_trans_2150_1_10_0_0_2150.dat"
             TEL=""
         elif [[ $PROD == "PROD6" ]]; then
             SITEOPT="-D${SITE}"
