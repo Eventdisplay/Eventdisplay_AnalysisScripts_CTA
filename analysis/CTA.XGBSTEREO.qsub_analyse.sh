@@ -52,7 +52,7 @@ fi
 
 OFIL=$(basename $MSCW_FILE .root)
 ODIR=$(dirname $MSCW_FILE)
-OFIL="${ODIR}/${OFIL}.${XGB}"
+OFIL="${ODIR}/${OFIL}.${XGB}_mintel${MINTEL}"
 LOGFILE="${OFIL}.log"
 rm -f "$LOGFILE"
 
