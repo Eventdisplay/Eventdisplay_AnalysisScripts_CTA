@@ -303,9 +303,11 @@ then
    if [[ $P2 == *"South"* ]]; then
        NS="South"
        PLACE="Paranal"
+       EDM="-sq01-LL"
    else
        NS="North"
        PLACE="LaPalma"
+       EDM="-sq51-LL"
    fi
    SCT=""
    if [[ $P2 == *"SCT"* ]]; then
@@ -327,8 +329,6 @@ then
    else
        SITE="${SITE}-dark"
    fi
-# N   EDM="-sq51-LL"
-   EDM="-sq01-LL"
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq50-LL-DL2plus"
    fi
@@ -343,14 +343,11 @@ then
    fi
    ARRAYDIR="prod6"
    TDATE="g20260214"
-# N   TDATE="g20251021"
    ANADATE="${TDATE}"
-# N   ANADATE="g20260129"
+   ANADATE="g20260325"
    XGBDATE="${ANADATE}"
-   XGBDATE="g20260218"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20260217"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
