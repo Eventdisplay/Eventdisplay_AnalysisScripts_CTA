@@ -9,6 +9,7 @@ SUBC="condor"
 h_cpu="47:29:00"
 h_vmem="64000M"
 tmpdir_size="1G"
+ncore=4
 
 if [ $# -lt 4 ]
 then
@@ -90,6 +91,7 @@ do
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
       -e "s|TELMIN|$NIMAGESMIN|" \
+      -e "s|NCORE|$ncore|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh
   chmod u+x $FNAM.sh
   echo "SCRIPT $FNAM.sh"
@@ -98,6 +100,6 @@ do
   if [[ $SUBC == *qsub* ]]; then
       qsub $QSUBOPT -V -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -o $QLOG -e $QLOG "$FNAM.sh"
   elif [[ $SUBC == *condor* ]]; then
-      ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size
+      ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size "" $ncore
   fi
 done
