@@ -7,10 +7,11 @@ ODIR=OUTPUTDIR
 LLIST=MSCWLIST
 MINTEL=TELMIN
 DSET="DATASET"
-env_name="eventdisplay_ml_cta"
+env_name="eventdisplay_ml_cta_mem"
 P="0.90"
 N="500000000"
-MAXCORES=48
+# TMP MAXCORES=48
+MAXCORES=1
 
 # set environmental variables
 source $EVNDISPSYS/setObservatory.sh CTA
@@ -59,7 +60,7 @@ eventdisplay-ml-train-xgb-stereo \
     --max_cores $MAXCORES \
     --observatory $site \
     --max_tel_per_type 10 \
-    --min_images $MINTEL \
+    --min_images $MINTEL --memory_profile \
     --train_test_fraction $P --max_events $N >| "${LOGFILE}" 2>&1
 
 python --version >> "${LOGFILE}"

@@ -6,20 +6,18 @@
 #
 
 SUBC="condor"
-h_cpu="8:29:00"
+h_cpu="11:29:00"
 h_vmem="24000M"
 tmpdir_size="1G"
 
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> <output directory> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> <output directory> [qsub options] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
-   echo
-   echo "  <direction>        e.g. for north: \"_180deg\", for south: \"_0deg\", for all directions: no option"
    echo
    exit
 fi
@@ -81,7 +79,7 @@ for ARRAY in $VARRAY
 do
    echo "STARTING $DSET ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ODIRNAME
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ODIRNAME}"_mem"
    mkdir -p "$ODIR"
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
