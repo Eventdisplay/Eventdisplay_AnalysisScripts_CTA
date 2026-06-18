@@ -20,13 +20,14 @@ fi
 TDIR=$(pwd)
 
 # SL7 export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root-6.20.04_build/
-export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root_v6.30.02.Linux-almalinux9.3-x86_64-gcc11.4/
+export ROOTSYS=/afs/ifh.de/group/cta/cta/software/root/root_v6.40.00.Linux-almalinux9.7-x86_64-gcc11.5/
 
 # main working directory (logs and code)
 DSET="${1}"
-export WORKDIR="${CTA_USER_WORK_DIR%/}/analysis/AnalysisData/${DSET}"
+SUBDIR="analysis/AnalysisData"
+export WORKDIR="${CTA_USER_WORK_DIR%/}/${SUBDIR}/${DSET}"
 # main data results
-# export DATADIR="${CTA_USER_DATA_DIR}/analysis/AnalysisData/${DSET}"
+# export DATADIR="${CTA_USER_DATA_DIR}/${SUBDIR}/${DSET}"
 
 # ROOT installation expected
 if [[ -z ${ROOTSYS} ]]; then
