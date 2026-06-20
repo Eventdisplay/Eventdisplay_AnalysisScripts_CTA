@@ -9,7 +9,7 @@ SUBC="condor"
 h_cpu="47:29:00"
 h_vmem="64000M"
 tmpdir_size="1G"
-ncore=4
+ncore=8
 
 if [ $# -lt 4 ]
 then
