@@ -80,7 +80,7 @@ for ARRAY in $VARRAY
 do
    echo "STARTING $DSET ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ODIRNAME}"_mem"
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ODIRNAME}""
    mkdir -p "$ODIR"
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
