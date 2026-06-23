@@ -46,9 +46,11 @@ RECID="0"
 
 # run scripts are collected here
 if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
-    RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
+    UUID=$(python -c "import uuid6; print(uuid6.uuid7())")
+    RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$UUID"
     mkdir -p ${RUNSCRIPTDIR}
 fi
+echo ${RUNSCRIPTDIR}
 
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "PREPAREANA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
