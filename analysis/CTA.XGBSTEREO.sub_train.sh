@@ -33,6 +33,8 @@ then
 fi
 echo "reading analysis parameter from $ANAPAR"
 NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk {'print $2'})
+XGBMINTEL="${NIMAGESMIN}"
+[ "$XGBMINTEL" -ge 3 ] && XGBMINTEL=3
 NCUTLST=$(grep NLST "$ANAPAR" | awk {'print $2'})
 NCUTMST=$(grep NMST "$ANAPAR" | awk {'print $2'})
 NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
@@ -82,15 +84,21 @@ do
 
    ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ODIRNAME}""
    mkdir -p "$ODIR"
+   MODELFILE="${ODIR}/dispdir_bdt_mintel${XGBMINTEL}.joblib.gz"
+   if [ -e "$MODELFILE" ]
+   then
+      echo "FOUND $MODELFILE - skipping training job"
+      continue
+   fi
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
    ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
-  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${NIMAGESMIN}
+  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${XGBMINTEL}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
-      -e "s|TELMIN|$NIMAGESMIN|" \
+      -e "s|TELMIN|$XGBMINTEL|" \
       -e "s|NCORE|$ncore|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh
   chmod u+x $FNAM.sh
