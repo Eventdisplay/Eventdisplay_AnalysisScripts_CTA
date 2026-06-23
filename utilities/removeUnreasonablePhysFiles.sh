@@ -76,6 +76,15 @@ find "$1" -name "*ID2*-[0-9][0-9]SSTs.*" ${OPTION}
 # South MST arrays only
 find "$1" -name "*ID3*-[0-9][0-9]MSTs-MSTF*" ${OPTION}
 
+# NIM6
+find "$1" -name "*ID0*NIM6*0LSTs05MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM5*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs00MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs02MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*2LSTs02MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM1*" ${OPTION}
+
 # North LST arrays
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}
 find "$1" -name "*NIM4LST4*2LSTs00MSTs-*" ${OPTION}
