@@ -20,10 +20,10 @@ fi
 
 JDIR=${1}
 PRIORITY="${3:-1}"
+SUBMITF=${JDIR}/submit.txt
 
 echo "Writing HTCondor job submission file ${SUBMITF} (job priority $PRIORITY) for ${JDIR}"
 if find "${JDIR}" -name "*.condor" -print -quit | grep -q .; then
-    SUBMITF=${1}/submit.txt
     rm -f ${SUBMITF}
     touch ${SUBMITF}
 
@@ -40,6 +40,7 @@ if find "${JDIR}" -name "*.condor" -print -quit | grep -q .; then
     CONDORFILE=$(find ${JDIR} -name "*.condor" | head -n 1)
     echo "$(grep -h request_memory $CONDORFILE)"  >>  ${SUBMITF}
     echo "$(grep -h request_disk $CONDORFILE)"  >>  ${SUBMITF}
+    echo "$(grep -h request_cpus $CONDORFILE)"  >>  ${SUBMITF}
     echo "getenv = True" >>  ${SUBMITF}
     echo "max_materialize = 1800" >>  ${SUBMITF}
     echo "priority = $PRIORITY"  >> ${SUBMITF}
