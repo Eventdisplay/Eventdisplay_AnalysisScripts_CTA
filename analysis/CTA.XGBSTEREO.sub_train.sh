@@ -89,6 +89,8 @@ do
    then
       echo "FOUND $MODELFILE - skipping training job"
       continue
+   else
+      echo "MODEL FILE NOT FOUND $MODELFILE"
    fi
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
