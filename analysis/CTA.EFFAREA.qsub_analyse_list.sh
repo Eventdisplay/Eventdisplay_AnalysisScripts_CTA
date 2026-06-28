@@ -80,10 +80,8 @@ then
 fi
 
 NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk '{print $2}')
-XGBMINTEL="${NIMAGESMIN}"
-[ "$XGBMINTEL" -ge 3 ] && XGBMINTEL=3
 # multiplicity dependent model selection
-[ "$XGBMINTEL" -eq 2 ] && XGBMINTEL=23
+XGBMINTEL=23
 # get telescope type dependent cuts
 NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
