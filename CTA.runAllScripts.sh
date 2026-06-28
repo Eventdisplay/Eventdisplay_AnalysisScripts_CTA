@@ -19,8 +19,7 @@ fi
 RUN="$1"
 SITE="South"
 
-# for ZE in 20deg 40deg 52deg 60deg; do
-for ZE in 20deg; do
+for ZE in 20deg;
     for NSB in dark; do
         dataset="prod6-${SITE}-${ZE}-${NSB}"
         ./CTA.mainRunScriptsReduced.sh $dataset $RUN
