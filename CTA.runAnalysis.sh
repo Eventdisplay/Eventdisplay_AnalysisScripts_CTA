@@ -617,7 +617,7 @@ do
                          "$PARA" \
                          "XGBStereo_${XGBDATE}" \
                          $QSUBOPT \
-			 ${PDIR}/${RUN}
+                         ${PDIR}/${RUN}
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then
