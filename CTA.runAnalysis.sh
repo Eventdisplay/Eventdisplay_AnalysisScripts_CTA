@@ -228,7 +228,6 @@ then
    ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -345,9 +344,10 @@ then
    TDATE="g20260610"
    ANADATE="${TDATE}"
    ANADATE="g20260325"
-   XGBDATE="${ANADATE}"
+   XGBDATE="g20260629"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
+   EFFDATE="g20260629"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
