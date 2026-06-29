@@ -343,11 +343,9 @@ then
    ARRAYDIR="prod6"
    TDATE="g20260610"
    ANADATE="${TDATE}"
-   ANADATE="g20260325"
    XGBDATE="g20260629"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20260629"
    PHYSDATE="${EFFDATE}"
 else
    echo "error: unknown site; allowed are N or S/S40deg/S60deg"
