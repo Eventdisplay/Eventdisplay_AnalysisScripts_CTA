@@ -337,8 +337,8 @@ then
    # Reuse the existing reconstruction files, but keep products from the new
    # XGBoost analysis under a new analysis date.
    ANASOURCEDATE="g20260325"
-   ANADATE="g20260629"
-   XGBDATE="g20260629"
+   ANADATE="g20260630"
+   XGBDATE="g20260630"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
