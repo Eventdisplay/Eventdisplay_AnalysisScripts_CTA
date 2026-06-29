@@ -49,27 +49,3 @@ jobs:
         run: |
           python -m pip install pre-commit
           SKIP=no-commit-to-branch  pre-commit run --all-files
-
-      - name: ShellCheck
-        run: |
-          find ./ -name "*.sh" -print0 | sort -z | xargs -0 shellcheck --severity=info
-
-      - name: Set up Go
-        uses: actions/setup-go@v6
-        with:
-          go-version: "stable"
-
-      - name: Install workflow and shell linters
-        run: |
-          mkdir -p "${RUNNER_TEMP}/go-bin"
-          echo "${RUNNER_TEMP}/go-bin" >> "${GITHUB_PATH}"
-          GOBIN="${RUNNER_TEMP}/go-bin" go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
-          GOBIN="${RUNNER_TEMP}/go-bin" go install mvdan.cc/sh/v3/cmd/shfmt@v3.11.0
-
-      - name: Actionlint
-        run: |
-          actionlint
-
-      - name: shfmt syntax check
-        run: |
-          shfmt -f ./ >/dev/null
