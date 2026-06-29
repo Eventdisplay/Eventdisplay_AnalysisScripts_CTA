@@ -5,8 +5,8 @@ message: If you use this software, please cite it using these metadata.
 title: "Eventdisplay Analysis Scripts for CTA"
 abstract: "Run scripts for CTA. Allows to efficiently run all analysis steps starting from the raw MC files to sensitivities using Eventdisplay."
 doi: "https://doi.org/10.5281/zenodo.4263710"
-version: 2.1.0
-date-released: 2024-08-18
+version: 2.4.0
+date-released: 2025-09-24
 keywords:
 - "gamma-ray astronomy"
 - "astronomy software"
@@ -22,9 +22,6 @@ authors:
   family-names: Maier
   affiliation: DESY
   orcid: https://orcid.org/0000-0001-9868-4700
-- given-names: Orel
-  family-names: Gueta
-  affiliation: DESY
 references:
 - scope: "Additional material"
   type: article
