@@ -114,10 +114,22 @@ do
    else
       echo "MODEL FILE NOT FOUND $MODELFILE"
    fi
-   # training list identical to TMVA gamma/hadron signal training
+   # Use the centrally prepared file-level training partition. This is the
+   # union of per-direction splits and is therefore exactly disjoint from the
+   # files used by XGBSTEREOANA and EFFAREA.
+   TRAINDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.TRAIN.MCAZ
+   if [ ! -d "$TRAINDIR" ]; then
+      echo "No training data directory found: $TRAINDIR"
+      echo "Run CTA.prepareAnalysis_no_sub.sh before XGB stereo training."
+      exit 1
+   fi
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
-   ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
+   find "$TRAINDIR" -maxdepth 1 -name "gamma_cone.*.mscw.root" -print | sort > "${SIGNALTRAINLIST}"
+   if [ ! -s "$SIGNALTRAINLIST" ]; then
+      echo "No gamma_cone training files found in $TRAINDIR"
+      exit 1
+   fi
 
   FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${XGBMINTEL}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \

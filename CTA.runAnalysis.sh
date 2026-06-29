@@ -70,6 +70,7 @@ EFFVERSION="V3"
 # (will be overwritten later)
 TDATE="g20200817"
 ANADATE="${TDATE}"
+ANASOURCEDATE=""
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
 EFFDATE="g20221102"
@@ -342,7 +343,10 @@ then
    fi
    ARRAYDIR="prod6"
    TDATE="g20260610"
-   ANADATE="${TDATE}"
+   # Reuse the existing reconstruction files, but keep products from the new
+   # XGBoost analysis under a new analysis date.
+   ANADATE="g20260629"
+   ANASOURCEDATE="g20260325"
    XGBDATE="g20260629"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -354,6 +358,9 @@ else
 fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
+fi
+if [[ -z ${ANASOURCEDATE} ]]; then
+  ANASOURCEDATE=${ANADATE}
 fi
 # NOT USED ANYMORE! Keep 'cone'
 OFFAXIS="cone"
@@ -654,7 +661,8 @@ do
                          ./CTA.prepareAnalysis_no_sub.sh \
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
-                         "$PARA"
+                         "$PARA" \
+                         "Analysis-ID$ID-${ANASOURCEDATE}"
                      fi
 ##########################################
 # train BDTs
