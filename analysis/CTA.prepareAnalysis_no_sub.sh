@@ -22,9 +22,9 @@ For every subarray, this creates:
   <target>.EFFAREA.MCAZ_0deg and <target>.EFFAREA.MCAZ_180deg
   <target>.TRAIN.MCAZ and <target>.EFFAREA.MCAZ (both directions combined)
 
-gamma_cone files are split 2/3 training and 1/3 analysis. Proton files are
-split 1/2 training and 1/2 analysis. gamma_onSource and electron files are
-analysis-only. Splitting is performed independently for each direction.
+gamma_cone and proton files are split 1/2 training and 1/2 analysis.
+gamma_onSource and electron files are analysis-only. Splitting is performed
+independently for each direction.
 
 Example for reusing an older reconstruction with a new analysis date:
   CTA.prepareAnalysis_no_sub.sh arrays.list DATASET new.runparameter \
@@ -199,7 +199,7 @@ while IFS= read -r ARRAY || [ -n "$ARRAY" ]; do
         rm -rf "$TRAIN_DIR" "$ANALYSIS_DIR"
         mkdir -p "$TRAIN_DIR" "$ANALYSIS_DIR"
 
-        link_partition "$SOURCE_DIR" gamma_cone "$direction" 3 "$TRAIN_DIR" "$ANALYSIS_DIR"
+        link_partition "$SOURCE_DIR" gamma_cone "$direction" 2 "$TRAIN_DIR" "$ANALYSIS_DIR"
         link_partition "$SOURCE_DIR" proton "$direction" 2 "$TRAIN_DIR" "$ANALYSIS_DIR"
         link_analysis_only "$SOURCE_DIR" gamma_onSource "$direction" "$ANALYSIS_DIR"
         link_analysis_only "$SOURCE_DIR" electron "$direction" "$ANALYSIS_DIR"
