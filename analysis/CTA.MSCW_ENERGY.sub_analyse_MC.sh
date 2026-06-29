@@ -42,7 +42,7 @@ fi
 MCAZ=$7
 MINIMAGE=$8
 QSUBOPT=""
-if [ -n $9 ]
+if [ -n "$9" ]
 then
    QSUBOPT="$9"
 fi
@@ -65,7 +65,7 @@ fi
 DATE=`date +"%y%m%d"`
 QLOG=$CTA_USER_LOG_DIR/$DATE/ANALYSETABLES/
 SHELLDIR="$QLOG/$ANADIR/"
-if [ -n ${10} ]; then
+if [ -n "${10}" ]; then
     QLOG=${10}
     SHELLDIR=${QLOG}
 fi
@@ -119,7 +119,7 @@ do
         echo "total number of jobs: $NJOBTOT"
 
         # output file name for mscw_energy
-        TFIL=$PART$NC"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET
+        TFIL=$PART"."$SUBAR"_ID${RECID}_${MCAZ}-"$DSET
 
         # skeleton script
         FSCRIPT="CTA.MSCW_ENERGY.qsub_analyse_MC"
