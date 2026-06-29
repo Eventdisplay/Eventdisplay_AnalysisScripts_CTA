@@ -125,7 +125,7 @@ do
    then
        echo "No training file found - continuing"
        echo ${FFF}
-       exit
+       continue
    fi
    echo "Teltype cuts: LSTs ($NCUTLST) MSTS ($NCUTMST) SSTs ($NCUTSST) MSCTs ($NCUTMSCT)"
    echo ${FFF}

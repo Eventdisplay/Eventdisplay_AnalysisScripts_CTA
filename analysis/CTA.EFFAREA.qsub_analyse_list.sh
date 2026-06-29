@@ -599,10 +599,19 @@ do
 
   ##############################
   # run effective area code
-      ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OLOG.log
+      if ! ${EVNDISPSYS}/bin/makeEffectiveArea $MSCF $OFIX.root > $OLOG.log; then
+          echo "makeEffectiveArea failed for $OFIX.root" >&2
+          touch $OLOG.SMALLFILE
+          continue
+      fi
 
       # cross check if run was successfull
       # (expect simply > 800k)
+      if [[ ! -e $OFIX.root ]]; then
+          echo "Effective-area output not found: $OFIX.root" >&2
+          touch $OLOG.SMALLFILE
+          continue
+      fi
       DS=$(du -k $OFIX.root | cut -f 1)
       if [[ ${DS} -le $minimumsize ]]; then
           touch $OLOG.SMALLFILE

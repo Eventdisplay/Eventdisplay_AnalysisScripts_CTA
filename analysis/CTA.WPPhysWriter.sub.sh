@@ -34,21 +34,21 @@ if [ -n "$8" ]; then
 fi
 
 PNAME=""
-if [ -n $9 ]; then
+if [ -n "$9" ]; then
    PNAME="$9"
 fi
 
 # log files
 DATE=`date +"%y%m%d"`
 FDIR=${CTA_USER_LOG_DIR}/$DATE/WPPHYSWRITER/
-if [ -n ${10} ]; then
+if [ -n "${10}" ]; then
     FDIR="${10}"
 fi
 mkdir -p ${FDIR}
 echo "log directory: " ${FDIR}
 
 QSUBOPT=""
-if [ -n ${11} ]; then
+if [ -n "${11}" ]; then
    QSUBOPT="${11}"
 fi
 QSUBOPT=${QSUBOPT//_X_/ }

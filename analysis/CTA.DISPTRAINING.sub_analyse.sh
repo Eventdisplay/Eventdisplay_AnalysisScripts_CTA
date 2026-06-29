@@ -22,10 +22,10 @@ h_cpu="47:29:00"
 h_vmem="24000M"
 tmpdir_size="1G"
 
-if [ $# -lt 5 ]
+if [ $# -lt 7 ]
 then
    echo
-   echo "CTA.DISPTRAINING_sub_analyse.sh <data set> <output directory> <recid> <array layout (e.g. S.3HB1)> <TMVA parameters> [scaling] [qsub options (optional)] [job_dir]"
+   echo "CTA.DISPTRAINING_sub_analyse.sh <data set> <output directory> <recid> <array layout (e.g. S.3HB1)> <TMVA parameters> <scaling> <quality cuts> [qsub options] [job_dir]"
    echo ""
    echo "  <data set>         e.g. cta-ultra3, ISDC3700m, ...  "
    echo "  <output directory> training results will be written to this directory (full path)"
@@ -33,6 +33,7 @@ then
    echo "  <array layout>     layout name with telescope type ID and scaling (e.g. S.3HB1)"
    echo "  <TMVA parameters>  file name of list of TMVA parameter file"
    echo "  <scaling>          layout scaling (e.g. 5); give 99 to ignore scaling"
+   echo "  <quality cuts>     DISP quality-cut parameter file"
    echo
    echo "  (note 1: hardwired telescope types in this script)"
    echo "  (note 2: disp core training switched off)"
@@ -49,16 +50,17 @@ RECID=$3
 ARRAY=$4
 TMVAP=$5
 SCALING=999
-if [ -n $6 ]
+if [ -n "$6" ]
 then
     SCALING=$6
 fi
-TMVAQC=""
-if [ -n $8 ]
-then
-   TMVAQC="$7"
+TMVAQC="$7"
+if [ ! -r "$TMVAQC" ]; then
+   echo "Error: DISP quality-cut parameter file not found: $TMVAQC" >&2
+   exit 1
 fi
-if [ -n $8 ]
+QSUBOPT=""
+if [ -n "$8" ]
 then
    QSUBOPT="$8"
 fi
@@ -88,7 +90,7 @@ EVNDISP="EVNDISP"
 DATE=`date +"%y%m%d"`
 QLOG=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/DISPTRAINING/
-if [ -n ${9} ]; then
+if [ -n "${9}" ]; then
     QLOG=${9}
     SHELLDIR=${QLOG}
 fi

@@ -127,8 +127,12 @@ do
 
 ####################################################################
 # execute converter
-   SIMFIL=`ls $TMPDIR/*.simtel.${EXTE}`
-   echo "TMPDIR FILES " $SIMFIL
+   SIMFIL="$TMPDIR/$(basename "$IFIL0")"
+   if [ ! -f "$SIMFIL" ]; then
+       echo "ERROR: copied simulation file not found: $SIMFIL" >&2
+       exit 1
+   fi
+   echo "TMPDIR FILE: $SIMFIL"
    if [[ $DSET == *"prod3"* ]]
    then
        if [[ $DSET == *"paranal"* ]] && [[ $DSET != *"prod3b"* ]]

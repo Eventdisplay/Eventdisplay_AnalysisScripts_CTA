@@ -253,19 +253,9 @@ then
    if [[ $P2 == *"DL2plus"* ]]; then
        EDM="-sq10-LL-DL2plus"
    fi
-   ARRAY=( "subArray.prod5.South-BL.list" )
-   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTs.list" )
-   ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta.list" )
-   ARRAY=( "subArray.prod5.South-Alpha.list" )
-   ARRAY=( "subArray.prod5.South-SV3f-v2.list" )
-   ARRAY=( "subArray.prod5.South-AlphaC8aj.list" )
-   ARRAY=( "subArray.prod5.South-Betab.list" )
+   ARRAY=( "subArray.prod5.South-Beta.list" )
    if [[ $P2 == *"sub"* ]]; then
-       ARRAY=( "subArray.prod5.South-Alpha-2LSTs42SSTsBeta-sub.list")
-       ARRAY=( "subArray.prod5.South-Alpha-sub.list" )
-       ARRAY=( "subArray.prod5.South-SV3f-v3-sub.list" )
-       ARRAY=( "subArray.prod5.South-AlphaC8aj-sub.list" )
-       ARRAY=( "subArray.prod5.South-Betab-sub.list" )
+       ARRAY=( "subArray.prod5.South-Beta-sub.list" )
    fi
    if [[ $P2 == *"Hyper"* ]] || [[ $P2 == *"hyper"* ]]; then
 #       ARRAY=( "subArray.prod5.South-HyperSST.list" )
@@ -427,7 +417,7 @@ then
                   $QSUBOPT
           cd ../
    done
-   continue
+   exit 0
 fi
 # remove from PHYS directory any unreasonable files (e.g. LST4 requirement for 2 LST array)
 if [[ $RUN == "CLEANUP" ]]; then
@@ -756,7 +746,7 @@ do
                      if [[ $OFFAXIS == "cone" ]]
                      then
                         ./CTA.WPPhysWriter.sub.sh \
-                                "$NFILARRAY "\
+                                "$NFILARRAY" \
                                 ${EFFFULLDIR}/BDT."$OOTIME"-${EFFVERSION}.$EFFDATE \
                                 $OOTIME \
                                 DESY.$PHYSDATE.${EFFVERSION}.ID$ID$AZ$ETYPF.${SITE}${EDM} \

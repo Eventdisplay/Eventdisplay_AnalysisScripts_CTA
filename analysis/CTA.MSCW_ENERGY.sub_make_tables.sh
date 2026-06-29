@@ -46,7 +46,7 @@ fi
 DSET=$5
 AZ=$6
 [[ "$7" ]] && MINTEL=$7 || MINTEL="4"
-if [ -n $8 ]
+if [ -n "$8" ]
 then
    QSUBOPT="$8"
 fi
@@ -79,7 +79,7 @@ fi
 # in case you submit a lot of scripts: QLOG=/dev/null
 QLOG=$CTA_USER_LOG_DIR/$DATE/MAKETABLES/
 SHELLDIR=$CTA_USER_LOG_DIR/$DATE/MAKETABLES/
-if [ -n ${9} ]; then
+if [ -n "${9}" ]; then
     QLOG=${9}
     SHELLDIR=${QLOG}
 fi
@@ -100,7 +100,7 @@ do
   TAFIL=$TFIL
 
 # run scripts
-  FNAM="$SHELLDIR/EMSCW.table-$TAFIL-W$MEANDIST-${ARRAY}${AZ}"
+  FNAM="$SHELLDIR/EMSCW.table-$TAFIL-${ARRAY}${AZ}"
   cp $FSCRIPT.sh $FNAM.sh
   cp $FSCRIPT.sh $FNAM.sh
 
