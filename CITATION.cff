@@ -4,7 +4,7 @@ cff-version: 1.2.0
 message: If you use this software, please cite it using these metadata.
 title: "Eventdisplay Analysis Scripts for CTA"
 abstract: "Run scripts for CTA. Allows to efficiently run all analysis steps starting from the raw MC files to sensitivities using Eventdisplay."
-doi: "https://doi.org/10.5281/zenodo.4263710"
+doi: 10.5281/zenodo.4263710
 version: 2.4.0
 date-released: 2025-09-24
 keywords:
