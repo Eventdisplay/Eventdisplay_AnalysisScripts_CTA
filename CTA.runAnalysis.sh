@@ -228,7 +228,6 @@ then
    ANADATE="g20231204"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
-   EFFDATE="g20240315"
    PHYSDATE="${EFFDATE}"
 ####################################
 # prod5 - Paranal
@@ -344,8 +343,7 @@ then
    ARRAYDIR="prod6"
    TDATE="g20260610"
    ANADATE="${TDATE}"
-   ANADATE="g20260325"
-   XGBDATE="${ANADATE}"
+   XGBDATE="g20260629"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
    PHYSDATE="${EFFDATE}"
@@ -617,7 +615,7 @@ do
                          "$PARA" \
                          "XGBStereo_${XGBDATE}" \
                          $QSUBOPT \
-			 ${PDIR}/${RUN}
+                         ${PDIR}/${RUN}
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then

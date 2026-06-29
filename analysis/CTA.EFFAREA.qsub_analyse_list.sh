@@ -79,9 +79,9 @@ then
    DL2FILLING=`grep DL2 $ANAPAR | awk {'print $2'}`
 fi
 
-NIMAGESMIN=`grep NIMAGESMIN $ANAPAR | awk {'print $2'}`
-XGBMINTEL="${NIMAGESMIN}"
-[ "$XGBMINTEL" -ge 3 ] && XGBMINTEL=3
+NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk '{print $2}')
+# multiplicity dependent model selection
+XGBMINTEL=23
 # get telescope type dependent cuts
 NCUTLST=`grep NLST $ANAPAR | awk {'print $2'}`
 NCUTMST=`grep NMST $ANAPAR | awk {'print $2'}`
