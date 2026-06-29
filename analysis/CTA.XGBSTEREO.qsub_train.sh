@@ -7,38 +7,31 @@ ODIR=OUTPUTDIR
 LLIST=MSCWLIST
 MINTEL=TELMIN
 DSET="DATASET"
-env_name="eventdisplay_ml_cta"
+ENV_BIN="CONDA_ENV_BIN"
 P="0.90"
 N="500000000"
 MAXCORES=NCORE
 
 # set environmental variables
-source $EVNDISPSYS/setObservatory.sh CTA
+if [ -z "${EVNDISPSYS:-}" ] || [ ! -r "$EVNDISPSYS/setObservatory.sh" ]; then
+    echo "Error: EVNDISPSYS is unset or setObservatory.sh is not readable." >&2
+    exit 1
+fi
+source "$EVNDISPSYS/setObservatory.sh" CTA || exit 1
+
+# ENV_BIN is resolved once by the submission script. Calling the executable
+# directly avoids Conda startup and package-metadata access in every batch job.
+XGB_TRAIN="${ENV_BIN}/eventdisplay-ml-train-xgb-stereo"
+if [ ! -x "$XGB_TRAIN" ]; then
+    echo "Error: incomplete eventdisplay-ml environment at '$ENV_BIN'." >&2
+    exit 1
+fi
+export PATH="${ENV_BIN}:${PATH}"
+export CONDA_PREFIX="${ENV_BIN%/bin}"
 
 # output data files are written to this directory
-mkdir -p "${ODIR}"
+mkdir -p "${ODIR}" || exit 1
 echo -e "Output files will be written to:\n ${ODIR}"
-
-check_conda_installation()
-{
-    if ! command -v conda &> /dev/null; then
-        echo "Error: found no conda installation."
-        echo "PATH: $PATH"
-        exit 1
-    fi
-
-    if ! conda run -n "$env_name" --no-capture-output \
-        bash -c 'command -v eventdisplay-ml-train-xgb-stereo' \
-        > /dev/null; then
-        echo "Error: the conda environment '$env_name' does not exist."
-        echo "       or eventdisplay-ml-train-xgb-stereo is not installed in it."
-        exit 1
-    fi
-
-    echo "Found conda environment '$env_name' with eventdisplay-ml installed."
-}
-
-check_conda_installation
 
 PREFIX="${ODIR}/dispdir_bdt_mintel${MINTEL}"
 LOGFILE="${PREFIX}.log"
@@ -52,13 +45,11 @@ fi
 
 {
     echo "Host: $(hostname)"
-    echo "Conda: $(command -v conda)"
-    conda run -n "$env_name" --no-capture-output \
-        bash -c 'echo "Python: $(command -v python)"; echo "Trainer: $(command -v eventdisplay-ml-train-xgb-stereo)"'
+    echo "Environment: $CONDA_PREFIX"
+    echo "Trainer: $XGB_TRAIN"
 } > "${LOGFILE}" 2>&1
 
-conda run -n "$env_name" --no-capture-output \
-    eventdisplay-ml-train-xgb-stereo \
+"$XGB_TRAIN" \
     --input_file_list "$LLIST" \
     --model_prefix "${PREFIX}" \
     --max_cores $MAXCORES \
@@ -68,7 +59,4 @@ conda run -n "$env_name" --no-capture-output \
     --train_test_fraction $P --max_events $N >> "${LOGFILE}" 2>&1
 status=$?
 
-conda run -n "$env_name" python --version >> "${LOGFILE}" 2>&1
-conda list -n "$env_name" >> "${LOGFILE}" 2>&1
-
-exit $status
+exit "$status"

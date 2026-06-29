@@ -8,36 +8,25 @@ XGBDIR="DIRXGB"
 MINTEL=TELMIN
 XGB="xgb_stereo"
 DSET="DATASET"
-env_name="eventdisplay_ml_cta"
+ENV_BIN="CONDA_ENV_BIN"
 MAXCORES=1
 
 # set environmental variables
-source $EVNDISPSYS/setObservatory.sh CTA
+if [ -z "${EVNDISPSYS:-}" ] || [ ! -r "$EVNDISPSYS/setObservatory.sh" ]; then
+    echo "Error: EVNDISPSYS is unset or setObservatory.sh is not readable." >&2
+    exit 1
+fi
+source "$EVNDISPSYS/setObservatory.sh" CTA || exit 1
 
-
-check_conda_installation()
-{
-    if command -v conda &> /dev/null; then
-        echo "Found conda installation."
-    else
-        echo "Error: found no conda installation."
-        echo "exiting..."
-        exit
-    fi
-    env_info=$(conda info --envs)
-    if [[ "$env_info" == *"$env_name"* ]]; then
-        echo "Found conda environment '$env_name'"
-    else
-        echo "Error: the conda environment '$env_name' does not exist."
-        echo "exiting..."
-        exit
-    fi
-}
-
-check_conda_installation
-
-source activate base
-conda activate $env_name
+# ENV_BIN is resolved once by the submission script.  Calling the executable
+# directly avoids conda startup and package-metadata access in every batch job.
+XGB_APPLY="${ENV_BIN}/eventdisplay-ml-apply-xgb-stereo"
+if [ ! -x "$XGB_APPLY" ]; then
+    echo "Error: incomplete eventdisplay-ml environment at '$ENV_BIN'." >&2
+    exit 1
+fi
+export PATH="${ENV_BIN}:${PATH}"
+export CONDA_PREFIX="${ENV_BIN%/bin}"
 
 # hardwired max training images to three
 [ "$MINTEL" -ge 3 ] && MINTEL=3
@@ -70,14 +59,12 @@ rm -f "$LOGFILE"
 
 echo "LOG FILE: $LOGFILE"
 
-eventdisplay-ml-apply-xgb-stereo \
+"$XGB_APPLY" \
     --input_file "$MSCW_FILE" \
     "${MODEL_OPTIONS[@]}" \
     --output_file "${OFIL}.root" \
     --max_cores $MAXCORES \
     --observatory $site  >| "${LOGFILE}" 2>&1
+status=$?
 
-python --version >> "${LOGFILE}"
-conda list -n $env_name >> "${LOGFILE}"
-
-conda deactivate
+exit "$status"

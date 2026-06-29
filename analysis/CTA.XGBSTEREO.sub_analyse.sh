@@ -7,6 +7,7 @@ SUBC="condor"
 h_cpu="0:29:00"
 h_vmem="12000M"
 tmpdir_size="1G"
+env_name="eventdisplay_ml_cta"
 
 if [ $# -lt 4 ]
 then
@@ -63,8 +64,29 @@ source ../setSoftwarePaths.sh "$DSET"
 if [ -z "$EVNDISPSYS" ]
 then
     echo "no EVNDISPSYS env variable defined"
-    exit
+    exit 1
 fi
+
+# Resolve the Conda environment once at submission time.  The generated jobs
+# use its binaries directly and therefore do not run Conda on worker nodes.
+CONDA_RUNNER="${CONDA_EXE:-}"
+if [ ! -x "$CONDA_RUNNER" ]; then
+    CONDA_RUNNER=$(type -P conda || type -P micromamba)
+fi
+if [ ! -x "$CONDA_RUNNER" ]; then
+    echo "no conda executable found"
+    exit 1
+fi
+if ! CONDA_ENV_BIN=$("$CONDA_RUNNER" run -n "$env_name" python -c \
+    'import os, sys; print(os.path.dirname(sys.executable))'); then
+    echo "Conda environment '$env_name' is unavailable"
+    exit 1
+fi
+if [ ! -x "$CONDA_ENV_BIN/eventdisplay-ml-apply-xgb-stereo" ]; then
+    echo "Conda environment '$env_name' is unavailable or eventdisplay-ml is not installed"
+    exit 1
+fi
+echo "Using Conda environment binaries: $CONDA_ENV_BIN"
 
 ######################################
 # log files
@@ -103,6 +125,7 @@ do
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
               -e "s|TELMIN|$NIMAGESMIN|" \
+              -e "s|CONDA_ENV_BIN|$CONDA_ENV_BIN|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh
           chmod u+x $FNAM.sh
           echo "SCRIPT $FNAM.sh"
