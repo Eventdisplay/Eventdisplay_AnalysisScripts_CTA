@@ -25,7 +25,7 @@ if [ $# -lt 2 ]; then
             prod6-South-20deg-moon prod6-South-40deg-moon prod6-South-52deg-moon prod6-South-60deg-moon
 
     run modes:
-        MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA PREPAREANA XGBSTEREOTRAIN XGBSTEREOANA TRAIN ANGRES QC CUTS PHYS CLEANUP
+        MAKETABLES PREPAREDISPBDTDATASPLIT DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPAREANA PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -45,7 +45,7 @@ fi
 RECID="0"
 
 # run scripts are collected here
-if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
+if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREDISPBDTDATASPLIT" ]]; then
     UUID=$(python -c "import uuid6; print(uuid6.uuid7())")
     RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$UUID"
     mkdir -p ${RUNSCRIPTDIR}
@@ -68,7 +68,7 @@ elif [[ ${RUN} == "XGBSTEREOTRAIN" ]] || [[ ${RUN} == "XGBSTEREOANA" ]]; then
    fi
 elif [[ ${RUN} == "CLEANUP" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
-elif [[ ${RUN} == "PREPAREFILELISTS" ]]; then
+elif [[ ${RUN} == "PREPAREDISPBDTDATASPLIT" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
    ./CTA.runAnalysis.sh ${P2}-sub ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}
 else
@@ -86,7 +86,7 @@ else
    fi
 fi
 
-if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
+if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREDISPBDTDATASPLIT" ]]; then
     echo "#####"
     echo "RUNSCRIPTDIR: ${RUNSCRIPTDIR%/}/${RUN}"
 fi

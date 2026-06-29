@@ -1,11 +1,10 @@
 #!/bin/bash
 #
-# Separate training files for DispBDT training
+# Prepare disjoint file lists for DispBDT training and subsequent analysis
 #
-# - fraction of gamma_cone and gamma_onSource
-# - random selection of files
-# - removes links to S.hyperarray / N.hyperarray for files used for training
-# - links to files in "<array_name>/EVNDISP.DISPTRAINING/..."
+# - randomly selects configured fractions of each particle type for training
+# - writes training lists to "<array_name>/EVNDISP.TRAIN/"
+# - writes the complementary analysis lists to "<array_name>/EVNDISP.ANALYSIS/"
 
 
 if [ ! -n "$2" ]
@@ -22,8 +21,8 @@ declare -A LOOKUP=(
 #  [gamma_cone]=5       # 20%
   [gamma_cone]=2       # 50%
   [gamma_onSource]=10  # 10%
-  [proton]=1000        # 1% (not used)
-  [electron]=1000      # 1% (not used)
+  [proton]=1000        # 0.1% (not used)
+  [electron]=1000      # 0.1% (not used)
 )
 
 # data set

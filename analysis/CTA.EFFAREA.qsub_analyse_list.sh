@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # calculate effective areas and instrument response functions for CTA
 #
