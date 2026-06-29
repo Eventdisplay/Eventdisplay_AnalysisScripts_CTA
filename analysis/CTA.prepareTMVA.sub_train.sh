@@ -58,7 +58,7 @@ RPAR="$CTA_EVNDISP_AUX_DIR/ParameterFiles/TMVA.BDT"
 #####################################
 MCAZ=${5:-$MCAZ}
 # batch farm submission options
-QSUBOPT=${5:-$QSUBOPT}
+QSUBOPT=${4:-$QSUBOPT}
 QSUBOPT=${QSUBOPT//_X_/ }
 QSUBOPT=${QSUBOPT//_M_/-}
 QSUBOPT=${QSUBOPT//\"/}
@@ -101,37 +101,17 @@ for ARRAY in $VARRAY
 do
     echo "STARTING $DSET ARRAY $ARRAY MCAZ $MCAZ"
 
-    # signal and background files
-    # (no electrons are used for the background training)
-    # ensure mixed training set for the two different pointing directions
-    # two lists for signal and background, alternating from previous lists
-    # (list must be sorted; and then mixed)
-    # Splitmode=BLOCK
-
-    # Training files for TMVA
-    SIGNALTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 != 0')
-    BACKGROUNDTRAINLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 1')
-    # Analysis and Testing files for TMVA
-    SIGNALTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 3 == 0')
-    BACKGROUNDTESTLIST=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/proton."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root | sort -g | awk 'NR % 2 == 0')
-    # Analysis (note electrons are not used in training)
-    GFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_onSource."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-    EFIL=$(ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/electron."$ARRAY"_ID"$RECID$MCAZ"*.mscw.root)
-
-    ##########################################################
-    # set links for events used in effective area calculation
-    # (separate training and events used for analysis)
-    ANAEFF="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ}"
-    rm -rf $ANAEFF
-    mkdir -p "$ANAEFF"
-    for arg in $SIGNALTESTLIST $BACKGROUNDTESTLIST $GFIL $EFIL
-    do
-        ln -s "$arg" "$ANAEFF/$(basename "$arg")"
-    done
-    ###############################################################
-    # add a 'continue' here if linking file is the main purpose
-    #continue
-    ###############################################################
+    # File-level training/test assignment is prepared locally by
+    # CTA.prepareAnalysis_no_sub.sh. Consume the explicit training partition
+    # here instead of independently repeating the modulo selection.
+    TRAINDIR="$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ANADIR}.TRAIN.MCAZ${MCAZ}"
+    if [ ! -d "$TRAINDIR" ]; then
+        echo "No training data directory found: $TRAINDIR"
+        echo "Run CTA.prepareAnalysis_no_sub.sh before preparing TMVA events."
+        exit 1
+    fi
+    SIGNALTRAINLIST=$(find "$TRAINDIR" -maxdepth 1 -name "gamma_cone.*.mscw.root" -print | sort)
+    BACKGROUNDTRAINLIST=$(find "$TRAINDIR" -maxdepth 1 -name "proton.*.mscw.root" -print | sort)
 
 ###############################################################
 # get number of telescopes depending of telescope types

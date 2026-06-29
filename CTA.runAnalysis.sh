@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # analysis submission for production 3b/4/5/6 analysis
 #
@@ -28,7 +28,8 @@ then
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
         prod6-South-20deg prod6-South-40deg prod6-South-52deg prod6-South-60deg
 
-    possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN PREPAREANA ANGRES QC CUTS PHYS CLEANUP
+    possible run modes are
+    EVNDISP MAKETABLES PREPAREDISPBDTDATASPLIT DISPBDT ANATABLES PREPAREANA XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN ANGRES QC CUTS PHYS CLEANUP
 
     optional run modes: TRAIN_RECO_QUALITY TRAIN_RECO_METHOD
 
@@ -70,6 +71,7 @@ EFFVERSION="V3"
 # (will be overwritten later)
 TDATE="g20200817"
 ANADATE="${TDATE}"
+ANASOURCEDATE=""
 TMVADATE="${TDATE}"
 EFFDATE="${TDATE}"
 EFFDATE="g20221102"
@@ -342,7 +344,10 @@ then
    fi
    ARRAYDIR="prod6"
    TDATE="g20260610"
-   ANADATE="${TDATE}"
+   # Reuse the existing reconstruction files, but keep products from the new
+   # XGBoost analysis under a new analysis date.
+   ANASOURCEDATE="g20260325"
+   ANADATE="g20260629"
    XGBDATE="g20260629"
    TMVADATE="${ANADATE}"
    EFFDATE="${ANADATE}"
@@ -354,6 +359,9 @@ else
 fi
 if [[ -z ${PHYSDATE} ]]; then
   PHYSDATE=${EFFDATE}
+fi
+if [[ -z ${ANASOURCEDATE} ]]; then
+  ANASOURCEDATE=${ANADATE}
 fi
 # NOT USED ANYMORE! Keep 'cone'
 OFFAXIS="cone"
@@ -428,7 +436,7 @@ if [[ $RUN == "CLEANUP" ]]; then
     exit
 fi
 # Prepare file lists required for DispBDT training
-if [[ $RUN == "PREPAREFILELISTS" ]]; then
+if [[ $RUN == "PREPAREDISPBDTDATASPLIT" ]]; then
     ./analysis/CTA.separateDispTrainingEvndispFiles.sh "${SITE}${EDM}" "${ARRAYDIR}/$ARRAY"
     exit
 fi
@@ -631,7 +639,7 @@ do
                          ${PDIR}/${RUN}
                     fi
 ##########################################
-# prepare train BDTs
+# prepare TMVA training events
                   elif [[ $RUN == "PREPARETMVA" ]]
                   then
                      if [ ${o} -eq 0 ] && [[ ! -z ${AZ} ]]
@@ -645,8 +653,7 @@ do
                          ${PDIR}/${RUN}
                     fi
 ##########################################
-# prepare analysis files to separate training / evaluation
-# (already done for non-empty Az in PREPARETMVA stage
+# prepare disjoint training and analysis files
                  elif [[ $RUN == "PREPAREANA" ]]
                  then
                      if [ ${o} -eq 0 ] && [[ -z ${AZ} ]]
@@ -654,7 +661,8 @@ do
                          ./CTA.prepareAnalysis_no_sub.sh \
                          "$NFILARRAY" \
                          ${SITE}${EDM} \
-                         "$PARA"
+                         "$PARA" \
+                         "Analysis-ID$ID-${ANASOURCEDATE}"
                      fi
 ##########################################
 # train BDTs

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # calculate effective areas and instrument response functions for CTA
 #
@@ -133,12 +133,17 @@ if [ -z $EFFAREABASEDIR ]
 then
    EFFAREABASEDIR=$EFFAREADIR
 fi
-# see if strict separation of training/testing events is possible
-# (mscw files would be in a directory ....EFF)
-if [ -e ${PRODBASEDIR}/$ARRAY/${ANADIR}.EFFAREA.MCAZ${MCAZ} ]
+# Require the explicitly prepared analysis partition. Falling back to ANADIR
+# would allow files used for machine-learning training into the final IRFs.
+SPLITANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
+if [ ! -d "${PRODBASEDIR}/$ARRAY/${SPLITANADIR}" ]
 then
-    ANADIR=${ANADIR}.EFFAREA.MCAZ${MCAZ}
+    echo "Error: analysis/test data directory not found:" >&2
+    echo "${PRODBASEDIR}/$ARRAY/${SPLITANADIR}" >&2
+    echo "Run CTA.prepareAnalysis_no_sub.sh before the effective-area analysis." >&2
+    exit 1
 fi
+ANADIR=${SPLITANADIR}
 
 # observation time
 OBSTIME=`grep OBSERVINGTIME_H $ANAPAR | awk {'print $2'}`
