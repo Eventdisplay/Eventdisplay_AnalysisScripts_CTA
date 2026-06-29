@@ -10,7 +10,7 @@ h_cpu="47:29:00"
 h_vmem="64000M"
 tmpdir_size="1G"
 ncore=8
-env_name="eventdisplay_ml_cta_mem"
+env_name="eventdisplay_ml_cta"
 
 if [ $# -lt 4 ]
 then
