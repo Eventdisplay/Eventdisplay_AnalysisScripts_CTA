@@ -26,7 +26,7 @@ then
          prod3b-S20-SCT156Tel
     Prod6 analysis:
         prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
-        prod6-South-20deg prod6-South-40deg
+        prod6-South-20deg prod6-South-40deg prod6-South-52deg prod6-South-60deg
 
     possible run modes are EVNDISP MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES XGBSTEREOTRAIN XGBSTEREOANA PREPARETMVA TRAIN PREPAREANA ANGRES QC CUTS PHYS CLEANUP
 
@@ -303,7 +303,7 @@ then
    if [[ $P2 == *"South"* ]]; then
        NS="South"
        PLACE="Paranal"
-       EDM="-sq01-LL"
+       EDM="-sq20-LL"
    else
        NS="North"
        PLACE="LaPalma"
@@ -342,7 +342,7 @@ then
        ARRAY=( "subArray.prod6.${NS}Hyper.list" )
    fi
    ARRAYDIR="prod6"
-   TDATE="g20260214"
+   TDATE="g20260610"
    ANADATE="${TDATE}"
    ANADATE="g20260325"
    XGBDATE="${ANADATE}"
@@ -616,7 +616,8 @@ do
                          ${SITE}${EDM} \
                          "$PARA" \
                          "XGBStereo_${XGBDATE}" \
-                         $QSUBOPT
+                         $QSUBOPT \
+			 ${PDIR}/${RUN}
                     fi
                   elif [[ $RUN == "XGBSTEREOANA" ]]
                   then

@@ -39,18 +39,18 @@ find "$1" -name "*MST4*LSTs03MSTs*" ${OPTION}
 ##################
 # South LST arrays
 # 4 LSTs
-find "$1" -name "*NIM5LST5*4LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM6LST6*4LSTs00MSTs00SSTs-*" ${OPTION}
+find "$1" -name "*NIM5LST5*4LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM6LST6*4LSTs00MSTs00SSTs*" ${OPTION}
 # 3 LSTs
-find "$1" -name "*NIM5LST5*3LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM6LST6*3LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM4LST4*3LSTs00MSTs00SSTs-*" ${OPTION}
+find "$1" -name "*NIM5LST5*3LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM6LST6*3LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM4LST4*3LSTs00MSTs00SSTs*" ${OPTION}
 find "$1" -name "*NIM4LST4*S.BL-3LSTs[A-Z]*" ${OPTION}
 # 2 LSTs
-find "$1" -name "*NIM5LST5*2LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM6LST6*2LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM4LST4*2LSTs00MSTs00SSTs-*" ${OPTION}
-find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs-*" ${OPTION}
+find "$1" -name "*NIM5LST5*2LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM6LST6*2LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM4LST4*2LSTs00MSTs00SSTs*" ${OPTION}
+find "$1" -name "*NIM3LST3*2LSTs00MSTs00SSTs*" ${OPTION}
 find "$1" -name "*NIM3LST3*S.BL-2LSTs[A-Z]*" ${OPTION}
 find "$1" -name "*NIM4LST4*S.BL-2LSTs[A-Z]*" ${OPTION}
 find "$1" -name "*NIM4LST4*-2LSTs*" ${OPTION}
@@ -75,6 +75,15 @@ find "$1" -name "*ID2*-[0-9][0-9]SSTs.*" ${OPTION}
 
 # South MST arrays only
 find "$1" -name "*ID3*-[0-9][0-9]MSTs-MSTF*" ${OPTION}
+
+# NIM6
+find "$1" -name "*ID0*NIM6*0LSTs05MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM5*0LSTs02MSTs00SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs00MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*0LSTs02MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM6*2LSTs02MSTs05SSTs*" ${OPTION}
+find "$1" -name "*ID0*NIM1*" ${OPTION}
 
 # North LST arrays
 find "$1" -name "*NIM4LST4*3LSTs00MSTs-*" ${OPTION}

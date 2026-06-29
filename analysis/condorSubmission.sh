@@ -3,7 +3,7 @@
 
 if [ "$1" = "-h" ]; then
 echo "
-UTILITY.condorSubmission.sh [submission script] [memory request] [disk request] <optional: array jobs>
+UTILITY.condorSubmission.sh [submission script] [memory request] [disk request] <optional: array jobs> <optional: number of cores>
 
 --------------------------------------------------------------------------------
 "
@@ -11,6 +11,7 @@ exit
 fi
 
 SUBFIL=${1}.condor
+NCORE=${5:-1}
 rm -f ${SUBFIL}
 echo "JobBatchName = ${1}" > ${SUBFIL}
 echo "Executable = ${1}" > ${SUBFIL}
@@ -22,6 +23,7 @@ echo "Output = ${1}.\$(Cluster)_\$(Process).output" >> ${SUBFIL}
 echo "Error = ${1}.\$(Cluster)_\$(Process).error" >> ${SUBFIL}
 echo "request_memory = ${2}" >> ${SUBFIL}
 echo "request_disk = ${3}" >> ${SUBFIL}
+echo "request_cpus = ${NCORE}" >> ${SUBFIL}
 echo "getenv = True" >> ${SUBFIL}
 echo "priority = 50" >> ${SUBFIL}
 # echo "max_materialize = 50" >> ${SUBFIL}

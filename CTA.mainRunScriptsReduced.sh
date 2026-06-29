@@ -21,7 +21,8 @@ if [ $# -lt 2 ]; then
        Prod6 analysis:
             prod6-North-20deg prod6-North-40deg prod6-North-52deg prod6-North-60deg
             prod6-North-20deg-moon prod6-North-40deg-moon prod6-North-52deg-moon prod6-North-60deg-moon
-            prod6-South-20deg prod6-South-40deg
+            prod6-South-20deg prod6-South-40deg prod6-South-52deg prod6-South-60deg
+            prod6-South-20deg-moon prod6-South-40deg-moon prod6-South-52deg-moon prod6-South-60deg-moon
 
     run modes:
         MAKETABLES PREPAREFILELISTS DISPBDT ANATABLES PREPARETMVA PREPAREANA XGBSTEREOTRAIN XGBSTEREOANA TRAIN ANGRES QC CUTS PHYS CLEANUP
@@ -45,9 +46,11 @@ RECID="0"
 
 # run scripts are collected here
 if [[ ${RUN} != "CLEANUP" ]] && [[ ${RUN} != "PREPAREFILELISTS" ]]; then
-    RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$(uuidgen)"
+    UUID=$(python -c "import uuid6; print(uuid6.uuid7())")
+    RUNSCRIPTDIR="${CTA_USER_LOG_DIR}/jobs/$UUID"
     mkdir -p ${RUNSCRIPTDIR}
 fi
+echo ${RUNSCRIPTDIR}
 
 if [[ ${RUN} == "MAKETABLES" ]] || [[ ${RUN} == "DISPBDT" ]] || [[ ${RUN} == "ANATABLES" ]] || [[ ${RUN} == "PREPARETMVA" ]] || [[ ${RUN} == "PREPAREANA" ]]; then
    ./CTA.runAnalysis.sh ${P2} ${RUN} ${RECID} 2 2 2 2 ${RUNSCRIPTDIR}

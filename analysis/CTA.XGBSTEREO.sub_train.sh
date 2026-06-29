@@ -6,20 +6,19 @@
 #
 
 SUBC="condor"
-h_cpu="8:29:00"
-h_vmem="24000M"
+h_cpu="47:29:00"
+h_vmem="64000M"
 tmpdir_size="1G"
+ncore=8
 
 if [ $# -lt 4 ]
 then
    echo
-   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> <output directory> [qsub options] [direction (e.g. _180deg)] [job_dir]"
+   echo "CTA.XGBSTEREO.sub_train.sh <subarray list> <data set> <analysis parameter file> <output directory> [qsub options] [job_dir]"
    echo ""
    echo "  <subarray list>   text file with list of subarray IDs"
    echo
    echo "  <data set>         e.g. cta-ultra3, ISDC3700, ...  "
-   echo
-   echo "  <direction>        e.g. for north: \"_180deg\", for south: \"_0deg\", for all directions: no option"
    echo
    exit
 fi
@@ -34,6 +33,8 @@ then
 fi
 echo "reading analysis parameter from $ANAPAR"
 NIMAGESMIN=$(grep NIMAGESMIN "$ANAPAR" | awk {'print $2'})
+XGBMINTEL="${NIMAGESMIN}"
+[ "$XGBMINTEL" -ge 3 ] && XGBMINTEL=3
 NCUTLST=$(grep NLST "$ANAPAR" | awk {'print $2'})
 NCUTMST=$(grep NMST "$ANAPAR" | awk {'print $2'})
 NCUTSST=$(grep NSST "$ANAPAR" | awk {'print $2'})
@@ -81,17 +82,26 @@ for ARRAY in $VARRAY
 do
    echo "STARTING $DSET ARRAY $ARRAY"
 
-   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ODIRNAME
+   ODIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/${ODIRNAME}""
    mkdir -p "$ODIR"
+   MODELFILE="${ODIR}/dispdir_bdt_mintel${XGBMINTEL}.joblib.gz"
+   if [ -e "$MODELFILE" ]
+   then
+      echo "FOUND $MODELFILE - skipping training job"
+      continue
+   else
+      echo "MODEL FILE NOT FOUND $MODELFILE"
+   fi
    # training list identical to TMVA gamma/hadron signal training
    SIGNALTRAINLIST=${ODIR}/training_files.list
    rm -f "${SIGNALTRAINLIST}"
    ls -1 $CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$ANADIR/gamma_cone."$ARRAY"_ID"$RECID"*.mscw.root | sort -g | awk 'NR % 3 != 0' > "${SIGNALTRAINLIST}"
 
-  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${NIMAGESMIN}
+  FNAM=$LDIR/$FSCRIPT.$DSET.$ARRAY.ID${RECID}.NIM${XGBMINTEL}
   sed -e "s|MSCWLIST|$SIGNALTRAINLIST|" \
       -e "s|DATASET|$DSET|" \
-      -e "s|TELMIN|$NIMAGESMIN|" \
+      -e "s|TELMIN|$XGBMINTEL|" \
+      -e "s|NCORE|$ncore|" \
       -e "s|OUTPUTDIR|$ODIR|" $FSCRIPT.sh > $FNAM.sh
   chmod u+x $FNAM.sh
   echo "SCRIPT $FNAM.sh"
@@ -100,6 +110,6 @@ do
   if [[ $SUBC == *qsub* ]]; then
       qsub $QSUBOPT -V -l h_cpu=${h_cpu} -l h_rss=${h_vmem} -l tmpdir_size=${tmpdir_size} -o $QLOG -e $QLOG "$FNAM.sh"
   elif [[ $SUBC == *condor* ]]; then
-      ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size
+      ./condorSubmission.sh ${FNAM}.sh $h_vmem $tmpdir_size "" $ncore
   fi
 done
