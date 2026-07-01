@@ -108,6 +108,11 @@ FSCRIPT="CTA.XGBSTEREO.qsub_analyse"
 for ARRAY in $VARRAY
 do
    XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$MODELDIR
+   TELMAX="3"
+   if [[ $ARRAY == *"0LSTs02MSTs00SSTs"* ]] || [[ $ARRAY == *"2LSTs00MSTs00SSTs"* ]]; then
+       TELMAX="2"
+   fi
+
 
    for ((m = 0; m < $NPART; m++ ))
    do
@@ -125,6 +130,7 @@ do
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
               -e "s|TELMIN|$NIMAGESMIN|" \
+              -e "s|TELMAX|$NIMAGESMAX|" \
               -e "s|CONDA_ENV_BIN|$CONDA_ENV_BIN|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh
           chmod u+x $FNAM.sh
