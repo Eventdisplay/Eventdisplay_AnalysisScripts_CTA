@@ -60,6 +60,7 @@ if [ -z "$TARGET_ANALYSIS" ]; then
     exit 1
 fi
 SOURCE_ANALYSIS=${4:-$TARGET_ANALYSIS}
+
 case "$TARGET_ANALYSIS:$SOURCE_ANALYSIS" in
     *"/"*)
         echo "Error: analysis directory arguments must be directory names, not paths" >&2
@@ -69,6 +70,10 @@ esac
 
 DATASET_DIR="${CTA_USER_DATA_DIR%/}/analysis/AnalysisData/$DSET"
 DIRECTIONS=( "_0deg" "_180deg" )
+
+if [[ ! -d ${DATASET_DIR}/$SOURCE_ANALYSIS ]]; then
+    SOURCE_ANALYSIS=$TARGET_ANALYSIS
+fi
 
 link_file()
 {
