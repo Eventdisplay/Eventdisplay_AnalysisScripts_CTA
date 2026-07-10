@@ -6,6 +6,7 @@
 MSCW_FILE="FFILE"
 XGBDIR="DIRXGB"
 MINTEL=TELMIN
+MAXTEL=TELMAX
 XGB="xgb_stereo"
 DSET="DATASET"
 ENV_BIN="CONDA_ENV_BIN"
@@ -37,7 +38,7 @@ MODEL_OPTIONS=( --model_prefix "${PREFIX}" )
 # high multiplicity events
 OMINTEL=${MINTEL}
 [ "$OMINTEL" -eq 2 ] && OMINTEL=23
-if [ "$MINTEL" -eq 2 ]; then
+if [ "$MINTEL" -eq 2 ] && [ "$MAXTEL" -ne 2 ]; then
     MODEL_OPTIONS+=(
         --model_prefix_high_multiplicity
         "${XGBDIR}/dispdir_bdt_mintel3"

@@ -47,7 +47,7 @@ if [[ -d ${WORKDIR}/code/Eventdisplay/ ]]; then
 elif [[ -d ${WORKDIR}/code ]]; then
     export EVNDISPSYS="${WORKDIR}/code"
 else
-   echo "Error: directory with software not found"
+   echo "Warning: directory with software not found"
    echo ${WORKDIR}
    return
 fi
