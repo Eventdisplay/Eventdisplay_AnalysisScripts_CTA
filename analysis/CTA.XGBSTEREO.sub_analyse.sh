@@ -109,7 +109,7 @@ for ARRAY in $VARRAY
 do
    XGBDIR=$CTA_USER_DATA_DIR/analysis/AnalysisData/$DSET/$ARRAY/$MODELDIR
    TELMAX="3"
-   if [[ $ARRAY == *"0LSTs02MSTs00SSTs"* ]] || [[ $ARRAY == *"2LSTs00MSTs00SSTs"* ]]; then
+   if [[ $ARRAY == *"0LSTs02MSTs00SSTs"* ]] || [[ $ARRAY == *"2LSTs00MSTs00SSTs"* ]] || [[ $ARRAY == *"0LSTs00MSTs02SSTs"* ]]; then
        TELMAX="2"
    fi
 
@@ -130,7 +130,7 @@ do
           sed -e "s|FFILE|$FILE|" \
               -e "s|DATASET|$DSET|" \
               -e "s|TELMIN|$NIMAGESMIN|" \
-              -e "s|TELMAX|$NIMAGESMAX|" \
+              -e "s|TELMAX|$TELMAX|" \
               -e "s|CONDA_ENV_BIN|$CONDA_ENV_BIN|" \
               -e "s|DIRXGB|$XGBDIR|" $FSCRIPT.sh > $FNAM.sh
           chmod u+x $FNAM.sh
